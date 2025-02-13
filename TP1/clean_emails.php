@@ -41,7 +41,7 @@ foreach ($sortedEmails as $email) {
     $domainFile = "$domainDir/$domain.txt";
 
     // Get existing emails for the domain
-    $existingEmails = file_exists($domainFile) ? file($domainFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : [];
+    $existingEmails = file_exists($domainFile) ? file($domainFile, FILE_SKIP_EMPTY_LINES) : [];
 
     // Add email if it doesn't exist
     if (!in_array($email, $existingEmails)) {

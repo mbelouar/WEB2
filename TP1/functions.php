@@ -5,7 +5,7 @@ function isValidEmail($email) {
 
 // Read and return emails from file
 function readEmails($file) {
-    return file_exists($file) ? file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : [];
+    return file_exists($file) ? file($file, FILE_SKIP_EMPTY_LINES) : [];
 }
 
 // Write emails back to file
