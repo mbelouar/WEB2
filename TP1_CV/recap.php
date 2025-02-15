@@ -42,21 +42,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = $_POST["message"] ?? "";
 
     // Format the data
-    $data = "------------------------------\n";
+    $data = "---------------- Renseignement Personnel ----------------\n";
     $data .= "Nom: $lastname\n";
     $data .= "Prénom: $firstname\n";
     $data .= "Email: $email\n";
     $data .= "Téléphone: $phone\n";
     $data .= "Age: $age\n";
+
+    $data .= "--------------- Renseignement Académique ---------------\n";
     $data .= "Formation: $formation\n";
     $data .= "Niveau: $niveau\n";
     $data .= "Modules suivis: $selectedModules\n";
     $data .= "Nombre de projets: $projectCount\n";
     $data .= "Projets réalisés: " . implode(", ", $projects) . "\n";
-    $data .= "Centres d'intérêt: $interest1, $interest2, $interest3, $interest4\n";
-    $data .= "Langues: $langue1 ($niveau1), $langue2 ($niveau2), $langue3 ($niveau3)\n";
-    $data .= "Remarques: $message\n";
-    $data .= "------------------------------\n\n";
+    
+    
+    $data .= "--------------- Centre d'intérêt ---------------\n";
+    if (!empty($interest1))
+        $data .= "Intérêt 1: $interest1\n";
+    if (!empty($interest2))
+        $data .= "Intérêt 2: $interest2\n";
+    if (!empty($interest3))
+        $data .= "Intérêt 3: $interest3\n";
+    if (!empty($interest4))
+        $data .= "Intérêt 4: $interest4\n";
+
+    $data .= "--------------- Langues ---------------\n";
+    if (!empty($langue1))
+        $data .= "Langue 1: $langue1 => Niveau: $niveau1\n";
+    if (!empty($langue2))
+        $data .= "Langue 2: $langue2 => Niveau: $niveau2\n";
+    if (!empty($langue3))
+        $data .= "Langue 3: $langue3 => Niveau: $niveau3\n";
+
+    $data .= "--------------- Remarques ---------------\n";
+    if (!empty($message))
+        $data .= "Message: $message\n";
+    else
+        $data .= "Aucun message\n";
+    $data .= "--------------------------------------------------------\n\n";
 
     // Save the data to the file
     fwrite($file, $data);
