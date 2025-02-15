@@ -1,26 +1,39 @@
 <?php
+session_start(); // Ensure session starts
 include_once 'functions.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["add_email"])) {
     $email = trim($_POST["email"]);
-    $emailsFile = "/uploads/Emails.txt";
 
-    // Check if the file exists (i.e., if it has been uploaded)
-    if (!file_exists($emailsFile)) {
-        echo "<p style='color:red;'> Error: Emails file not uploaded yet!</p>";
+    // Get the uploaded file name from session
+    $fileName = isset($_SESSION["uploadedFile"]) ? $_SESSION["uploadedFile"] : '';
+
+    $emailsFile = "uploads/" . $fileName;
+
+    if (empty($fileName)) {
+        $_SESSION["message"] = "⚠️ Please upload a file first!";
+        $_SESSION["msg_type"] = "error";
+    } elseif (!file_exists($emailsFile)) {
+        $_SESSION["message"] = "❌ File does not exist!";
+        $_SESSION["msg_type"] = "error";
     } else {
         $emails = readEmails($emailsFile);
 
         if (!isValidEmail($email)) {
-            echo "<p style='color:red;'> Invalid email!</p>";
+            $_SESSION["message"] = "❌ Invalid email!";
+            $_SESSION["msg_type"] = "error";
         } elseif (in_array($email, $emails)) {
-            echo "<p style='color:red;'> Email already exists!</p>";
+            $_SESSION["message"] = "⚠️ Email already exists!";
+            $_SESSION["msg_type"] = "error";
         } else {
             $emails[] = $email;
-            // Write emails back to file
             writeEmails($emailsFile, $emails);
-            echo "<p style='color:green;'> Email added successfully!</p>";
+            $_SESSION["message"] = "✅ Email added successfully!";
+            $_SESSION["msg_type"] = "success";
         }
     }
 }
+
+header("Location: index.php"); // Redirect back to the main page
+exit;
 ?>

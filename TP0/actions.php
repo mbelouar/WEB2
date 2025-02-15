@@ -1,4 +1,6 @@
 <?php
+include_once 'functions.php';
+include_once 'clean_emails.php';
 // Start the session if you want to store messages
 session_start();
 
@@ -22,7 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit" name="valid" value="valid_emails">Valid Emails</button>
         <button type="submit" name="invalid" value="invalid_emails">Invalid Emails</button>
     </form>
+    
 </div>
+
+<?php
+    $fileName = isset($_SESSION["uploadedFile"]) ? $_SESSION["uploadedFile"] : '';
+    $file = "uploads/" . $fileName;
+?>
 
 <?php 
 // Show the appropriate content based on the action chosen
@@ -37,6 +45,7 @@ if (isset($action)) {
                 <button type="submit" name="add_email">Add</button>
             </form>
         </div>
+        
         <?php
     } elseif ($action == "valid_emails") {
         // Show Valid Emails content (you would typically include code to list valid emails)
@@ -44,7 +53,7 @@ if (isset($action)) {
         <div class="content">
             <h2>Valid Emails</h2>
             <!-- Logic to display valid emails -->
-            <p>List of valid emails goes here...</p>
+            <?php displayValidEmails($file); ?>
         </div>
         <?php
     } elseif ($action == "invalid_emails") {
@@ -53,7 +62,7 @@ if (isset($action)) {
         <div class="content">
             <h2>Invalid Emails</h2>
             <!-- Logic to display invalid emails -->
-            <p>List of invalid emails goes here...</p>
+            <?php displayInvalidEmails($file); ?>
         </div>
         <?php
     }

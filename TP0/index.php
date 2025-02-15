@@ -1,5 +1,5 @@
 <?php 
-include_once 'functions.php'; 
+include_once 'functions.php';
 session_start();
 ?>
 
@@ -21,18 +21,11 @@ session_start();
             <h2>Upload File</h2>
             <form action="upload.php" method="post" enctype="multipart/form-data">
                 Select File to Upload
-                <input type="file" name="uploadedFile" required>
+                <input type="file" name="file" required>
                 <button type="submit" name="upload">Upload</button>
             </form>
         </div>
-        <?php if (isset($_SESSION["message"])): ?>
-            <p style="color: <?= ($_SESSION["msg_type"] == "success") ? 'green' : 'red'; ?>; font-weight: bold;">
-                <?= $_SESSION["message"]; ?>
-            </p>
-            <?php unset($_SESSION["message"], $_SESSION["msg_type"]); // Clear message after displaying ?>
-        <?php endif; ?>
-
-        
+        <?php displayMessage(); ?>
         <?php include 'actions.php'; ?>
 
     </div>
