@@ -12,6 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $action = $_POST["valid"];
     } elseif (isset($_POST["invalid"])) {
         $action = $_POST["invalid"];
+    } elseif (isset($_POST["duplicate"])) {
+        $action = $_POST["duplicate"];
     }
 }
 ?>
@@ -23,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit" name="add" value="add_email">Add Email</button>
         <button type="submit" name="valid" value="valid_emails">Valid Emails</button>
         <button type="submit" name="invalid" value="invalid_emails">Invalid Emails</button>
+        <button type="submit" name="duplicate" value="duplicate_emails">Duplicate Emails</button>
     </form>
     
 </div>
@@ -30,6 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php
     $fileName = isset($_SESSION["uploadedFile"]) ? $_SESSION["uploadedFile"] : '';
     $file = "uploads/" . $fileName;
+
+    // echo "<p>File: $file</p>";
+    // echo "<p>Action: $action</p>";
 ?>
 
 <?php 
@@ -63,6 +69,14 @@ if (isset($action)) {
             <h2>Invalid Emails</h2>
             <!-- Logic to display invalid emails -->
             <?php displayInvalidEmails($file); ?>
+        </div>
+        <?php
+    } elseif ($action == "duplicate_emails") {
+        ?>
+        <div class="content">
+            <h2>Duplicate Emails</h2>
+            <!-- Logic to display duplicate emails -->
+            <?php displayDuplicateEmails($file); ?>
         </div>
         <?php
     }

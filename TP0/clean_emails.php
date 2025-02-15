@@ -56,7 +56,7 @@ function displayDuplicateEmails($file) {
     if (!empty($duplicates)) {
         echo "<h3>Duplicate Emails:</h3><ul>";
         foreach ($duplicates as $email => $count) {
-            echo "<li>$email ($count occurrences)</li>";
+            echo "<li>$email - $count occurrences</li>";
         }
         echo "</ul>";
     } else {
