@@ -24,29 +24,59 @@ function displayInvalidEmails($file) {
     list($validEmails, $invalidEmails, $emailFrequency) = cleanAndOrganizeEmails($file);
     
     if (!empty($invalidEmails)) {
-        echo "<ul>";
+        echo "<table border='1'>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>";
+            
+        // Loop through invalid emails and display each in a table row
         foreach ($invalidEmails as $email) {
-            echo "<li>$email</li>";
+            echo "<tr><td>$email</td></tr>";
         }
-        echo "</ul>";
+        echo "</tbody></table>";
     } else {
         echo "<p>No invalid emails found.</p>";
     }
+    if (!file_exists("Files"))
+        mkdir ("Files");
+    file_put_contents("Files/adressesNonValides.txt", implode("\n", $invalidEmails));
 }
 
 function displayValidEmails($file) {
     list($validEmails, $invalidEmails, $emailFrequency) = cleanAndOrganizeEmails($file);
     
     if (!empty($validEmails)) {
-        echo "<ul>";
+        echo "<table border='1'>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>";
+        
+        // Loop through valid emails and display each in a table row
         foreach ($validEmails as $email => $status) {
-            echo "<li>$email</li>";
+            echo "<tr><td>$email</td></tr>";
         }
-        echo "</ul>";
+        echo "</tbody></table>";
     } else {
         echo "<p>No valid emails found.</p>";
     }
+
+    // Create the directory if it doesn't exist
+    if (!file_exists("Files")) {
+        mkdir("Files");
+    }
+
+    // Save the valid emails to a file EmailsT.txt in ascending order
+    $validEmails = array_keys($validEmails);
+    sort($validEmails);
+    file_put_contents("Files/EmailsT.txt", implode("\n", $validEmails));
 }
+
 
 function displayDuplicateEmails($file) {
     list($validEmails, $invalidEmails, $emailFrequency) = cleanAndOrganizeEmails($file);
@@ -56,31 +86,71 @@ function displayDuplicateEmails($file) {
     });
 
     if (!empty($duplicates)) {
-        echo "<ul>";
+        echo "<table border='1'>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>";
+        
+        // Loop through duplicate emails and display each in a table row
         foreach ($duplicates as $email => $count) {
-            echo "<li>$email - $count occurrences</li>";
+            echo "<tr><td>$email</td><td>$count</td></tr>";
         }
-        echo "</ul>";
+        echo "</tbody></table>";
     } else {
         echo "<p>No duplicate emails found.</p>";
     }
+
+    if (!file_exists("Files"))
+        mkdir ("Files");
+    file_put_contents("Files/adressesDupliquees.txt", implode("\n", array_keys($duplicates)));
 }
 
 function displayDomainEmails($file) {
     list($validEmails, $invalidEmails, $emailFrequency) = cleanAndOrganizeEmails($file);
     
+    // Extract domains from valid emails
     $domains = array_map(function($email) {
         return explode('@', $email)[1];
     }, array_keys($validEmails));
 
     $domainFrequency = array_count_values($domains);
 
-    if (!empty($domainFrequency)) {
-        echo "<ul>";
-        foreach ($domainFrequency as $domain => $count) {
-            echo "<li>$domain - $count occurrences</li>";
+    $domainDir = "domains";
+    if (!is_dir($domainDir)) {
+        mkdir($domainDir);
+    }
+
+    foreach (array_keys($validEmails) as $email) {
+        $domain = substr(strrchr($email, "@"), 1);
+        $domainFile = "$domainDir/$domain.txt";
+
+        $existingEmails = file_exists($domainFile) ? file($domainFile, FILE_SKIP_EMPTY_LINES) : [];
+
+        if (!in_array($email . PHP_EOL, $existingEmails)) {
+            file_put_contents($domainFile, $email . PHP_EOL, FILE_APPEND);
         }
-        echo "</ul>";
+    }
+
+    // Display domain frequency on the page
+    if (!empty($domainFrequency)) {
+        echo "<table border='1'>
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>";
+        
+        // Loop through domain frequency and display each in a table row
+        foreach ($domainFrequency as $domain => $count) {
+            echo "<tr><td>$domain</td><td>$count</td></tr>";
+        }
+        echo "</tbody></table>";
     } else {
         echo "<p>No domain emails found.</p>";
     }
