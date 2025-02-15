@@ -1,51 +1,234 @@
-
-<link rel="stylesheet" href="style.css">
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulaire</title>
-</head>
-<body>
-    <div class="container">
-        <h1>Formulaire</h1>
-        <div class="content">
-            <h2>Renseignement Personnels</h2>
-            <form action="" method="post">
-                <input type="text" name="nom" placeholder="Nom" required>
-                <input type="text" name="prenom" placeholder="Prénom" required>
-                <input type="text" name="age" placeholder="Age" required>
-                <input type="tel" name="telephone" placeholder="Téléphone" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <button type="submit" name="add_email">Ajouter</button>
+<html>
+    <head>
+        <title>Contactez-moi</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+        <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="divider"></div>
+            <div class="heading">
+                <h2>CV - Generator</h2>
+            </div>
+            <form id="contact-form" method="post" action="recap.php" role="form">
+                
+                <!-- Renseignement Personnel -->
+                <div class="section">
+                    <div class="section-title">Renseignement Personnel</div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="firstname" class="form-label">Prénom <span class="blue">*</span></label>
+                            <input id="firstname" type="text" name="firstname" class="form-control" placeholder="Votre prénom">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="name" class="form-label">Nom <span class="blue">*</span></label>
+                            <input id="name" type="text" name="name" class="form-control" placeholder="Votre Nom">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="email" class="form-label">Email <span class="blue">*</span></label>
+                            <input id="email" type="text" name="email" class="form-control" placeholder="Votre Email">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="phone" class="form-label">Téléphone</label>
+                            <input id="phone" type="text" name="phone" class="form-control" placeholder="Votre Téléphone">
+                        </div>
+                        <div class="row">
+                        <div class="col-lg-6">
+                            <label for="age" class="form-label">Age <span class="blue">*</span></label>
+                            <input id="age" type="text" name="age" class="form-control" placeholder="Votre Age">
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Renseignement Académique -->
+                <div class="section">
+                    <div class="section-title">Renseignement Académique</div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="formation" class="form-label">Vous êtes en: <span class="blue">*</span></label><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="formation" value="2AP" id="formation-2AP">
+                                <label class="form-check-label" for="formation-2AP">2AP</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="formation" value="GSTR" id="formation-GSTR">
+                                <label class="form-check-label" for="formation-GSTR">GSTR</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="formation" value="GI" id="formation-GI">
+                                <label class="form-check-label" for="formation-GI">GI</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="formation" value="SCM" id="formation-SCM">
+                                <label class="form-check-label" for="formation-SCM">SCM</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="formation" value="GC" id="formation-GC">
+                                <label class="form-check-label" for="formation-GC">GC</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="formation" value="MS" id="formation-MS">
+                                <label class="form-check-label" for="formation-MS">MS</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="niveau" value="niveau_1" id="niveau_1">
+                                <label class="form-check-label" for="niveau_1">1er annee</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="niveau" value="niveau_2" id="niveau_2">
+                                <label class="form-check-label" for="niveau_2">2eme annee</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="niveau" value="niveau_3" id="niveau_3">
+                                <label class="form-check-label" for="niveau_3">3eme annee</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <label for="formation" class="form-label">Modules suivies cette annee: <span class="blue">*</span></label><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="modules" value="proAv" id="proAv">
+                                <label class="form-check-label" for="proAv">Pro Av</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="modules" value="compilation" id="compilation">
+                                <label class="form-check-label" for="compilation">Compilation</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="modules" value="reseauxAv" id="reseauxAv">
+                                <label class="form-check-label" for="reseauxAv">Reseaux Av</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="modules" value="webAv" id="webAv">
+                                <label class="form-check-label" for="webAv">Web Avancee</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="modules" value="poo" id="poo">
+                                <label class="form-check-label" for="poo">POO</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="modules" value="bd" id="bd">
+                                <label class="form-check-label" for="bd">BD</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <label for="project" class="form-label">Nombre de projets réalisés cette année: <span class="blue">*</span></label>
+                            <select id="project" name="project" class="form-control" onchange="generateProjectFields()">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <!-- Container for dynamic fields -->
+                        <div id="projectFields" class="mt-3"></div>
+                    </div>
+                </div>
+
+                <!-- Centre d'interet -->
+                <div class="section">
+                    <div class="section-title">Centre d'intérêt</div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="interest1" class="form-label">Centre d'intérêt 1: <span class="blue">*</span></label>
+                            <input id="interest1" type="text" name="interest1" class="form-control" placeholder="Entrez votre intérêt">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="interest2" class="form-label">Centre d'intérêt 2: <span class="blue">*</span></label>
+                            <input id="interest2" type="text" name="interest2" class="form-control" placeholder="Entrez votre intérêt">
+                        </div>
+                        <div class="col-lg-6 mt-2">
+                            <label for="interest3" class="form-label">Centre d'intérêt 3:</label>
+                            <input id="interest3" type="text" name="interest3" class="form-control" placeholder="Entrez votre intérêt">
+                        </div>
+                        <div class="col-lg-6 mt-2">
+                            <label for="interest4" class="form-label">Centre d'intérêt 4:</label>
+                            <input id="interest4" type="text" name="interest4" class="form-control" placeholder="Entrez votre intérêt">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Langues -->
+                <div class="section">
+                    <div class="section-title">Langues</div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="langue1" class="form-label">Langue 1: <span class="blue">*</span></label>
+                            <input id="langue1" type="text" name="langue1" class="form-control" placeholder="Entrez la langue">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="niveau1" class="form-label">Niveau: <span class="blue">*</span></label>
+                            <select id="niveau1" name="niveau1" class="form-control">
+                                <option value="debutant">Débutant</option>
+                                <option value="intermediaire">Intermédiaire</option>
+                                <option value="avance">Avancé</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-6 mt-2">
+                            <label for="langue2" class="form-label">Langue 2: <span class="blue">*</span></label>
+                            <input id="langue2" type="text" name="langue2" class="form-control" placeholder="Entrez la langue">
+                        </div>
+                        <div class="col-lg-6 mt-2">
+                            <label for="niveau2" class="form-label">Niveau: <span class="blue">*</span></label>
+                            <select id="niveau2" name="niveau2" class="form-control">
+                                <option value="debutant">Débutant</option>
+                                <option value="intermediaire">Intermédiaire</option>
+                                <option value="avance">Avancé</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-6 mt-2">
+                            <label for="langue3" class="form-label">Langue 3:</label>
+                            <input id="langue3" type="text" name="langue3" class="form-control" placeholder="Entrez la langue">
+                        </div>
+                        <div class="col-lg-6 mt-2">
+                            <label for="niveau3" class="form-label">Niveau:</label>
+                            <select id="niveau3" name="niveau3" class="form-control">
+                                <option value="debutant">Débutant</option>
+                                <option value="intermediaire">Intermédiaire</option>
+                                <option value="avance">Avancé</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Remarques -->
+                <div class="section">
+                    <div class="section-title">Vos Remarques</div>
+                    <div class="row">
+                        <div class="">
+                            <input type="textarea" id="message" name="message" class="form-control" placeholder="Votre message">
+                        </div>
+                        <!-- upload file -->
+                        <div class="col-lg-12">
+                            <form action="upload.php" method="post" enctype="multipart/form-data">
+                                <label for="file" class="form-label">Choisir un fichier</label>
+                                <input type="file" name="file" required>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div>
+                    <input type="submit" class="button1 btn btn-primary" value="Envoyer">
+                </div>    
+
             </form>
-            <h2>Renseignement Academique</h2>
-            <form action="" method="post"></form>
-                <label for="niveau">Niveau d'études:</label>
-                <select name="niveau" id="niveau" required>
-                    <option value="bac">Bac</option>
-                    <option value="bac+2">Bac+2</option>
-                    <option value="bac+3">Bac+3</option>
-                    <option value="bac+5">Bac+5</option>
-                </select>
-                
-                <label for="specialite">Spécialité:</label>
-                <select name="specialite" id="specialite" required>
-                    <option value="informatique">Informatique</option>
-                    <option value="gestion">Gestion</option>
-                    <option value="droit">Droit</option>
-                    <option value="medecine">Médecine</option>
-                </select>
-                
-                <label for="competences">Compétences:</label>
-                <select name="competences[]" id="competences" multiple required>
-                    <option value="programmation">Programmation</option>
-                    <option value="gestion_projet">Gestion de projet</option>
-                    <option value="communication">Communication</option>
-                    <option value="design">Design</option>
-                </select>
-                
-                <button type="submit" name="add_academic">Ajouter</button>
-            </form> </div></select>
-    </div>
+        </div>
+
+
+        <script src="script.js"></script>
+    </body>
+</html>
