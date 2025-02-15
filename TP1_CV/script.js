@@ -1,4 +1,3 @@
-
 function generateProjectFields() {
     let projectCount = document.getElementById("project").value;
     let projectFields = document.getElementById("projectFields");
@@ -18,7 +17,7 @@ function generateProjectFields() {
 
         let input = document.createElement("input");
         input.setAttribute("type", "text");
-        input.setAttribute("name", "projectName" + i);
+        input.setAttribute("name", "projectNames[]"); // Store as an array
         input.setAttribute("id", "projectName" + i);
         input.setAttribute("placeholder", "Entrez le nom du projet " + i);
         input.classList.add("form-control");

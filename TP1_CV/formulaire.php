@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Contactez-moi</title>
+        <title>CV-GENERATOR</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -95,27 +95,27 @@
                         <div class="col-lg-12">
                             <label for="formation" class="form-label">Modules suivies cette annee: <span class="blue">*</span></label><br>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules" value="proAv" id="proAv">
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="proAv" id="proAv">
                                 <label class="form-check-label" for="proAv">Pro Av</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules" value="compilation" id="compilation">
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="compilation" id="compilation">
                                 <label class="form-check-label" for="compilation">Compilation</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules" value="reseauxAv" id="reseauxAv">
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="reseauxAv" id="reseauxAv">
                                 <label class="form-check-label" for="reseauxAv">Reseaux Av</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules" value="webAv" id="webAv">
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="webAv" id="webAv">
                                 <label class="form-check-label" for="webAv">Web Avancee</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules" value="poo" id="poo">
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="poo" id="poo">
                                 <label class="form-check-label" for="poo">POO</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules" value="bd" id="bd">
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="bd" id="bd">
                                 <label class="form-check-label" for="bd">BD</label>
                             </div>
                         </div>
@@ -204,22 +204,20 @@
 
 
                 <!-- Remarques -->
+                <!-- Remarques -->
                 <div class="section">
                     <div class="section-title">Vos Remarques</div>
                     <div class="row">
                         <div class="">
-                            <input type="textarea" id="message" name="message" class="form-control" placeholder="Votre message">
+                            <textarea id="message" name="message" class="form-control" placeholder="Votre message"></textarea>
                         </div>
                         <!-- upload file -->
                         <div class="col-lg-12">
-                            <form action="upload.php" method="post" enctype="multipart/form-data">
-                                <label for="file" class="form-label">Choisir un fichier</label>
-                                <input type="file" name="file" required>
-                            </form>
+                            <label for="file" class="form-label">Choisir un fichier</label>
+                            <input type="file" name="file" class="" required>
                         </div>
                     </div>
                 </div>
-
 
                 <div>
                     <input type="submit" class="button1 btn btn-primary" value="Envoyer">
