@@ -1,10 +1,8 @@
 <?php
 include_once 'functions.php';
 include_once 'clean_emails.php';
-// Start the session if you want to store messages
 session_start();
 
-// Handle actions based on button pressed
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["add"])) {
         $action = $_POST["add"];
@@ -14,18 +12,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $action = $_POST["invalid"];
     } elseif (isset($_POST["duplicate"])) {
         $action = $_POST["duplicate"];
+    } elseif (isset($_POST["domain"])) {
+        $action = $_POST["domain"];
     }
 }
 ?>
 
 <div class="content">
     <h2>Choose Action</h2>
-    <!-- Form to choose action -->
     <form action="" method="post">
         <button type="submit" name="add" value="add_email">Add Email</button>
         <button type="submit" name="valid" value="valid_emails">Valid Emails</button>
         <button type="submit" name="invalid" value="invalid_emails">Invalid Emails</button>
         <button type="submit" name="duplicate" value="duplicate_emails">Duplicate Emails</button>
+        <button type="submit" name="domain" value="domain_emails">Domain Emails</button>
     </form>
     
 </div>
@@ -39,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <?php 
-// Show the appropriate content based on the action chosen
 if (isset($action)) {
     if ($action == "add_email") {
         // Show Add Email form
@@ -54,7 +53,6 @@ if (isset($action)) {
         
         <?php
     } elseif ($action == "valid_emails") {
-        // Show Valid Emails content (you would typically include code to list valid emails)
         ?>
         <div class="content">
             <h2>Valid Emails</h2>
@@ -63,7 +61,6 @@ if (isset($action)) {
         </div>
         <?php
     } elseif ($action == "invalid_emails") {
-        // Show Invalid Emails content (you would typically include code to list invalid emails)
         ?>
         <div class="content">
             <h2>Invalid Emails</h2>
@@ -77,6 +74,14 @@ if (isset($action)) {
             <h2>Duplicate Emails</h2>
             <!-- Logic to display duplicate emails -->
             <?php displayDuplicateEmails($file); ?>
+        </div>
+        <?php
+    } elseif ($action == "domain_emails") {
+        ?>
+        <div class="content">
+            <h2>Domain Emails</h2>
+            <!-- Logic to display domain emails -->
+            <?php displayDomainEmails($file); ?>
         </div>
         <?php
     }

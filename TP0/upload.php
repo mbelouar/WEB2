@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start session at the very top
+session_start(); 
 
 if (isset($_POST["upload"])) {
     $target_dir = "uploads/";
@@ -42,7 +42,6 @@ if (isset($_POST["upload"])) {
         }
     }
 
-    // Redirect back to index.php
     header("Location: index.php");
     exit; // Stop script execution
 }

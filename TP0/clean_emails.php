@@ -10,7 +10,7 @@ function cleanAndOrganizeEmails($file) {
     foreach ($emails as $email) {
         $email = trim($email);
         if (isValidEmail($email)) {
-            $validEmails[$email] = true; // ensure unique emails
+            $validEmails[$email] = true; 
             $emailFrequency[$email] = isset($emailFrequency[$email]) ? $emailFrequency[$email] + 1 : 1; // count email frequency
         } else {
             $invalidEmails[] = $email;
@@ -24,6 +24,7 @@ function displayInvalidEmails($file) {
     list($validEmails, $invalidEmails, $emailFrequency) = cleanAndOrganizeEmails($file);
     
     if (!empty($invalidEmails)) {
+        echo "<ul>";
         foreach ($invalidEmails as $email) {
             echo "<li>$email</li>";
         }
@@ -37,6 +38,7 @@ function displayValidEmails($file) {
     list($validEmails, $invalidEmails, $emailFrequency) = cleanAndOrganizeEmails($file);
     
     if (!empty($validEmails)) {
+        echo "<ul>";
         foreach ($validEmails as $email => $status) {
             echo "<li>$email</li>";
         }
@@ -54,13 +56,33 @@ function displayDuplicateEmails($file) {
     });
 
     if (!empty($duplicates)) {
-        echo "<h3>Duplicate Emails:</h3><ul>";
+        echo "<ul>";
         foreach ($duplicates as $email => $count) {
             echo "<li>$email - $count occurrences</li>";
         }
         echo "</ul>";
     } else {
         echo "<p>No duplicate emails found.</p>";
+    }
+}
+
+function displayDomainEmails($file) {
+    list($validEmails, $invalidEmails, $emailFrequency) = cleanAndOrganizeEmails($file);
+    
+    $domains = array_map(function($email) {
+        return explode('@', $email)[1];
+    }, array_keys($validEmails));
+
+    $domainFrequency = array_count_values($domains);
+
+    if (!empty($domainFrequency)) {
+        echo "<ul>";
+        foreach ($domainFrequency as $domain => $count) {
+            echo "<li>$domain - $count occurrences</li>";
+        }
+        echo "</ul>";
+    } else {
+        echo "<p>No domain emails found.</p>";
     }
 }
 

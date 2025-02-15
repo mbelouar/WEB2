@@ -1,11 +1,10 @@
 <?php
-session_start(); // Ensure session starts
+session_start();
 include_once 'functions.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["add_email"])) {
     $email = trim($_POST["email"]);
 
-    // Get the uploaded file name from session
     $fileName = isset($_SESSION["uploadedFile"]) ? $_SESSION["uploadedFile"] : '';
 
     $emailsFile = "uploads/" . $fileName;
