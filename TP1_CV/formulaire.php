@@ -7,6 +7,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="style.css">
     </head>
@@ -220,9 +221,15 @@
 
                 <p id="error-message" style="color: red; display: none;">Veuillez sélectionner au moins un module.</p>
 
-                <div>
+                <!-- <div>
                     <input type="submit" onclick="return validateCheckboxes()" class="button1 btn btn-primary" value="Envoyer">
-                </div>    
+                </div> -->
+
+                <div class="d-flex justify-content-between mt-3">
+                    <button type="submit" onclick="return validateCheckboxes()" class="button-env btn btn-primary">Envoyer</button>
+                    <button type="button" id="generate-btn" class="button-gen btn btn-success">Générer</button>
+                </div>
+
 
             </form>
         </div>
