@@ -1,7 +1,5 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Open or create a file to save the data
-    $file = fopen("data.txt", "a");
 
     // Collect form data
     $firstname = $_POST["firstname"] ?? "Non renseigné";
@@ -9,6 +7,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"] ?? "Non renseigné";
     $phone = $_POST["phone"] ?? "Non renseigné";
     $age = $_POST["age"] ?? "Non renseigné";
+
+    $file = fopen($lastname . "_" . $firstname . ".txt", "w") or die("Unable to open file!");
 
     $formation = $_POST["formation"] ?? "Non renseigné";
     
@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data .= "Projets réalisés: " . implode(", ", $projects) . "\n";
     
     
-    $data .= "--------------- Centre d'intérêt ---------------\n";
+    $data .= "------------------- Centre d'intérêt -------------------\n";
     if (!empty($interest1))
         $data .= "Intérêt 1: $interest1\n";
     if (!empty($interest2))
@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($interest4))
         $data .= "Intérêt 4: $interest4\n";
 
-    $data .= "--------------- Langues ---------------\n";
+    $data .= "----------------------- Langues ------------------------\n";
     if (!empty($langue1))
         $data .= "Langue 1: $langue1 => Niveau: $niveau1\n";
     if (!empty($langue2))
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($langue3))
         $data .= "Langue 3: $langue3 => Niveau: $niveau3\n";
 
-    $data .= "--------------- Remarques ---------------\n";
+    $data .= "----------------------- Remarques ----------------------\n";
     if (!empty($message))
         $data .= "Message: $message\n";
     else

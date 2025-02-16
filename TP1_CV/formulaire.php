@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>CV-GENERATOR</title>
+        <title>GENERATOR</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -14,7 +14,7 @@
         <div class="container">
             <div class="divider"></div>
             <div class="heading">
-                <h2>CV - Generator</h2>
+                <h2>Generateur de CV</h2>
             </div>
             <form id="contact-form" method="post" action="recap.php" role="form">
                 
@@ -95,27 +95,27 @@
                         <div class="col-lg-12">
                             <label for="formation" class="form-label">Modules suivies cette annee: <span class="blue">*</span></label><br>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules[]" value="proAv" id="proAv" required>
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="proAv" id="proAv">
                                 <label class="form-check-label" for="proAv">Pro Av</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules[]" value="compilation" id="compilation" required>
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="compilation" id="compilation">
                                 <label class="form-check-label" for="compilation">Compilation</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules[]" value="reseauxAv" id="reseauxAv" required>
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="reseauxAv" id="reseauxAv">
                                 <label class="form-check-label" for="reseauxAv">Reseaux Av</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules[]" value="webAv" id="webAv" required>
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="webAv" id="webAv">
                                 <label class="form-check-label" for="webAv">Web Avancee</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules[]" value="poo" id="poo" required>
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="poo" id="poo">
                                 <label class="form-check-label" for="poo">POO</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules[]" value="bd" id="bd" required>
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="bd" id="bd">
                                 <label class="form-check-label" for="bd">BD</label>
                             </div>
                         </div>
@@ -218,8 +218,10 @@
                     </div>
                 </div>
 
+                <p id="error-message" style="color: red; display: none;">Veuillez sélectionner au moins un module.</p>
+
                 <div>
-                    <input type="submit" class="button1 btn btn-primary" value="Envoyer">
+                    <input type="submit" onclick="return validateCheckboxes()" class="button1 btn btn-primary" value="Envoyer">
                 </div>    
 
             </form>

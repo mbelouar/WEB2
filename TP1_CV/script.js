@@ -27,3 +27,23 @@ function generateProjectFields() {
         projectFields.appendChild(div);
     }
 }
+
+function validateCheckboxes() {
+    const checkboxes = document.querySelectorAll('input[name="modules[]"]');
+    const errorMessage = document.getElementById('error-message');
+    
+    let checked = false;
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            checked = true;
+        }
+    });
+
+    if (!checked) {
+        errorMessage.style.display = 'block';
+        return false; // Prevent form submission
+    } else {
+        errorMessage.style.display = 'none';
+        return true; // Allow form submission
+    }
+}
