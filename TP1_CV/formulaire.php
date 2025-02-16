@@ -236,5 +236,6 @@
 
 
         <script src="script.js"></script>
+        <script src="generate.js"></script>
     </body>
 </html>
