@@ -42,6 +42,106 @@ document.addEventListener("DOMContentLoaded", function () {
     generateProjectFields();
 });
 
+function generateStages() {
+    let stageCount = document.getElementById("stage").value;
+    let stageFields = document.getElementById("stageFields");
+
+    // Clear previous inputs
+    stageFields.innerHTML = "";
+
+    // Generate input fields based on selected number
+    for (let i = 1; i <= stageCount; i++) {
+        let div = document.createElement("div");
+        div.classList.add("mb-3");
+
+        // Create Stage Name Label and Input
+        let nameLabel = document.createElement("label");
+        nameLabel.setAttribute("for", "stageName" + i);
+        nameLabel.classList.add("form-label");
+        nameLabel.innerHTML = "Nom du stage " + i + " :";
+
+        let nameInput = document.createElement("input");
+        nameInput.setAttribute("type", "text");
+        nameInput.setAttribute("name", "stageNames[]");
+        nameInput.setAttribute("id", "stageName" + i);
+        nameInput.setAttribute("placeholder", "Entrez le nom du stage " + i);
+        nameInput.classList.add("form-control");
+
+        // Create Stage Description Label and Input
+        let descLabel = document.createElement("label");
+        descLabel.setAttribute("for", "stageDesc" + i);
+        descLabel.classList.add("form-label");
+        descLabel.innerHTML = "Description du stage " + i + " :";
+
+        let descInput = document.createElement("textarea");
+        descInput.setAttribute("name", "stageDescriptions[]");
+        descInput.setAttribute("id", "stageDesc" + i);
+        descInput.setAttribute("placeholder", "Entrez la description du stage " + i);
+        descInput.classList.add("form-control");
+
+        // Append name input fields
+        div.appendChild(nameLabel);
+        div.appendChild(nameInput);
+
+        // Append description input fields
+        div.appendChild(descLabel);
+        div.appendChild(descInput);
+
+        // Append the div to the stageFields container
+        stageFields.appendChild(div);
+    }
+}
+
+function generateExperience() {
+    let experienceCount = document.getElementById("experience").value;
+    let experienceFields = document.getElementById("experienceFields");
+
+    // Clear previous inputs
+    experienceFields.innerHTML = "";
+
+    // Generate input fields based on selected number
+    for (let i = 1; i <= experienceCount; i++) {
+        let div = document.createElement("div");
+        div.classList.add("mb-3");
+
+        // Create Experience Name Label and Input
+        let nameLabel = document.createElement("label");
+        nameLabel.setAttribute("for", "experienceName" + i);
+        nameLabel.classList.add("form-label");
+        nameLabel.innerHTML = "Nom de l'expérience " + i + " :";
+
+        let nameInput = document.createElement("input");
+        nameInput.setAttribute("type", "text");
+        nameInput.setAttribute("name", "experienceNames[]");
+        nameInput.setAttribute("id", "experienceName" + i);
+        nameInput.setAttribute("placeholder", "Entrez le nom de l'expérience " + i);
+        nameInput.classList.add("form-control");
+
+        // Create Experience Description Label and Input
+        let descLabel = document.createElement("label");
+        descLabel.setAttribute("for", "experienceDesc" + i);
+        descLabel.classList.add("form-label");
+        descLabel.innerHTML = "Description de l'expérience " + i + " :";
+
+        let descInput = document.createElement("textarea");
+        descInput.setAttribute("name", "experienceDescriptions[]");
+        descInput.setAttribute("id", "experienceDesc" + i);
+        descInput.setAttribute("placeholder", "Entrez la description de l'expérience " + i);
+        descInput.classList.add("form-control");
+
+        // Append name input fields
+        div.appendChild(nameLabel);
+        div.appendChild(nameInput);
+
+        // Append description input fields
+        div.appendChild(descLabel);
+        div.appendChild(descInput);
+
+        // Append the div to the experienceFields container
+        experienceFields.appendChild(div);
+    }
+}
+
 
 
 function validateCheckboxes() {

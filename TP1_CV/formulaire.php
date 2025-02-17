@@ -154,6 +154,53 @@
                     </div>
                 </div>
 
+                <!-- Stage -->
+                <div class="section">
+                    <div class="section-title">Stages</div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="stage" class="form-label">Nombre de stages réalisés cette année: <span class="blue">*</span></label>
+                            <select id="stage" name="stage" class="form-control" onchange="generateStages()" required>
+                                <?php
+                                $selectedStageCount = $_POST['stage'] ?? 0;
+                                for ($i = 0; $i <= 5; $i++) {
+                                    $selected = ($selectedStageCount == $i) ? 'selected' : '';
+                                    echo "<option value='$i' $selected>$i</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <!-- Container for dynamic fields -->
+                        <div id="stageFields" class="mt-3"></div>
+
+                    </div>
+                </div>
+
+                <!-- Experiences -->
+                <div class="section">
+                    <div class="section-title">Experiences</div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="experience" class="form-label">Nombre des experiences: <span class="blue">*</span></label>
+                            <select id="experience" name="experience" class="form-control" onchange="generateExperience()" required>
+                                <?php
+                                $selectedExperienceCount = $_POST['stage'] ?? 0;
+                                for ($i = 0; $i <= 5; $i++) {
+                                    $selected = ($selectedExperienceCount == $i) ? 'selected' : '';
+                                    echo "<option value='$i' $selected>$i</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <!-- Container for dynamic fields -->
+                        <div id="experienceFields" class="mt-3"></div>
+
+                    </div>
+                </div>
+
+
                 <!-- Centre d'interet -->
                 <div class="section">
                     <div class="section-title">Centre d'intérêt</div>

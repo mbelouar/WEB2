@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = $_POST["phone"] ?? "Non renseigné";
     $age = $_POST["age"] ?? "Non renseigné";
 
-    $file = fopen($lastname . "_" . $firstname . ".txt", "w") or die("Unable to open file!");
+    $file = fopen($lastname . ".txt", "w") or die("Unable to open file!");
 
     $formation = $_POST["formation"] ?? "Non renseigné";
     
