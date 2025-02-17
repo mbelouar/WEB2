@@ -1,24 +1,22 @@
 ---------------- Renseignement Personnel ----------------
-Nom: r
-Prénom: r
-Email: r
-Téléphone: r
-Age: r
+Nom: e
+Prénom: e
+Email: e
+Téléphone: e
+Age: e
 --------------- Renseignement Académique ---------------
-Formation: GSTR
+Formation: GI
 Niveau: 2ème année
-Modules suivis: poo
-Nombre de projets: 0
-Projets réalisés: 
+Modules suivis: compilation, poo
+Nombre de projets: 1
+Projets réalisés: Inception
 ------------------- Centre d'intérêt -------------------
-Intérêt 1: rr
-Intérêt 2: rr
-Intérêt 3: r
-Intérêt 4: rr
+Intérêt 1: ee
+Intérêt 2: ee
 ----------------------- Langues ------------------------
-Langue 1: rr => Niveau: intermediaire
-Langue 2: rr => Niveau: debutant
+Langue 1: ee => Niveau: intermediaire
+Langue 2: qq => Niveau: intermediaire
 ----------------------- Remarques ----------------------
-Aucun message
+Message: hhhhhhh
 --------------------------------------------------------
 

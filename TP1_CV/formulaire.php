@@ -133,7 +133,7 @@
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="modules[]" value="bd" id="bd"
                                 <?php echo in_array('bd', $_POST['modules'] ?? []) ? 'checked' : ''; ?>>
-                                <label class="form-check-label" for="bd">BD</label>
+                                <label4 class="form-check-label" for="bd">BD</label4>
                             </div>
                         </div>
                         <div class="col-lg-12">
@@ -188,35 +188,38 @@
                         <div class="col-lg-6">
                             <label for="niveau1" class="form-label">Niveau: <span class="blue">*</span></label>
                             <select id="niveau1" name="niveau1" class="form-control" required>
-                                <option value="debutant">Débutant</option>
-                                <option value="intermediaire">Intermédiaire</option>
-                                <option value="avance">Avancé</option>
+                                <option value="debutant" <?php echo (isset($_POST['niveau1']) && $_POST['niveau1'] == 'debutant') ? 'selected' : ''; ?>>Débutant</option>
+                                <option value="intermediaire" <?php echo (isset($_POST['niveau1']) && $_POST['niveau1'] == 'intermediaire') ? 'selected' : ''; ?>>Intermédiaire</option>
+                                <option value="avance" <?php echo (isset($_POST['niveau1']) && $_POST['niveau1'] == 'avance') ? 'selected' : ''; ?>>Avancé</option>
                             </select>
                         </div>
+
                         <div class="col-lg-6 mt-2">
                             <label for="langue2" class="form-label">Langue 2: <span class="blue">*</span></label>
                             <input id="langue2" type="text" name="langue2" value="<?php echo $_POST['langue2'] ?? ''; ?>" class="form-control" placeholder="Entrez la langue" required>
                         </div>
-                        <div class="col-lg-6 mt-2">
+                        <div class="col-lg-6">
                             <label for="niveau2" class="form-label">Niveau: <span class="blue">*</span></label>
                             <select id="niveau2" name="niveau2" class="form-control" required>
-                                <option value="debutant">Débutant</option>
-                                <option value="intermediaire">Intermédiaire</option>
-                                <option value="avance">Avancé</option>
+                                <option value="debutant" <?php echo (isset($_POST['niveau2']) && $_POST['niveau2'] == 'debutant') ? 'selected' : ''; ?>>Débutant</option>
+                                <option value="intermediaire" <?php echo (isset($_POST['niveau2']) && $_POST['niveau2'] == 'intermediaire') ? 'selected' : ''; ?>>Intermédiaire</option>
+                                <option value="avance" <?php echo (isset($_POST['niveau2']) && $_POST['niveau2'] == 'avance') ? 'selected' : ''; ?>>Avancé</option>
                             </select>
                         </div>
+
                         <div class="col-lg-6 mt-2">
                             <label for="langue3" class="form-label">Langue 3:</label>
                             <input id="langue3" type="text" name="langue3" value="<?php echo $_POST['langue3'] ?? ''; ?>" class="form-control" placeholder="Entrez la langue">
                         </div>
-                        <div class="col-lg-6 mt-2">
-                            <label for="niveau3" class="form-label">Niveau:</label>
-                            <select id="niveau3" name="niveau3" class="form-control">
-                                <option value="debutant">Débutant</option>
-                                <option value="intermediaire">Intermédiaire</option>
-                                <option value="avance">Avancé</option>
+                        <div class="col-lg-6">
+                            <label for="niveau3" class="form-label">Niveau: <span class="blue">*</span></label>
+                            <select id="niveau3" name="niveau3" class="form-control" required>
+                                <option value="debutant" <?php echo (isset($_POST['niveau3']) && $_POST['niveau3'] == 'debutant') ? 'selected' : ''; ?>>Débutant</option>
+                                <option value="intermediaire" <?php echo (isset($_POST['niveau3']) && $_POST['niveau3'] == 'intermediaire') ? 'selected' : ''; ?>>Intermédiaire</option>
+                                <option value="avance" <?php echo (isset($_POST['niveau3']) && $_POST['niveau3'] == 'avance') ? 'selected' : ''; ?>>Avancé</option>
                             </select>
                         </div>
+
                     </div>
                 </div>
 
@@ -226,7 +229,9 @@
                     <div class="section-title">Vos Remarques</div>
                     <div class="row">
                         <div class="">
-                            <textarea id="message" name="message" class="form-control" placeholder="Votre message"></textarea>
+                        <textarea id="message" name="message" class="form-control" placeholder="Votre message"><?php 
+                            echo isset($_POST['message']) ? htmlspecialchars(trim(preg_replace('/\s+/', ' ', $_POST['message']))) : ''; 
+                        ?></textarea>
                         </div>
                         <!-- upload file -->
                         <div class="col-lg-12">
@@ -237,10 +242,6 @@
                 </div>
 
                 <p id="error-message" style="color: red; display: none;">Veuillez sélectionner au moins un module.</p>
-
-                <!-- <div>
-                    <input type="submit" onclick="return validateCheckboxes()" class="button1 btn btn-primary" value="Envoyer">
-                </div> -->
 
                 <!-- Hidden input to store previously entered project names -->
                 <input type="hidden" id="savedProjects" value='<?php echo json_encode($_POST['projectNames'] ?? []); ?>'>
