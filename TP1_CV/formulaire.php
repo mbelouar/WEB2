@@ -25,24 +25,24 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <label for="firstname" class="form-label">Prénom <span class="blue">*</span></label>
-                            <input id="firstname" type="text" name="firstname" class="form-control" placeholder="Votre prénom" required>
+                            <input id="firstname" type="text" name="firstname" value="<?php echo $_POST['firstname'] ?? ''; ?>" class="form-control" placeholder="Votre prénom" required>
                         </div>
                         <div class="col-lg-6">
                             <label for="name" class="form-label">Nom <span class="blue">*</span></label>
-                            <input id="name" type="text" name="name" class="form-control" placeholder="Votre Nom" required>
+                            <input id="name" type="text" name="name" value="<?php echo $_POST['name'] ?? ''; ?>" class="form-control" placeholder="Votre Nom" required>
                         </div>
                         <div class="col-lg-6">
                             <label for="email" class="form-label">Email <span class="blue">*</span></label>
-                            <input id="email" type="text" name="email" class="form-control" placeholder="Votre Email" required>
+                            <input id="email" type="text" name="email" value="<?php echo $_POST['email'] ?? ''; ?>" class="form-control" placeholder="Votre Email" required>
                         </div>
                         <div class="col-lg-6">
                             <label for="phone" class="form-label">Téléphone <span class="blue">*</span></label>
-                            <input id="phone" type="text" name="phone" class="form-control" placeholder="Votre Téléphone" required>
+                            <input id="phone" type="text" name="phone" value="<?php echo $_POST['phone'] ?? ''; ?>" class="form-control" placeholder="Votre Téléphone" required>
                         </div>
                         <div class="row">
                         <div class="col-lg-6">
                             <label for="age" class="form-label">Age <span class="blue">*</span></label>
-                            <input id="age" type="text" name="age" class="form-control" placeholder="Votre Age" required>
+                            <input id="age" type="text" name="age" value="<?php echo $_POST['age'] ?? ''; ?>" class="form-control" placeholder="Votre Age" required>
                         </div>
                     </div>
                     </div>
@@ -54,81 +54,98 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <label for="formation" class="form-label">Vous êtes en: <span class="blue">*</span></label><br>
+                            <!-- keep the selected value after form submission -->
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="formation" value="2AP" id="formation-2AP" required>
-                                <label class="form-check-label" for="formation-2AP">2AP</label>
+                                <input class="form-check-input" type="radio" name="formation" value="2AP" id="formation-2AP"
+                                <?php echo ($_POST['formation'] ?? '') == '2AP' ? 'checked' : ''; ?> required>
+                                <label class="form-check-label" for="formation-2AP">1AP</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="formation" value="GSTR" id="formation-GSTR" required>
+                                <input class="form-check-input" type="radio" name="formation" value="GSTR" id="formation-GSTR"
+                                <?php echo ($_POST['formation'] ?? '') == 'GSTR' ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="formation-GSTR">GSTR</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="formation" value="GI" id="formation-GI" required>
+                                <input class="form-check-input" type="radio" name="formation" value="GI" id="formation-GI"
+                                <?php echo ($_POST['formation'] ?? '') == 'GI' ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="formation-GI">GI</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="formation" value="SCM" id="formation-SCM" required>
+                                <input class="form-check-input" type="radio" name="formation" value="SCM" id="formation-SCM"
+                                <?php echo ($_POST['formation'] ?? '') == 'SCM' ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="formation-SCM">SCM</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="formation" value="GC" id="formation-GC" required>
+                                <input class="form-check-input" type="radio" name="formation" value="GC" id="formation-GC"
+                                <?php echo ($_POST['formation'] ?? '') == 'GC' ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="formation-GC">GC</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="formation" value="MS" id="formation-MS" required>
+                                <input class="form-check-input" type="radio" name="formation" value="MS" id="formation-MS"
+                                <?php echo ($_POST['formation'] ?? '') == 'MS' ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="formation-MS">MS</label>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="niveau" value="niveau_1" id="niveau_1" required>
-                                <label class="form-check-label" for="niveau_1">1er annee</label>
+                                <input class="form-check-input" type="radio" name="niveau" value="niveau_1" id="niveau_1"
+                                <?php echo ($_POST['niveau'] ?? '') == 'niveau_1' ? 'checked' : ''; ?> required>
+                                <label class="form-check-label" for="niveau_1">1ere annee</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="niveau" value="niveau_2" id="niveau_2" required>
+                                <input class="form-check-input" type="radio" name="niveau" value="niveau_2" id="niveau_2"
+                                <?php echo ($_POST['niveau'] ?? '') == 'niveau_2' ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="niveau_2">2eme annee</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="niveau" value="niveau_3" id="niveau_3" required>
+                                <input class="form-check-input" type="radio" name="niveau" value="niveau_3" id="niveau_3"
+                                <?php echo ($_POST['niveau'] ?? '') == 'niveau_3' ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="niveau_3">3eme annee</label>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <label for="formation" class="form-label">Modules suivies cette annee: <span class="blue">*</span></label><br>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules[]" value="proAv" id="proAv">
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="proAv" id="proAv"
+                                <?php echo in_array('proAv', $_POST['modules'] ?? []) ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="proAv">Pro Av</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules[]" value="compilation" id="compilation">
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="compilation" id="compilation"
+                                <?php echo in_array('compilation', $_POST['modules'] ?? []) ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="compilation">Compilation</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules[]" value="reseauxAv" id="reseauxAv">
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="reseauxAv" id="reseauxAv"
+                                <?php echo in_array('reseauxAv', $_POST['modules'] ?? []) ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="reseauxAv">Reseaux Av</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules[]" value="webAv" id="webAv">
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="webAv" id="webAv"
+                                <?php echo in_array('webAv', $_POST['modules'] ?? []) ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="webAv">Web Avancee</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules[]" value="poo" id="poo">
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="poo" id="poo"
+                                <?php echo in_array('poo', $_POST['modules'] ?? []) ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="poo">POO</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="modules[]" value="bd" id="bd">
+                                <input class="form-check-input" type="checkbox" name="modules[]" value="bd" id="bd"
+                                <?php echo in_array('bd', $_POST['modules'] ?? []) ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="bd">BD</label>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <label for="project" class="form-label">Nombre de projets réalisés cette année: <span class="blue">*</span></label>
                             <select id="project" name="project" class="form-control" onchange="generateProjectFields()" required>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
+                                <?php
+                                $selectedProjectCount = $_POST['project'] ?? 0;
+                                for ($i = 0; $i <= 5; $i++) {
+                                    $selected = ($selectedProjectCount == $i) ? 'selected' : '';
+                                    echo "<option value='$i' $selected>$i</option>";
+                                }
+                                ?>
                             </select>
                         </div>
 
@@ -143,19 +160,19 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <label for="interest1" class="form-label">Centre d'intérêt 1: <span class="blue">*</span></label>
-                            <input id="interest1" type="text" name="interest1" class="form-control" placeholder="Entrez votre intérêt" required>
+                            <input id="interest1" type="text" name="interest1" value="<?php echo $_POST['interest1'] ?? ''; ?>" class="form-control" placeholder="Entrez votre intérêt" required>
                         </div>
                         <div class="col-lg-6">
                             <label for="interest2" class="form-label">Centre d'intérêt 2: <span class="blue">*</span></label>
-                            <input id="interest2" type="text" name="interest2" class="form-control" placeholder="Entrez votre intérêt" required>
+                            <input id="interest2" type="text" name="interest2" value="<?php echo $_POST['interest2'] ?? ''; ?>" class="form-control" placeholder="Entrez votre intérêt" required>
                         </div>
                         <div class="col-lg-6 mt-2">
                             <label for="interest3" class="form-label">Centre d'intérêt 3:</label>
-                            <input id="interest3" type="text" name="interest3" class="form-control" placeholder="Entrez votre intérêt">
+                            <input id="interest3" type="text" name="interest3" value="<?php echo $_POST['interest3'] ?? ''; ?>" class="form-control" placeholder="Entrez votre intérêt">
                         </div>
                         <div class="col-lg-6 mt-2">
                             <label for="interest4" class="form-label">Centre d'intérêt 4:</label>
-                            <input id="interest4" type="text" name="interest4" class="form-control" placeholder="Entrez votre intérêt">
+                            <input id="interest4" type="text" name="interest4" value="<?php echo $_POST['interest4'] ?? ''; ?>" class="form-control" placeholder="Entrez votre intérêt">
                         </div>
                     </div>
                 </div>
@@ -166,7 +183,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <label for="langue1" class="form-label">Langue 1: <span class="blue">*</span></label>
-                            <input id="langue1" type="text" name="langue1" class="form-control" placeholder="Entrez la langue" required>
+                            <input id="langue1" type="text" name="langue1" value="<?php echo $_POST['langue1'] ?? ''; ?>" class="form-control" placeholder="Entrez la langue" required>
                         </div>
                         <div class="col-lg-6">
                             <label for="niveau1" class="form-label">Niveau: <span class="blue">*</span></label>
@@ -178,7 +195,7 @@
                         </div>
                         <div class="col-lg-6 mt-2">
                             <label for="langue2" class="form-label">Langue 2: <span class="blue">*</span></label>
-                            <input id="langue2" type="text" name="langue2" class="form-control" placeholder="Entrez la langue" required>
+                            <input id="langue2" type="text" name="langue2" value="<?php echo $_POST['langue2'] ?? ''; ?>" class="form-control" placeholder="Entrez la langue" required>
                         </div>
                         <div class="col-lg-6 mt-2">
                             <label for="niveau2" class="form-label">Niveau: <span class="blue">*</span></label>
@@ -190,7 +207,7 @@
                         </div>
                         <div class="col-lg-6 mt-2">
                             <label for="langue3" class="form-label">Langue 3:</label>
-                            <input id="langue3" type="text" name="langue3" class="form-control" placeholder="Entrez la langue">
+                            <input id="langue3" type="text" name="langue3" value="<?php echo $_POST['langue3'] ?? ''; ?>" class="form-control" placeholder="Entrez la langue">
                         </div>
                         <div class="col-lg-6 mt-2">
                             <label for="niveau3" class="form-label">Niveau:</label>
@@ -225,6 +242,9 @@
                     <input type="submit" onclick="return validateCheckboxes()" class="button1 btn btn-primary" value="Envoyer">
                 </div> -->
 
+                <!-- Hidden input to store previously entered project names -->
+                <input type="hidden" id="savedProjects" value='<?php echo json_encode($_POST['projectNames'] ?? []); ?>'>
+
                 <div class="d-flex justify-content-between mt-3">
                     <button type="submit" onclick="return validateCheckboxes()" class="button-env btn btn-primary">Envoyer</button>
                     <button type="button" id="generate-btn" class="button-gen btn btn-success">Générer</button>
@@ -236,6 +256,11 @@
 
 
         <script src="script.js"></script>
-        <script src="generate.js"></script>
+        <script> 
+            document.addEventListener('DOMContentLoaded', function() {
+                // Get the saved project names and generate the fields
+                generateProjectFields();
+            });
+        </script>
     </body>
 </html>

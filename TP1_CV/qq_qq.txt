@@ -1,0 +1,24 @@
+---------------- Renseignement Personnel ----------------
+Nom: qq
+Prénom: qq
+Email: q
+Téléphone: q
+Age: q
+--------------- Renseignement Académique ---------------
+Formation: GI
+Niveau: 2ème année
+Modules suivis: compilation, webAv
+Nombre de projets: 0
+Projets réalisés: 
+------------------- Centre d'intérêt -------------------
+Intérêt 1: qq
+Intérêt 2: q
+Intérêt 3: q
+----------------------- Langues ------------------------
+Langue 1: e => Niveau: intermediaire
+Langue 2: q => Niveau: avance
+Langue 3: qq => Niveau: debutant
+----------------------- Remarques ----------------------
+Aucun message
+--------------------------------------------------------
+

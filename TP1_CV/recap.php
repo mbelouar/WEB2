@@ -92,7 +92,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Show confirmation message
     echo "<h2>Données enregistrées avec succès!</h2>";
     echo "<p>Merci, $firstname $lastname. Vos informations ont été sauvegardées.</p>";
+
+    // Form to return to formulaire.php with stored values
+    echo "<form action='formulaire.php' method='POST'>";
+    echo "<input type='hidden' name='firstname' value='$firstname'>";
+    echo "<input type='hidden' name='name' value='$lastname'>";
+    echo "<input type='hidden' name='email' value='$email'>";
+    echo "<input type='hidden' name='phone' value='$phone'>";
+    echo "<input type='hidden' name='age' value='$age'>";
+    echo "<input type='hidden' name='formation' value='$formation'>";
+    echo "<input type='hidden' name='niveau' value='{$_POST['niveau']}'>"; // Send the original key
+    if (!empty($_POST['modules'])) {
+        foreach ($_POST['modules'] as $module) {
+            echo "<input type='hidden' name='modules[]' value='$module'>";
+        }
+    }
+    echo "<input type='hidden' name='project' value='$projectCount'>";
+    if (!empty($projects)) {
+        foreach ($projects as $project) {
+            echo "<input type='hidden' name='projectNames[]' value='$project'>";
+        }
+    }
+    echo "<input type='hidden' name='interest1' value='$interest1'>";
+    echo "<input type='hidden' name='interest2' value='$interest2'>";
+    echo "<input type='hidden' name='interest3' value='$interest3'>";
+    echo "<input type='hidden' name='interest4' value='$interest4'>";
+    echo "<input type='hidden' name='langue1' value='$langue1'>";
+    echo "<input type='hidden' name='niveau1' value='$niveau1'>";
+    echo "<input type='hidden' name='langue2' value='$langue2'>";
+    echo "<input type='hidden' name='niveau2' value='$niveau2'>";
+    echo "<input type='hidden' name='langue3' value='$langue3'>";
+    echo "<input type='hidden' name='niveau3' value='$niveau3'>";
+    echo "<input type='hidden' name='message' value='$message'>";
+
+    echo "<button type='submit'>Modifier</button>";
+    echo "</form>";
+
     echo "<a href='formulaire.php'>Retour au formulaire</a>";
+
 } else {
     echo "<h2>Accès non autorisé.</h2>";
 }

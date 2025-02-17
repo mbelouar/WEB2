@@ -6,6 +6,9 @@ function generateProjectFields() {
     // Clear previous inputs
     projectFields.innerHTML = "";
 
+    // Retrieve previously entered project names from the hidden input
+    let savedProjects = JSON.parse(document.getElementById("savedProjects").value || "[]");
+
     // Generate input fields based on selected number
     for (let i = 1; i <= projectCount; i++) {
         let div = document.createElement("div");
@@ -18,16 +21,28 @@ function generateProjectFields() {
 
         let input = document.createElement("input");
         input.setAttribute("type", "text");
-        input.setAttribute("name", "projectNames[]"); // Store as an array
+        input.setAttribute("name", "projectNames[]");
         input.setAttribute("id", "projectName" + i);
         input.setAttribute("placeholder", "Entrez le nom du projet " + i);
         input.classList.add("form-control");
+
+        // Restore previously entered values if available
+        if (savedProjects[i - 1]) {
+            input.value = savedProjects[i - 1];  // Fill input field
+        }
 
         div.appendChild(label);
         div.appendChild(input);
         projectFields.appendChild(div);
     }
 }
+
+// Ensure fields are restored on reload
+document.addEventListener("DOMContentLoaded", function () {
+    generateProjectFields();
+});
+
+
 
 function validateCheckboxes() {
     const checkboxes = document.querySelectorAll('input[name="modules[]"]');
