@@ -25,26 +25,39 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <label for="firstname" class="form-label">Prénom <span class="blue">*</span></label>
-                            <input id="firstname" type="text" name="firstname" value="<?php echo $_POST['firstname'] ?? ''; ?>" class="form-control" placeholder="Votre prénom" required>
+                            <input id="firstname" type="text" name="firstname" value="<?php echo $_POST['firstname'] ?? ''; ?>" class="form-control" placeholder="Votre prénom" minlength="5" required>
                         </div>
                         <div class="col-lg-6">
                             <label for="name" class="form-label">Nom <span class="blue">*</span></label>
-                            <input id="name" type="text" name="name" value="<?php echo $_POST['name'] ?? ''; ?>" class="form-control" placeholder="Votre Nom" required>
+                            <input id="name" type="text" name="name" value="<?php echo $_POST['name'] ?? ''; ?>" class="form-control" placeholder="Votre Nom" minlength="5" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="age" class="form-label">Age <span class="blue">*</span></label>
+                            <input id="age" type="number" name="age" value="<?php echo $_POST['age'] ?? ''; ?>" class="form-control" placeholder="Votre Age" required>
                         </div>
                         <div class="col-lg-6">
                             <label for="email" class="form-label">Email <span class="blue">*</span></label>
-                            <input id="email" type="text" name="email" value="<?php echo $_POST['email'] ?? ''; ?>" class="form-control" placeholder="Votre Email" required>
+                            <input id="email" type="email" name="email" value="<?php echo $_POST['email'] ?? ''; ?>" class="form-control" placeholder="Votre Email" required>
                         </div>
                         <div class="col-lg-6">
                             <label for="phone" class="form-label">Téléphone <span class="blue">*</span></label>
-                            <input id="phone" type="text" name="phone" value="<?php echo $_POST['phone'] ?? ''; ?>" class="form-control" placeholder="Votre Téléphone" required>
+                            <input id="phone" type="tel" name="phone" value="<?php echo $_POST['phone'] ?? ''; ?>" 
+                                class="form-control" placeholder="Votre Téléphone" required 
+                                pattern="^[0-9]{10}$" 
+                                title="Le numéro de téléphone doit comporter 10 chiffres.">
                         </div>
-                        <div class="row">
                         <div class="col-lg-6">
-                            <label for="age" class="form-label">Age <span class="blue">*</span></label>
-                            <input id="age" type="text" name="age" value="<?php echo $_POST['age'] ?? ''; ?>" class="form-control" placeholder="Votre Age" required>
+                            <label for="address" class="form-label">Adresse <span class="blue">*</span></label>
+                            <input id="address" type="text" name="address" value="<?php echo $_POST['address'] ?? ''; ?>" class="form-control" placeholder="Votre Adresse" required>
                         </div>
-                    </div>
+                        <div class="col-lg-6">
+                            <label for="github" class="form-label">Github</label>
+                            <input id="github" type="text" name="github" value="<?php echo $_POST['github'] ?? ''; ?>" class="form-control" placeholder="Votre Github">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="linkedin" class="form-label">Linkedin</label>
+                            <input id="linkedin" type="text" name="linkedin" value="<?php echo $_POST['linkedin'] ?? ''; ?>" class="form-control" placeholder="Votre Linkedin">
+                        </div>
                     </div>
                 </div>
 
@@ -185,7 +198,7 @@
                             <label for="experience" class="form-label">Nombre des experiences: <span class="blue">*</span></label>
                             <select id="experience" name="experience" class="form-control" onchange="generateExperience()" required>
                                 <?php
-                                $selectedExperienceCount = $_POST['stage'] ?? 0;
+                                $selectedExperienceCount = $_POST['experience'] ?? 0;
                                 for ($i = 0; $i <= 5; $i++) {
                                     $selected = ($selectedExperienceCount == $i) ? 'selected' : '';
                                     echo "<option value='$i' $selected>$i</option>";
@@ -295,25 +308,44 @@
 
                 <!-- Remarques -->
                 <div class="section">
-                    <div class="section-title">Vos Remarques</div>
+                    <div class="section-title">Profile</div>
                     <div class="row">
                         <div class="">
-                        <textarea id="message" name="message" class="form-control" placeholder="Votre message"><?php 
-                            echo isset($_POST['message']) ? htmlspecialchars(trim(preg_replace('/\s+/', ' ', $_POST['message']))) : ''; 
+                        <textarea id="profile_desc" name="profile_desc" class="form-control" placeholder="Votre profile"><?php 
+                            echo isset($_POST['profile_desc']) ? htmlspecialchars(trim(preg_replace('/\s+/', ' ', $_POST['profile_desc']))) : ''; 
                         ?></textarea>
                         </div>
-                        <!-- upload file -->
+                        <!-- upload the picture -->
                         <div class="col-lg-12">
-                            <label for="file" class="form-label">Choisir un fichier</label>
-                            <input type="file" name="file" class="" required>
+                            <label for="picture" class="form-label">Choisir une photo de profile (JPG, PNG, JPEG) <span class="blue">*</span></label>
+                            <input type="file" name="picture" class="" required>
                         </div>
                     </div>
                 </div>
 
                 <p id="error-message" style="color: red; display: none;">Veuillez sélectionner au moins un module.</p>
+                <p id="error-message" style="color: red; <?= !empty($error_message) ? 'display: block;' : 'display: none;'; ?>">
+                    <?= $error_message; ?>
+                </p>
+                
+                <!-- Hidden input to store previously entered project names and desc -->
+                <input type="hidden" id="savedProjects" value='
+                <?php echo json_encode($_POST['projectNames'] ?? []); ?>'>
+                <input type="hidden" id="savedDescriptions" name="savedDescriptions" value='
+                <?php echo json_encode($_POST['projectDescriptions'] ?? []); ?>'>
 
-                <!-- Hidden input to store previously entered project names -->
-                <input type="hidden" id="savedProjects" value='<?php echo json_encode($_POST['projectNames'] ?? []); ?>'>
+                <!-- Hidden input to store previously entered stage names and desc -->
+                <input type="hidden" id="savedStages" name="savedStages" value='
+                <?= htmlspecialchars(json_encode($_POST['stageNames'] ?? [])) ?>'>
+                <input type="hidden" id="savedStageDescriptions" name="savedStageDescriptions" value='
+                <?= htmlspecialchars(json_encode($_POST['stageDescriptions'] ?? [])) ?>'>
+
+                <!-- Hidden input to store previously entered experience names and desc -->
+                <input type="hidden" id="savedExperiences" name="savedExperiences" value='
+                <?= htmlspecialchars(json_encode($_POST['experienceNames'] ?? [])) ?>'>
+                <input type="hidden" id="savedExperienceDescriptions" name="savedExperienceDescriptions" value='
+                <?= htmlspecialchars(json_encode($_POST['experienceDescriptions'] ?? [])) ?>'>
+
 
                 <div class="d-flex justify-content-between mt-3">
                     <button type="submit" onclick="return validateCheckboxes()" class="button-env btn btn-primary">Envoyer</button>
@@ -326,11 +358,5 @@
 
 
         <script src="script.js"></script>
-        <script> 
-            document.addEventListener('DOMContentLoaded', function() {
-                // Get the saved project names and generate the fields
-                generateProjectFields();
-            });
-        </script>
     </body>
 </html>

@@ -6,8 +6,9 @@ function generateProjectFields() {
     // Clear previous inputs
     projectFields.innerHTML = "";
 
-    // Retrieve previously entered project names from the hidden input
+    // Retrieve previously entered project names and desc from the hidden input
     let savedProjects = JSON.parse(document.getElementById("savedProjects").value || "[]");
+    let savedDescriptions = JSON.parse(document.getElementById("savedDescriptions").value || "[]");
 
     // Generate input fields based on selected number
     for (let i = 1; i <= projectCount; i++) {
@@ -44,6 +45,10 @@ function generateProjectFields() {
             input.value = savedProjects[i - 1];  // Fill input field
         }
 
+        if (savedDescriptions[i - 1]) {
+            descInput.value = savedDescriptions[i - 1];  // Fill input field
+        }
+
         div.appendChild(label);
         div.appendChild(input);
 
@@ -54,17 +59,16 @@ function generateProjectFields() {
     }
 }
 
-// Ensure fields are restored on reload
-document.addEventListener("DOMContentLoaded", function () {
-    generateProjectFields();
-});
-
 function generateStages() {
     let stageCount = document.getElementById("stage").value;
     let stageFields = document.getElementById("stageFields");
 
     // Clear previous inputs
     stageFields.innerHTML = "";
+
+    // Retrieve previously entered stages names and desc from the hidden input
+    let savedStages = JSON.parse(document.getElementById("savedStages").value || "[]");
+    let savedDescriptions = JSON.parse(document.getElementById("savedStageDescriptions").value || "[]");
 
     // Generate input fields based on selected number
     for (let i = 1; i <= stageCount; i++) {
@@ -96,6 +100,15 @@ function generateStages() {
         descInput.setAttribute("placeholder", "Entrez la description du stage " + i);
         descInput.classList.add("form-control");
 
+        // Restore previously entered values if available
+        if (savedStages[i - 1]) {
+            nameInput.value = savedStages[i - 1];  // Fill input field
+        }
+
+        if (savedDescriptions[i - 1]) {
+            descInput.value = savedDescriptions[i - 1];  // Fill input field
+        }
+
         // Append name input fields
         div.appendChild(nameLabel);
         div.appendChild(nameInput);
@@ -115,6 +128,9 @@ function generateExperience() {
 
     // Clear previous inputs
     experienceFields.innerHTML = "";
+
+    let savedExperiences = JSON.parse(document.getElementById("savedExperiences").value || "[]");
+    let savedDescriptions = JSON.parse(document.getElementById("savedExperienceDescriptions").value || "[]");
 
     // Generate input fields based on selected number
     for (let i = 1; i <= experienceCount; i++) {
@@ -146,6 +162,15 @@ function generateExperience() {
         descInput.setAttribute("placeholder", "Entrez la description de l'expérience " + i);
         descInput.classList.add("form-control");
 
+        // Restore previously entered values if available
+        if (savedExperiences[i - 1]) {
+            nameInput.value = savedExperiences[i - 1];  // Fill input field
+        }
+
+        if (savedDescriptions[i - 1]) {
+            descInput.value = savedDescriptions[i - 1];  // Fill input field
+        }
+
         // Append name input fields
         div.appendChild(nameLabel);
         div.appendChild(nameInput);
@@ -158,8 +183,6 @@ function generateExperience() {
         experienceFields.appendChild(div);
     }
 }
-
-
 
 function validateCheckboxes() {
     const checkboxes = document.querySelectorAll('input[name="modules[]"]');
@@ -180,3 +203,10 @@ function validateCheckboxes() {
         return true; // Allow form submission
     }
 }
+
+// Ensure fields are restored on reload
+document.addEventListener("DOMContentLoaded", function () {
+    generateProjectFields();
+    generateStages();
+    generateExperience();
+});
