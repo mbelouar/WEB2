@@ -11,7 +11,8 @@
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="style.css">
     </head>
-    <body>
+    <body >
+        <div id="particles-js"></div>
         <div class="container">
             <div class="divider"></div>
             <div class="heading">
@@ -357,6 +358,7 @@
         </div>
 
 
+        <script src="particles.js"></script>
         <script src="script.js"></script>
     </body>
 </html>

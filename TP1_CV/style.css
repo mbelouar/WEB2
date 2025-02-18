@@ -1,7 +1,14 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Lato', sans-serif;
-    margin: 70px 0px;
     background: #626F47;
+    position: relative;
+    isolation: isolate;
 }
 
 .section {
@@ -93,3 +100,15 @@ h2 {
     background: #A4B465;
 }
 
+.container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 70px;
+}
+
+#particles-js{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
