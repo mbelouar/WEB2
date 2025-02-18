@@ -17,7 +17,7 @@
             <div class="heading">
                 <h2>Generateur de CV</h2>
             </div>
-            <form id="contact-form" method="post" action="recap.php" role="form">
+            <form id="contact-form" method="post" action="recap.php" enctype="multipart/form-data" role="form">
                 
                 <!-- Renseignement Personnel -->
                 <div class="section">
@@ -306,7 +306,7 @@
                 </div>
 
 
-                <!-- Remarques -->
+                <!-- Profile and picture -->
                 <div class="section">
                     <div class="section-title">Profile</div>
                     <div class="row">

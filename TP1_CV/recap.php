@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"] ?? "Non renseigné";
     $phone = $_POST["phone"] ?? "Non renseigné";
     $age = $_POST["age"] ?? "Non renseigné";
-    $adresse = $_POST["adresse"] ?? "Non renseigné";
+    $adresse = $_POST["adress"] ?? "Non renseigné";
     $github = $_POST["github"] ?? "Non renseigné";
     $linkedin = $_POST["linkedin"] ?? "Non renseigné";
 
@@ -158,8 +158,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     fwrite($file, $data);
     fclose($file);
 
-    // Handle file upload
+
+    // Handle picture upload
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // Define allowed file formats
+        $allowedExtensions = ['jpg', 'jpeg', 'png'];
     
+        // Get file details
+        $uploadedFile = $_FILES['picture'];
+        $fileName = basename($uploadedFile['name']);
+        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+    
+        // Check if the uploaded file format is allowed
+        if (!in_array($fileExtension, $allowedExtensions)) {
+            $error_message = "Invalid file extension. Only .jpg, .jpeg, and .png are allowed.";
+            include "formulaire.php";
+            exit();
+        } else {
+            // Ensure the 'uploads' directory exists
+            $uploadDir = 'uploads/';
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0777, true); // Create the directory with proper permissions
+            }
+    
+            // Define the file path
+            $filePath = $uploadDir . $fileName;
+            
+            // Move the uploaded file to the 'uploads' directory
+            if (!move_uploaded_file($uploadedFile['tmp_name'], $filePath)) {
+                echo "Error uploading the file.";
+            }
+        }
+    }
+
 
     // Show confirmation message
     echo "<h2>Données enregistrées avec succès!</h2>";
