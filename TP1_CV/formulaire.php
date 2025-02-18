@@ -200,6 +200,28 @@
                     </div>
                 </div>
 
+                <!-- Competences -->
+                <div class="section">
+                    <div class="section-title">Competences</div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="competence1" class="form-label">Competence 1: <span class="blue">*</span></label>
+                            <input id="competence1" type="text" name="competence1" value="<?php echo $_POST['competence1'] ?? ''; ?>" class="form-control" placeholder="Entrez votre competence" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="competence2" class="form-label">Competence 2: <span class="blue">*</span></label>
+                            <input id="competence2" type="text" name="competence2" value="<?php echo $_POST['competence2'] ?? ''; ?>" class="form-control" placeholder="Entrez votre competence" required>
+                        </div>
+                        <div class="col-lg-6 mt-2">
+                            <label for="competence3" class="form-label">Competence 3:</label>
+                            <input id="competence3" type="text" name="competence3" value="<?php echo $_POST['competence3'] ?? ''; ?>" class="form-control" placeholder="Entrez votre competence">
+                        </div>
+                        <div class="col-lg-6 mt-2">
+                            <label for="competence4" class="form-label">Competence 4:</label>
+                            <input id="competence4" type="text" name="competence4" value="<?php echo $_POST['competence4'] ?? ''; ?>" class="form-control" placeholder="Entrez votre competence">
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Centre d'interet -->
                 <div class="section">

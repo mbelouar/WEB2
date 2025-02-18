@@ -26,6 +26,19 @@ function generateProjectFields() {
         input.setAttribute("placeholder", "Entrez le nom du projet " + i);
         input.classList.add("form-control");
 
+        let descLabel = document.createElement("label");
+        descLabel.setAttribute("for", "projectDesc" + i);
+        descLabel.classList.add("form-label");
+        descLabel.innerHTML = "Description du projet " + i + " :";
+        descLabel.classList.add("mt-2");
+
+        let descInput = document.createElement("textarea");
+        descInput.setAttribute("name", "projectDescriptions[]");
+        descInput.setAttribute("id", "projectDesc" + i);
+        descInput.setAttribute("placeholder", "Entrez la description du projet " + i);
+        descInput.classList.add("form-control");
+
+
         // Restore previously entered values if available
         if (savedProjects[i - 1]) {
             input.value = savedProjects[i - 1];  // Fill input field
@@ -33,6 +46,10 @@ function generateProjectFields() {
 
         div.appendChild(label);
         div.appendChild(input);
+
+        div.appendChild(descLabel);
+        div.appendChild(descInput);
+
         projectFields.appendChild(div);
     }
 }
