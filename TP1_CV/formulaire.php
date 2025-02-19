@@ -7,7 +7,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="style.css">
     </head>
@@ -21,7 +22,7 @@
             <form id="contact-form" method="post" action="recap.php" enctype="multipart/form-data" role="form">
                 
                 <!-- Renseignement Personnel -->
-                <div class="section">
+                <!-- <div class="section">
                     <div class="section-title">Renseignement Personnel</div>
                     <div class="row">
                         <div class="col-lg-6">
@@ -60,15 +61,14 @@
                             <input id="linkedin" type="text" name="linkedin" value="<?php echo $_POST['linkedin'] ?? ''; ?>" class="form-control" placeholder="Votre Linkedin">
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Renseignement Académique -->
-                <div class="section">
+                <!-- <div class="section">
                     <div class="section-title">Renseignement Académique</div>
                     <div class="row">
                         <div class="col-lg-12">
                             <label for="formation" class="form-label">Vous êtes en: <span class="blue">*</span></label><br>
-                            <!-- keep the selected value after form submission -->
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="formation" value="2AP" id="formation-2AP"
                                 <?php echo ($_POST['formation'] ?? '') == '2AP' ? 'checked' : ''; ?> required>
@@ -163,13 +163,12 @@
                             </select>
                         </div>
 
-                        <!-- Container for dynamic fields -->
                         <div id="projectFields" class="mt-3"></div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Stage -->
-                <div class="section">
+                <!-- <div class="section">
                     <div class="section-title">Stages</div>
                     <div class="row">
                         <div class="col-lg-12">
@@ -185,14 +184,14 @@
                             </select>
                         </div>
 
-                        <!-- Container for dynamic fields -->
+                        
                         <div id="stageFields" class="mt-3"></div>
 
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Experiences -->
-                <div class="section">
+                <!-- <div class="section">
                     <div class="section-title">Experiences</div>
                     <div class="row">
                         <div class="col-lg-12">
@@ -208,14 +207,14 @@
                             </select>
                         </div>
 
-                        <!-- Container for dynamic fields -->
+                       
                         <div id="experienceFields" class="mt-3"></div>
 
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Competences -->
-                <div class="section">
+                <!-- <div class="section">
                     <div class="section-title">Competences</div>
                     <div class="row">
                         <div class="col-lg-6">
@@ -235,10 +234,10 @@
                             <input id="competence4" type="text" name="competence4" value="<?php echo $_POST['competence4'] ?? ''; ?>" class="form-control" placeholder="Entrez votre competence">
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Centre d'interet -->
-                <div class="section">
+                <!-- <div class="section">
                     <div class="section-title">Centre d'intérêt</div>
                     <div class="row">
                         <div class="col-lg-6">
@@ -258,10 +257,10 @@
                             <input id="interest4" type="text" name="interest4" value="<?php echo $_POST['interest4'] ?? ''; ?>" class="form-control" placeholder="Entrez votre intérêt">
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Langues -->
-                <div class="section">
+                <!-- <div class="section">
                     <div class="section-title">Langues</div>
                     <div class="row">
                         <div class="col-lg-6">
@@ -304,7 +303,7 @@
                         </div>
 
                     </div>
-                </div>
+                </div> -->
 
 
                 <!-- Profile and picture -->
@@ -317,10 +316,10 @@
                         ?></textarea>
                         </div>
                         <!-- upload the picture -->
-                        <div class="col-lg-12">
+                        <!-- <div class="col-lg-12">
                             <label for="picture" class="form-label">Choisir une photo de profile (JPG, PNG, JPEG) <span class="blue">*</span></label>
                             <input type="file" name="picture" class="" required>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
@@ -350,15 +349,15 @@
 
                 <div class="d-flex justify-content-between mt-3">
                     <button type="submit" onclick="return validateCheckboxes()" class="button-env btn btn-primary">Envoyer</button>
-                    <button type="button" id="generate-btn" class="button-gen btn btn-success">Générer</button>
+                    <button type="button" id="generatePdf" class="button-gen btn btn-primary">Generer</button>
                 </div>
 
 
             </form>
         </div>
 
-
         <script src="particles.js"></script>
         <script src="script.js"></script>
+        <script src="generatePdf.js"></script>
     </body>
 </html>

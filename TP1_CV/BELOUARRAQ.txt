@@ -1,0 +1,32 @@
+---------------- Renseignement Personnel ----------------
+Nom: BELOUARRAQ
+Prénom: Mohammed
+Age: 23
+Email: test2222@gmail.com
+Téléphone: 0688191812
+Adresse: nr 98 appt 7
+Github: 
+Linkedin: 
+--------------- Renseignement Académique ---------------
+Formation: GI
+Niveau: 2ème année
+Modules suivis: compilation, webAv
+Nombre de projets: 0
+Projets réalisés: 
+------------------------ Stages ------------------------
+Stages réalisés: 
+--------------------- Expériences ----------------------
+Expériences professionnelles: 
+---------------------- Competences ---------------------
+Compétence 1: c/c++
+Compétence 2: docker
+------------------- Centre d'intérêt -------------------
+Intérêt 1: Football
+Intérêt 2: Movies
+----------------------- Langues ------------------------
+Langue 1: Anglais => Niveau: intermediaire
+Langue 2: Francais => Niveau: intermediaire
+----------------------- Remarques ----------------------
+Aucun message
+--------------------------------------------------------
+
