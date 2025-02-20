@@ -1,0 +1,136 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern CV</title>
+  <link rel="stylesheet" href="cv_gen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .header img {
+      border-radius: 50%;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border: 2px solid #007bff;
+    }
+
+    .header h1 {
+      color: #007bff;
+      font-size: 2.5em;
+      margin: 0;
+      text-align: center;
+      width: 100%;
+    }
+    
+    .main-content {
+      width: 75%;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: -3px 0 5px rgba(0, 0, 0, 0.1);
+      margin-top: 10px;
+    }
+
+    .container {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="header">
+        <img src="placeholder-image.jpg" alt="Your Profile Picture">
+      </div>
+      <section id="contact-info">
+        <h2>Contact</h2>
+        <p><i class="fas fa-envelope icon"></i> <a href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></p>
+        <p><i class="fas fa-phone icon"></i> <?php echo $phone; ?></p>
+        <p><i class="fab fa-linkedin icon"></i> <a href="<?php echo $linkedin; ?>"><?php echo $linkedin; ?></a></p>
+        <p><i class="fab fa-github icon"></i> <a href="<?php echo $github; ?>"><?php echo $github; ?></a></p>
+      </section>
+
+      <section id="education">
+        <h2>Education</h2>
+        <ul>
+          <li>
+            <h3><?php echo $formation; ?></h3>
+            <p><?php echo $niveau; ?></p>
+            <p><?php echo $age; ?> years old</p>
+          </li>
+        </ul>
+      </section>
+
+      <section id="competences">
+        <h2>Competences</h2>
+        <ul>
+          <li><?php echo $competence1; ?></li>
+          <li><?php echo $competence2; ?></li>
+          <li><?php echo $competence3; ?></li>
+          <li><?php echo $competence4; ?></li>
+        </ul>
+
+        <h2>Languages</h2>
+        <ul>
+          <li><?php echo $langue1; ?> (<?php echo $niveau1; ?>)</li>
+          <li><?php echo $langue2; ?> (<?php echo $niveau2; ?>)</li>
+          <li><?php echo $langue3; ?> (<?php echo $niveau3; ?>)</li>
+        </ul>
+
+        <h2>Interests</h2>
+        <ul>
+          <li><?php echo $interest1; ?></li>
+          <li><?php echo $interest2; ?></li>
+          <li><?php echo $interest3; ?></li>
+          <li><?php echo $interest4; ?></li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="main-content">
+      <div class="header-name">
+        <h1><?php echo $firstname . " " . $lastname; ?></h1>
+      </div>
+      <div class="divider">
+        <svg width="100" height="3" viewBox="0 0 0 3" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="1.5" x2="100" y2="1.5" stroke="#007bff" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <section id="summary">
+        <h2>Summary</h2>
+        <p><?php echo $message; ?></p>
+      </section>
+
+      <section id="experience">
+        <h2>Experience</h2>
+        <?php
+        for ($i = 0; $i < $experienceCount; $i++) {
+            echo "<div class='experience'>";
+            echo "<h3>" . $experiences[$i] . "</h3>";
+            echo "<p class='date'>" . $experienceDesc[$i] . "</p>";
+            echo "</div>";
+        }
+        ?>
+      </section>
+      
+      <section id="projects">
+        <h2>Projects</h2>
+        <?php
+        for ($i = 0; $i < $projectCount; $i++) {
+            echo "<div class='project'>";
+            echo "<h3>" . $projects[$i] . "</h3>";
+            echo "<p>" . $projectDesc[$i] . "</p>";
+            echo "</div>";
+        }
+        ?>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

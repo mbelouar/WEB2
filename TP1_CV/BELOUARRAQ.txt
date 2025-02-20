@@ -5,8 +5,8 @@ Age: 23
 Email: test2222@gmail.com
 Téléphone: 0688191812
 Adresse: nr 98 appt 7
-Github: 
-Linkedin: 
+Github: mbelouar
+Linkedin: BELOUARRAQ Mohammed
 --------------- Renseignement Académique ---------------
 Formation: GI
 Niveau: 2ème année
@@ -20,13 +20,17 @@ Expériences professionnelles:
 ---------------------- Competences ---------------------
 Compétence 1: c/c++
 Compétence 2: docker
+Compétence 3: git/github
+Compétence 4: oracle database
 ------------------- Centre d'intérêt -------------------
 Intérêt 1: Football
 Intérêt 2: Movies
+Intérêt 3: Coding
 ----------------------- Langues ------------------------
-Langue 1: Anglais => Niveau: intermediaire
+Langue 1: Anglais => Niveau: avance
 Langue 2: Francais => Niveau: intermediaire
------------------------ Remarques ----------------------
-Aucun message
---------------------------------------------------------
-
+------------------------ Profile -----------------------
+Profile: 9 ans d’expérience dans le domaine du prêt-à-porter féminin dont 5 ans sur le poste de directrice adjointe et 2 ans en tant que directrice de magasin
+---------------------- picture path --------------------
+picture path: uploads/article-image-1.jpg
+---------------------- Fin du CV -----------------------

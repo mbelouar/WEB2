@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $allowedExtensions = ['jpg', 'jpeg', 'png'];
 
@@ -27,6 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!move_uploaded_file($uploadedFile['tmp_name'], $filePath)) {
             echo "Error uploading the file.";
         }
+
+        // Save the file path to the session
+        $_SESSION['cv_data']['picture'] = $filePath;
     }
 }
 

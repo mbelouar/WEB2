@@ -1,10 +1,43 @@
+<?php session_start(); 
+
+// Retrieve experiences from session
+$experienceCount = $_SESSION['cv_data']['experienceCount'] ?? 0;
+$experiences = $_SESSION['cv_data']['experiences'] ?? [];
+$experienceDesc = $_SESSION['cv_data']['experienceDesc'] ?? [];
+
+
+// Retrieve projects from session
+$projectCount = $_SESSION['cv_data']['projectCount'] ?? 0;
+$projects = $_SESSION['cv_data']['projects'] ?? [];
+$projectDesc = $_SESSION['cv_data']['projectDesc'] ?? [];
+
+// Assign experiences dynamically
+$experienceList = [];
+$experienceDesc = [];
+
+for ($i = 0; $i < $experienceCount; $i++) {
+    $experienceList[] = $experiences[$i] ?? ''; // Ensure no errors if the index is missing
+    $experienceDesc[] = $experienceDesc[$i] ?? ''; // Ensure no errors if the index is missing
+}
+
+// Assign projects dynamically
+$projectList = [];
+$projectDesc = [];
+
+for ($i = 0; $i < $projectCount; $i++) {
+    $projectList[] = $projects[$i] ?? ''; // Ensure no errors if the index is missing
+    $projectDesc[] = $projectDesc[$i] ?? ''; // Ensure no errors if the index is missing
+}
+
+?>
+
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Modern CV</title>
   <link rel="stylesheet" href="cv_gen.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     .header {
       display: flex;
@@ -45,31 +78,32 @@
   </style>
 </head>
 <body>
+
   <div class="container">
     <div class="sidebar">
       <div class="header">
-        <img src="placeholder-image.jpg" alt="Your Profile Picture">
+        <img src="<?php echo $_SESSION['cv_data']['picture'] ?>" alt="Profile Picture">
       </div>
       <section id="contact-info">
         <h2>Contact</h2>
-        <p><i class="fas fa-envelope icon"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7c0513090e5219111d15103c19041d110c1019521f1311">[email&#160;protected]</a></p>
-        <p><i class="fas fa-phone icon"></i> (123) 456-7890</p>
-        <p><i class="fab fa-linkedin icon"></i> <a href="#">linkedin.com/in/yourprofile</a></p>
-        <p><i class="fab fa-github icon"></i> <a href="#">github.com/yourgithub</a></p>
+        <!-- retrieve the email, phone, linkedin, and github from the session -->
+        <p><i class="fas fa-envelope icon"></i> <?php echo $_SESSION['cv_data']['email']; ?></p>
+        <p><i class="fas fa-phone icon"></i> (+212) <?php echo $_SESSION['cv_data']['phone'] ?></p>
+        <?php if (!empty($_SESSION['cv_data']['linkedin'])) { ?>
+          <p><i class="fab fa-linkedin icon"></i> <?php echo $_SESSION['cv_data']['linkedin'] ?></p>
+        <?php } ?>
+        <?php if (!empty($_SESSION['cv_data']['github'])) { ?>
+          <p><i class="fab fa-github icon"></i> <?php echo $_SESSION['cv_data']['github'] ?></p>
+        <?php } ?>
       </section>
 
       <section id="education">
         <h2>Education</h2>
         <ul>
           <li>
-            <h3>University Name</h3>
-            <p>Degree, Major</p>
-            <p>2018 - 2022</p>
-          </li>
-          <li>
-            <h3>Another Institution</h3>
-            <p>Diploma, Field of Study</p>
-            <p>2016 - 2018</p>
+            <h3>ENSA Tetouan</h3>
+            <p><?php echo $_SESSION['cv_data']['formation'] ?> , <?php echo $_SESSION['cv_data']['niveau'] ?></p>
+            <p>2020 - 2025</p>
           </li>
         </ul>
       </section>
@@ -77,33 +111,42 @@
       <section id="competences">
         <h2>Competences</h2>
         <ul>
-          <li>HTML</li>
-          <li>CSS</li>
-          <li>JavaScript</li>
-          <li>React</li>
-          <li>Node.js</li>
-          <li>SQL</li>
+          <li><?php echo $_SESSION['cv_data']['competence1'] ?></li>
+          <li><?php echo $_SESSION['cv_data']['competence2'] ?></li>
+          <?php if (!empty($_SESSION['cv_data']['competence3'])) { ?>
+            <li><?php echo $_SESSION['cv_data']['competence3'] ?></li>
+          <?php } ?>
+          <?php if (!empty($_SESSION['cv_data']['competence4'])) { ?>
+            <li><?php echo $_SESSION['cv_data']['competence4'] ?></li>
+          <?php } ?>
         </ul>
         
         <h2>Languages</h2>
         <ul>
-          <li>English (Fluent)</li>
-          <li>Spanish (Conversational)</li>
-          <li>French (Basic)</li>
+          <li><?php echo $_SESSION['cv_data']['langue1'] ?> (<?php echo $_SESSION['cv_data']['niveau1'] ?>)</li>
+          <li><?php echo $_SESSION['cv_data']['langue2'] ?> (<?php echo $_SESSION['cv_data']['niveau2'] ?>)</li>
+          <?php if (!empty($_SESSION['cv_data']['langue3'])) { ?>
+            <li><?php echo $_SESSION['cv_data']['langue3'] ?> (<?php echo $_SESSION['cv_data']['niveau3'] ?>)</li>
+          <?php } ?>
         </ul>
 
         <h2>Interests</h2>
         <ul>
-          <li>Web Development</li>
-          <li>UX/UI Design</li>
-          <li>New Technologies</li>
+          <li><?php echo $_SESSION['cv_data']['interest1'] ?></li>
+          <li><?php echo $_SESSION['cv_data']['interest2'] ?></li>
+          <?php if (!empty($_SESSION['cv_data']['interest3'])) { ?>
+            <li><?php echo $_SESSION['cv_data']['interest3'] ?></li>
+          <?php } ?>
+          <?php if (!empty($_SESSION['cv_data']['interest4'])) { ?>
+            <li><?php echo $_SESSION['cv_data']['interest4'] ?></li>
+          <?php } ?>
         </ul>
       </section>
     </div>
 
     <div class="main-content">
       <div class="header-name">
-        <h1>Your Name</h1>
+        <h1><?php echo $_SESSION['cv_data']['firstname'] . " " . $_SESSION['cv_data']['lastname']; ?></h1>
       </div>
       <div class="divider">
         <svg width="100" height="3" viewBox="0 0 0 3" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -111,63 +154,124 @@
         </svg>
       </div>
       <section id="summary">
-        <h2>Summary</h2>
-        <p>
-          Highly motivated and skilled web developer with 4+ years of experience in designing, developing, and implementing innovative web solutions. Proficient in a variety of technologies including HTML, CSS, JavaScript, and React. Proven ability to work independently and collaboratively in fast-paced environments to deliver high-quality, scalable, and maintainable code. Passionate about learning new technologies and staying up-to-date with industry trends.
-        </p>
+        <h2>Profile</h2>
+        <p><?php echo $_SESSION['cv_data']['message'] ?></p>
       </section>
 
       <section id="experience">
-        <h2>Experience</h2>
+        <h2>Experiences</h2>
 
-        <div class="experience">
-          <h3>Senior Web Developer</h3>
-          <p class="date">January 2023 - Present</p>
-          <p>Acme Corp</p>
-          <ul>
-            <li>Led a team of developers in the design and development of a new e-commerce platform.</li>
-            <li>Implemented responsive design and ensured cross-browser compatibility.</li>
-            <li>Improved website performance by 40% through code optimization and caching strategies.</li>
-          </ul>
-        </div>
+        <?php if (!empty($experienceList[0])) { ?>
+          <div class="experience">
+            <h3><?php echo $experienceList[0] ?></h3>
+            <p class="date">January 2023 - December 2023</p>
+            <ul>
+              <li><?php echo $experienceDesc[0] ?></li>
+            </ul>
+          </div>
+        <?php } ?>
 
-        <div class="experience">
-          <h3>Web Developer</h3>
-          <p class="date">January 2022 - December 2022</p>
-          <p>Beta Inc</p>
-          <ul>
-            <li>Developed and maintained web applications using HTML, CSS, JavaScript, and PHP.</li>
-            <li>Collaborated with designers to create visually appealing and user-friendly interfaces.</li>
-            <li>Resolved critical production issues and provided ongoing technical support.</li>
-          </ul>
-        </div>
+        <?php if (!empty($experienceList[1])) { ?>
+          <div class="experience">
+            <h3><?php echo $experienceList[1] ?></h3>
+            <p class="date">January 2022 - December 2022</p>
+            <ul>
+              <li><?php echo $experienceDesc[1] ?></li>
+            </ul>
+          </div> 
+        <?php } ?>
+
+        <?php if (!empty($experienceList[2])) { ?>
+          <div class="experience">
+            <h3><?php echo $experienceList[2] ?></h3>
+            <p class="date">January 2021 - December 2021</p>
+            <ul>
+              <li><?php echo $experienceDesc[2] ?></li>
+            </ul>
+          </div>
+        <?php } ?>
+
+        <?php if (!empty($experienceList[3])) { ?>
+          <div class="experience">
+            <h3><?php echo $experienceList[3] ?></h3>
+            <p class="date">January 2020 - December 2020</p>
+            <ul>
+              <li><?php echo $experienceDesc[3] ?></li>
+            </ul>
+          </div>
+        <?php } ?>
+
+        <?php if (!empty($experienceList[4])) { ?>
+          <div class="experience">
+            <h3><?php echo $experienceList[4] ?></h3>
+            <p class="date">January 2019 - December 2019</p>
+            <ul>
+              <li><?php echo $experienceDesc[4] ?></li>
+            </ul>
+          </div>
+        <?php } ?>
+
       </section>
       
       <section id="projects">
         <h2>Projects</h2>
 
-        <div class="project">
-          <h3>Project Title 1</h3>
-          <p class="date">2023</p>
-          <p>Description of the project and your role.</p>
-          <ul>
-            <li>Key achievement 1</li>
-            <li>Key achievement 2</li>
-          </ul>
-        </div>
+       <?php if (!empty($projectList[0])) { ?>
+          <div class="project">
+            <h3><?php echo $projectList[0] ?></h3>
+            <p class="date">2023</p>
+            <ul>
+              <li> <?php echo $projectDesc[0] ?></li>
+            </ul>
+          </div>
+        <?php } ?>
 
-        <div class="project">
-          <h3>Project Title 2</h3>
-          <p class="date">2022</p>
-          <p>Description of the project and your role.</p>
-          <ul>
-            <li>Key achievement 1</li>
-            <li>Key achievement 2</li>
-          </ul>
-        </div>
+        <?php if (!empty($projectList[1])) { ?>
+          <div class="project">
+            <h3><?php echo $projectList[1] ?></h3>
+            <p class="date">2022</p>
+            <ul>
+              <li> <?php echo $projectDesc[1] ?></li>
+            </ul>
+          </div>
+        <?php } ?>
+
+        <?php if (!empty($projectList[2])) { ?>
+          <div class="project">
+            <h3><?php echo $projectList[2] ?></h3>
+            <p class="date">2021</p>
+            <ul>
+              <li> <?php echo $projectDesc[2] ?></li>
+            </ul>
+          </div>
+        <?php } ?>
+
+        <?php if (!empty($projectList[3])) { ?>
+          <div class="project">
+            <h3><?php echo $projectList[3] ?></h3>
+            <p class="date">2020</p>
+            <ul>
+              <li> <?php echo $projectDesc[3] ?></li>
+            </ul>
+          </div>
+        <?php } ?>
+
+        <?php if (!empty($projectList[4])) { ?>
+          <div class="project">
+            <h3><?php echo $projectList[4] ?></h3>
+            <p class="date">2019</p>
+            <ul>
+              <li> <?php echo $projectDesc[4] ?></li>
+            </ul>
+          </div>
+        <?php } ?>
+
       </section>
+      
 
     </div>
   </div>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+  
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+</body>
 </html>

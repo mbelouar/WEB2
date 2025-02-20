@@ -1,5 +1,7 @@
 <?php 
 
+session_start();
+
 // Validate age input
 if (!isset($_POST['age']) || !ctype_digit($_POST['age']) || $_POST['age'] < 1 || $_POST['age'] > 120) {
     $error_message = "Veuillez entrer un âge valide entre 1 et 120.";
@@ -32,7 +34,12 @@ elseif ($niveau == "niveau_3")
     $niveau = "3ème année";
 
 
-$selectedModules = implode(", ", $_POST["modules"] ?? []);
+$selectedModules = $_POST['modules'] ?? []; // Ensure it's an array
+if (!is_array($selectedModules)) {
+    $selectedModules = [$selectedModules];
+}
+
+$modulesSuivi = implode(", ", $_POST["modules"] ?? []);
 
 // Get the projects
 $projectCount = $_POST["project"] ?? "0";
@@ -69,8 +76,12 @@ $niveau2 = $_POST["niveau2"] ?? "";
 $langue3 = $_POST["langue3"] ?? "";
 $niveau3 = $_POST["niveau3"] ?? "";
 
-// Get the message
-$message = $_POST["message"] ?? "";
+// Get the message without spaces at the beginning and end
+$message = $_POST["profile_desc"] ?? "";
+$message = trim($message);
+
+// Save the picture path in the session
+$picPath = $_SESSION['cv_data']['picture'] ?? "Non renseigné";
 
 // Format the data
 $data = "---------------- Renseignement Personnel ----------------\n";
@@ -86,7 +97,7 @@ $data .= "Linkedin: $linkedin\n";
 $data .= "--------------- Renseignement Académique ---------------\n";
 $data .= "Formation: $formation\n";
 $data .= "Niveau: $niveau\n";
-$data .= "Modules suivis: $selectedModules\n";
+$data .= "Modules suivis: $modulesSuivi\n";
 $data .= "Nombre de projets: $projectCount\n";
 $data .= "Projets réalisés: \n";
 if (!empty($projects)) {
@@ -143,15 +154,58 @@ if (!empty($langue2))
 if (!empty($langue3))
     $data .= "Langue 3: $langue3 => Niveau: $niveau3\n";
 
-$data .= "----------------------- Remarques ----------------------\n";
+$data .= "------------------------ Profile -----------------------\n";
 if (!empty($message))
-    $data .= "Message: $message\n";
+    $data .= "Profile: $message\n";
 else
-    $data .= "Aucun message\n";
-$data .= "--------------------------------------------------------\n\n";
+    $data .= "Aucun description du profile\n";
+
+$data .= "---------------------- picture path --------------------\n";
+$data .= "picture path: $picPath\n";
+
+$data .= "---------------------- Fin du CV -----------------------\n";
 
 // Save the data to the file
 fwrite($file, $data);
 fclose($file);
+
+// Store all the information in the session as an associative array
+$_SESSION['cv_data'] = [
+    'firstname'      => $firstname,
+    'lastname'       => $lastname,
+    'email'          => $email,
+    'phone'          => $phone,
+    'age'            => $age,
+    'adresse'        => $adresse,
+    'github'         => $github,
+    'linkedin'       => $linkedin,
+    'formation'      => $formation,
+    'niveau'         => $niveau,
+    'modules'        => $selectedModules,
+    'projectCount'   => $projectCount,
+    'projects'       => $projects,
+    'projectDesc'    => $projectDesc,
+    'stageCount'     => $stageCount,
+    'stages'         => $stages,
+    'stageDesc'      => $stageDesc,
+    'experienceCount'=> $experienceCount,
+    'experiences'    => $experiences,
+    'experienceDesc' => $experienceDesc,
+    'competence1'    => $competence1,
+    'competence2'    => $competence2,
+    'competence3'    => $competence3,
+    'competence4'    => $competence4,
+    'interest1'      => $interest1,
+    'interest2'      => $interest2,
+    'interest3'      => $interest3,
+    'interest4'      => $interest4,
+    'langue1'        => $langue1,
+    'niveau1'        => $niveau1,
+    'langue2'        => $langue2,
+    'niveau2'        => $niveau2,
+    'langue3'        => $langue3,
+    'niveau3'        => $niveau3,
+    'message'        => $message,
+];
 
 ?>
