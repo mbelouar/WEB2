@@ -1,6 +1,9 @@
 <?php 
 include_once 'functions.php';
-session_start();
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 
 <!DOCTYPE html>

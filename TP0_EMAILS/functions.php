@@ -2,12 +2,32 @@
 session_start(); 
 
 function isValidEmail($email) {
-    return filter_var($email, FILTER_VALIDATE_EMAIL);
+    // Improved regex for email validation
+    $regex = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+
+    return preg_match($regex, $email) === 1; // returns true if valid
 }
 
+
 function readEmails($file) {
-    return file_exists($file) ? file($file, FILE_SKIP_EMPTY_LINES) : [];
+    $emails = [];
+    
+    // Open file in read mode
+    $handle = fopen($file, "r");
+    if ($handle) {
+        while (($line = fgets($handle)) !== false) {
+            // Trim and validate each email
+            $email = trim($line);
+            if (isValidEmail($email)) {
+                $emails[] = $email;
+            }
+        }
+        fclose($handle);
+    }
+    
+    return $emails;
 }
+
 
 function writeEmails($file, $emails) {
     file_put_contents($file, implode("\n", array_map('trim', $emails))); 

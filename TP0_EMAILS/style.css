@@ -123,3 +123,13 @@ tr:nth-child(even) {
     background-color: #f44336;
     color: white;
 }
+
+/* Container for the emails with a fixed height and scroll */
+.emails-container {
+    max-height: 400px; /* Adjust height as needed */
+    overflow-y: auto;  /* Vertical scrolling */
+    margin-top: 20px;  /* Add space above the table */
+    padding: 10px;
+    background-color: #f9f9f9; /* Optional: gives it a background */
+    border: 1px solid #ccc; /* Optional: adds border around the scrollable area */
+}

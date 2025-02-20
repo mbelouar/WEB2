@@ -14,8 +14,14 @@ function cleanAndOrganizeEmails($file) {
             $emailFrequency[$email] = isset($emailFrequency[$email]) ? $emailFrequency[$email] + 1 : 1; // count email frequency
         } else {
             $invalidEmails[] = $email;
+            // echo "Invalid email: $email\n";
         }
     }
+
+    // display emails for debugging
+    // echo "<pre>";
+    // print_r($validEmails);
+    // echo "</pre>";
 
     return [$validEmails, $invalidEmails, $emailFrequency];
 }
@@ -23,7 +29,13 @@ function cleanAndOrganizeEmails($file) {
 function displayInvalidEmails($file) {
     list($validEmails, $invalidEmails, $emailFrequency) = cleanAndOrganizeEmails($file);
     
+    // Debugging: Check if there are invalid emails
+    // echo "<pre>";
+    // print_r($invalidEmails);
+    // echo "</pre>";
+    
     if (!empty($invalidEmails)) {
+        echo "<div class='emails-container'>";  // Make invalid emails scrollable
         echo "<table border='1'>
                 <thead>
                     <tr>
@@ -37,18 +49,23 @@ function displayInvalidEmails($file) {
             echo "<tr><td>$email</td></tr>";
         }
         echo "</tbody></table>";
+        echo "</div>";  // End scrollable container
     } else {
         echo "<p>No invalid emails found.</p>";
     }
+    // Write invalid emails to file
     if (!file_exists("Files"))
         mkdir ("Files");
     file_put_contents("Files/adressesNonValides.txt", implode("\n", $invalidEmails));
 }
 
+
+
 function displayValidEmails($file) {
     list($validEmails, $invalidEmails, $emailFrequency) = cleanAndOrganizeEmails($file);
     
     if (!empty($validEmails)) {
+        echo "<div class='emails-container'>";
         echo "<table border='1'>
                 <thead>
                     <tr>
@@ -62,6 +79,7 @@ function displayValidEmails($file) {
             echo "<tr><td>$email</td></tr>";
         }
         echo "</tbody></table>";
+        echo "</div>";
     } else {
         echo "<p>No valid emails found.</p>";
     }
@@ -86,6 +104,7 @@ function displayDuplicateEmails($file) {
     });
 
     if (!empty($duplicates)) {
+        echo "<div class='emails-container'>";
         echo "<table border='1'>
                 <thead>
                     <tr>
@@ -100,6 +119,7 @@ function displayDuplicateEmails($file) {
             echo "<tr><td>$email</td><td>$count</td></tr>";
         }
         echo "</tbody></table>";
+        echo "</div>";
     } else {
         echo "<p>No duplicate emails found.</p>";
     }
@@ -137,6 +157,7 @@ function displayDomainEmails($file) {
 
     // Display domain frequency on the page
     if (!empty($domainFrequency)) {
+        echo "<div class='emails-container'>";  // Start scrollable container
         echo "<table border='1'>
                 <thead>
                     <tr>
@@ -151,9 +172,11 @@ function displayDomainEmails($file) {
             echo "<tr><td>$domain</td><td>$count</td></tr>";
         }
         echo "</tbody></table>";
+        echo "</div>";  // End scrollable container
     } else {
         echo "<p>No domain emails found.</p>";
     }
 }
+
 
 ?>
