@@ -45,11 +45,35 @@ $modulesSuivi = implode(", ", $_POST["modules"] ?? []);
 $projectCount = $_POST["project"] ?? "0";
 $projects = isset($_POST['projectNames']) ? $_POST['projectNames'] : [];
 $projectDesc = isset($_POST['projectDescriptions']) ? $_POST['projectDescriptions'] : [];
+$projectStartDate = isset($_POST['projectStartDates']) ? $_POST['projectStartDates'] : [];
+$projectEndDate = isset($_POST['projectEndDates']) ? $_POST['projectEndDates'] : [];
+
+// check if the project start date is before the end date
+for ($i = 0; $i < count($projectStartDate); $i++) {
+    if ($projectStartDate[$i] > $projectEndDate[$i]) {
+        $error_message = "La date de début du projet " . ($i + 1) . " doit être avant la date de fin.";
+        include "formulaire.php";
+        exit();
+    }
+}
 
 // Get the stages
 $stageCount = $_POST["stage"] ?? "0";
-$stages = $_POST['stageNames'] ?? [];  // Correct key for names
-$stageDesc = $_POST['stageDescriptions'] ?? [];  // Correct key for descriptions
+$stages = $_POST['stageNames'] ?? []; 
+$stageDesc = $_POST['stageDescriptions'] ?? []; 
+$stageStartDate = $_POST['stageStartDates'] ?? [];  
+$stageEndDate = $_POST['stageEndDates'] ?? [];  
+$stageEntreprise = $_POST['stageEntreprises'] ?? [];
+$stageLocation = $_POST['stageLocations'] ?? [];
+
+// check if the stage start date is before the end date
+for ($i = 0; $i < count($stageStartDate); $i++) {
+    if ($stageStartDate[$i] > $stageEndDate[$i]) {
+        $error_message = "La date de début du stage " . ($i + 1) . " doit être avant la date de fin.";
+        include "formulaire.php";
+        exit();
+    }
+}
 
 // Get the experiences
 $experienceCount = $_POST["experience"] ?? "0";
@@ -104,6 +128,8 @@ if (!empty($projects)) {
     foreach ($projects as $key => $project) {
         $data .= "Projet " . ($key + 1) . ": $project\n";
         $data .= "Description: " . $projectDesc[$key] . "\n";
+        $data .= "Date de début: " . $projectStartDate[$key] . "\n";
+        $data .= "Date de fin: " . $projectEndDate[$key] . "\n";
     }
 }
 
@@ -113,6 +139,10 @@ if (!empty($stages)) {
     foreach ($stages as $key => $stage) {
         $data .= "Stage " . ($key + 1) . ": $stage\n";
         $data .= "Description: " . ($stageDesc[$key] ?? "N/A") . "\n";
+        $data .= "Date de début: " . ($stageStartDate[$key] ?? "N/A") . "\n";
+        $data .= "Date de fin: " . ($stageEndDate[$key] ?? "N/A") . "\n";
+        $data .= "Entreprise: " . ($stageEntreprise[$key] ?? "N/A") . "\n";
+        $data .= "Location: " . ($stageLocation[$key] ?? "N/A") . "\n";
     }
 }
 
@@ -179,32 +209,46 @@ $_SESSION['cv_data'] = [
     'adresse'        => $adresse,
     'github'         => $github,
     'linkedin'       => $linkedin,
+
     'formation'      => $formation,
     'niveau'         => $niveau,
     'modules'        => $selectedModules,
+
     'projectCount'   => $projectCount,
     'projects'       => $projects,
     'projectDesc'    => $projectDesc,
+    'projectStartDate' => $projectStartDate,
+    'projectEndDate' => $projectEndDate,
+
     'stageCount'     => $stageCount,
     'stages'         => $stages,
     'stageDesc'      => $stageDesc,
+    'stageStartDate' => $stageStartDate,
+    'stageEndDate'   => $stageEndDate,
+    'stageEntreprise'=> $stageEntreprise,
+    'stageLocation'  => $stageLocation,
+
     'experienceCount'=> $experienceCount,
     'experiences'    => $experiences,
     'experienceDesc' => $experienceDesc,
+
     'competence1'    => $competence1,
     'competence2'    => $competence2,
     'competence3'    => $competence3,
     'competence4'    => $competence4,
+
     'interest1'      => $interest1,
     'interest2'      => $interest2,
     'interest3'      => $interest3,
     'interest4'      => $interest4,
+
     'langue1'        => $langue1,
     'niveau1'        => $niveau1,
     'langue2'        => $langue2,
     'niveau2'        => $niveau2,
     'langue3'        => $langue3,
     'niveau3'        => $niveau3,
+    
     'message'        => $message,
 ];
 

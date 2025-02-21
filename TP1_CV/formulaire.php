@@ -81,52 +81,54 @@ if (!is_array($modules)) {
                             <label for="formation" class="form-label">Vous êtes en: <span class="blue">*</span></label><br>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="formation" value="2AP" id="formation-2AP"
-                                <?php echo ($_SESSION['cv_data']['formation'] ?? '') == '2AP' ? 'checked' : ''; ?> required>
-                                <label class="form-check-label" for="formation-2AP">1AP</label>
+                                    <?php echo ($_SESSION['cv_data']['formation'] ?? '') == '2AP' ? 'checked' : ''; ?> required onchange="toggleNiveauOptions()">
+                                <label class="form-check-label" for="formation-2AP">2AP</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="formation" value="GSTR" id="formation-GSTR"
-                                <?php echo ($_SESSION['cv_data']['formation'] ?? '') == 'GSTR' ? 'checked' : ''; ?> required>
+                                    <?php echo ($_SESSION['cv_data']['formation'] ?? '') == 'GSTR' ? 'checked' : ''; ?> required onchange="toggleNiveauOptions()">
                                 <label class="form-check-label" for="formation-GSTR">GSTR</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="formation" value="GI" id="formation-GI"
-                                <?php echo ($_SESSION['cv_data']['formation'] ?? '') == 'GI' ? 'checked' : ''; ?> required>
+                                    <?php echo ($_SESSION['cv_data']['formation'] ?? '') == 'GI' ? 'checked' : ''; ?> required onchange="toggleNiveauOptions()">
                                 <label class="form-check-label" for="formation-GI">GI</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="formation" value="SCM" id="formation-SCM"
-                                <?php echo ($_SESSION['cv_data']['formation'] ?? '') == 'SCM' ? 'checked' : ''; ?> required>
+                                    <?php echo ($_SESSION['cv_data']['formation'] ?? '') == 'SCM' ? 'checked' : ''; ?> required onchange="toggleNiveauOptions()">
                                 <label class="form-check-label" for="formation-SCM">SCM</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="formation" value="GC" id="formation-GC"
-                                <?php echo ($_SESSION['cv_data']['formation'] ?? '') == 'GC' ? 'checked' : ''; ?> required>
+                                    <?php echo ($_SESSION['cv_data']['formation'] ?? '') == 'GC' ? 'checked' : ''; ?> required onchange="toggleNiveauOptions()">
                                 <label class="form-check-label" for="formation-GC">GC</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="formation" value="MS" id="formation-MS"
-                                <?php echo ($_SESSION['cv_data']['formation'] ?? '') == 'MS' ? 'checked' : ''; ?> required>
+                                    <?php echo ($_SESSION['cv_data']['formation'] ?? '') == 'MS' ? 'checked' : ''; ?> required onchange="toggleNiveauOptions()">
                                 <label class="form-check-label" for="formation-MS">MS</label>
                             </div>
                         </div>
+
                         <div class="col-lg-12">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="niveau" value="niveau_1" id="niveau_1"
-                                <?php echo ($_SESSION['cv_data']['niveau'] ?? '') == '1er année' ? 'checked' : ''; ?> required>
+                                    <?php echo ($_SESSION['cv_data']['niveau'] ?? '') == '1er année' ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="niveau_1">1ere annee</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="niveau" value="niveau_2" id="niveau_2"
-                                <?php echo ($_SESSION['cv_data']['niveau'] ?? '') == '2ème année' ? 'checked' : ''; ?> required>
+                                    <?php echo ($_SESSION['cv_data']['niveau'] ?? '') == '2ème année' ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="niveau_2">2eme annee</label>
                             </div>
-                            <div class="form-check form-check-inline">
+                            <div class="form-check form-check-inline" id="niveau_3_container">
                                 <input class="form-check-input" type="radio" name="niveau" value="niveau_3" id="niveau_3"
-                                <?php echo ($_SESSION['cv_data']['niveau'] ?? '') == '3ème année' ? 'checked' : ''; ?> required>
+                                    <?php echo ($_SESSION['cv_data']['niveau'] ?? '') == '3ème année' ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="niveau_3">3eme annee</label>
                             </div>
                         </div>
+
                         <div class="col-lg-12">
                             <label for="formation" class="form-label">Modules suivies cette annee: <span class="blue">*</span></label><br>
                             <div class="form-check form-check-inline">
@@ -346,12 +348,24 @@ if (!is_array($modules)) {
                 <?php echo json_encode($_SESSION['cv_data']['projects'] ?? []); ?>'>
                 <input type="hidden" id="savedDescriptions" name="savedDescriptions" value='
                 <?php echo json_encode($_SESSION['cv_data']['projectDesc'] ?? []); ?>'>
+                <input type="hidden" id="savedStartDate" name="savedStartDate" value='
+                <?php echo json_encode($_SESSION['cv_data']['projectStartDate'] ?? []); ?>'>
+                <input type="hidden" id="savedEndDate" name="savedEndDate" value='
+                <?php echo json_encode($_SESSION['cv_data']['projectEndDate'] ?? []); ?>'>
 
                 <!-- Hidden input to store previously entered stage names and desc -->
                 <input type="hidden" id="savedStages" name="savedStages" value='
                 <?= htmlspecialchars(json_encode($_SESSION['cv_data']['stages'] ?? [])) ?>'>
                 <input type="hidden" id="savedStageDescriptions" name="savedStageDescriptions" value='
                 <?= htmlspecialchars(json_encode($_SESSION['cv_data']['stageDesc'] ?? [])) ?>'>
+                <input type="hidden" id="savedStageStartDate" name="savedStageStartDate" value='
+                <?= htmlspecialchars(json_encode($_SESSION['cv_data']['stageStartDate'] ?? [])) ?>'>
+                <input type="hidden" id="savedStageEndDate" name="savedStageEndDate" value='
+                <?= htmlspecialchars(json_encode($_SESSION['cv_data']['stageEndDate'] ?? [])) ?>'>
+                <input type="hidden" id="savedStageEntreprises" name="savedStageEntreprises" value='
+                <?= htmlspecialchars(json_encode($_SESSION['cv_data']['stageEntreprise'] ?? [])) ?>'>
+                <input type="hidden" id="savedStageLocations" name="savedStageLocations" value='
+                <?= htmlspecialchars(json_encode($_SESSION['cv_data']['stageLocation'] ?? [])) ?>'>
 
                 <!-- Hidden input to store previously entered experience names and desc -->
                 <input type="hidden" id="savedExperiences" name="savedExperiences" value='
