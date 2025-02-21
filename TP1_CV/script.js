@@ -258,6 +258,11 @@ function generateExperience() {
 
     let savedExperiences = JSON.parse(document.getElementById("savedExperiences").value || "[]");
     let savedDescriptions = JSON.parse(document.getElementById("savedExperienceDescriptions").value || "[]");
+    let savedStartDate = JSON.parse(document.getElementById("savedExperienceStartDate").value || "[]");
+    let savedEndDate = JSON.parse(document.getElementById("savedExperienceEndDate").value || "[]");
+    let savedEnreprise = JSON.parse(document.getElementById("savedExperienceEntreprises").value || "[]");
+    let savedLocation = JSON.parse(document.getElementById("savedExperienceLocations").value || "[]");
+    let savedPosition = JSON.parse(document.getElementById("savedExperiencePositions").value || "[]");
 
     // Generate input fields based on selected number
     for (let i = 1; i <= experienceCount; i++) {
@@ -289,6 +294,73 @@ function generateExperience() {
         descInput.setAttribute("placeholder", "Entrez la description de l'expérience " + i);
         descInput.classList.add("form-control");
 
+        // Create Experience Date Label and Input
+        let startDateLabel = document.createElement("label");
+        startDateLabel.setAttribute("for", "experienceStartDate" + i);
+        startDateLabel.classList.add("form-label");
+        startDateLabel.innerHTML = "Date de début de l'expérience " + i + " :";
+        startDateLabel.classList.add("mt-2");
+
+        let startDateInput = document.createElement("input");
+        startDateInput.setAttribute("type", "date");
+        startDateInput.setAttribute("name", "experienceStartDates[]");
+        startDateInput.setAttribute("id", "experienceStartDate" + i);
+        startDateInput.classList.add("form-control");
+
+        let endDateLabel = document.createElement("label");
+        endDateLabel.setAttribute("for", "experienceEndDate" + i);
+        endDateLabel.classList.add("form-label");
+        endDateLabel.innerHTML = "Date de fin de l'expérience " + i + " :";
+        endDateLabel.classList.add("mt-2");
+
+        let endDateInput = document.createElement("input");
+        endDateInput.setAttribute("type", "date");
+        endDateInput.setAttribute("name", "experienceEndDates[]");
+        endDateInput.setAttribute("id", "experienceEndDate" + i);
+        endDateInput.classList.add("form-control");
+
+        // Create Experience Entreprise Label and Input
+        let entrepriseLabel = document.createElement("label");
+        entrepriseLabel.setAttribute("for", "experienceEntreprise" + i);
+        entrepriseLabel.classList.add("form-label");
+        entrepriseLabel.innerHTML = "Entreprise de l'expérience " + i + " :";
+        entrepriseLabel.classList.add("mt-2");
+
+        let entrepriseInput = document.createElement("input");
+        entrepriseInput.setAttribute("type", "text");
+        entrepriseInput.setAttribute("name", "experienceEntreprises[]");
+        entrepriseInput.setAttribute("id", "experienceEntreprise" + i);
+        entrepriseInput.setAttribute("placeholder", "Entrez le nom de l'entreprise de l'expérience " + i);
+        entrepriseInput.classList.add("form-control");
+
+        // Create Experience Location Label and Input
+        let locationLabel = document.createElement("label");
+        locationLabel.setAttribute("for", "experienceLocation" + i);
+        locationLabel.classList.add("form-label");
+        locationLabel.innerHTML = "Lieu de l'expérience " + i + " :";
+        locationLabel.classList.add("mt-2");
+
+        let locationInput = document.createElement("input");
+        locationInput.setAttribute("type", "text");
+        locationInput.setAttribute("name", "experienceLocations[]");
+        locationInput.setAttribute("id", "experienceLocation" + i);
+        locationInput.setAttribute("placeholder", "Entrez le lieu de l'expérience " + i);
+        locationInput.classList.add("form-control");
+
+        // Create Experience Position Label and Input
+        let positionLabel = document.createElement("label");
+        positionLabel.setAttribute("for", "experiencePosition" + i);
+        positionLabel.classList.add("form-label");
+        positionLabel.innerHTML = "Poste occupé lors de l'expérience " + i + " :";
+        positionLabel.classList.add("mt-2");
+
+        let positionInput = document.createElement("input");
+        positionInput.setAttribute("type", "text");
+        positionInput.setAttribute("name", "experiencePositions[]");
+        positionInput.setAttribute("id", "experiencePosition" + i);
+        positionInput.setAttribute("placeholder", "Entrez le poste occupé lors de l'expérience " + i);
+        positionInput.classList.add("form-control");
+
         // Restore previously entered values if available
         if (savedExperiences[i - 1]) {
             nameInput.value = savedExperiences[i - 1];  // Fill input field
@@ -298,6 +370,26 @@ function generateExperience() {
             descInput.value = savedDescriptions[i - 1];  // Fill input field
         }
 
+        if (savedStartDate[i - 1]) {
+            startDateInput.value = savedStartDate[i - 1];  // Fill input field
+        }
+
+        if (savedEndDate[i - 1]) {
+            endDateInput.value = savedEndDate[i - 1];  // Fill input field
+        }
+
+        if (savedEnreprise[i - 1]) {
+            entrepriseInput.value = savedEnreprise[i - 1];  // Fill input field
+        }
+
+        if (savedLocation[i - 1]) {
+            locationInput.value = savedLocation[i - 1];  // Fill input field
+        }
+
+        if (savedPosition[i - 1]) {
+            positionInput.value = savedPosition[i - 1];  // Fill input field
+        }
+
         // Append name input fields
         div.appendChild(nameLabel);
         div.appendChild(nameInput);
@@ -305,6 +397,25 @@ function generateExperience() {
         // Append description input fields
         div.appendChild(descLabel);
         div.appendChild(descInput);
+
+        // Append date input fields
+        div.appendChild(startDateLabel);
+        div.appendChild(startDateInput);
+
+        div.appendChild(endDateLabel);
+        div.appendChild(endDateInput);
+
+        // Append entreprise input fields
+        div.appendChild(entrepriseLabel);
+        div.appendChild(entrepriseInput);
+
+        // Append location input fields
+        div.appendChild(locationLabel);
+        div.appendChild(locationInput);
+
+        // Append position input fields
+        div.appendChild(positionLabel);
+        div.appendChild(positionInput);
 
         // Append the div to the experienceFields container
         experienceFields.appendChild(div);
@@ -341,6 +452,51 @@ function toggleNiveauOptions() {
         niveau3Container.style.display = 'inline-block';
     }
 }
+
+document.getElementById("addInterest").addEventListener("click", function() {
+    let container = document.getElementById("interestContainer");
+    let count = container.getElementsByTagName("input").length + 1;
+
+    let div = document.createElement("div");
+    div.className = "col-lg-6 mt-2";
+
+    let label = document.createElement("label");
+    label.className = "form-label";
+    label.textContent = "Centre d'intérêt " + count + ":";
+
+    let input = document.createElement("input");
+    input.type = "text";
+    input.name = "interests[]"; // Ensures submission as an array
+    input.className = "form-control";
+    input.placeholder = "Entrez votre intérêt";
+
+    div.appendChild(label);
+    div.appendChild(input);
+    container.appendChild(div);
+});
+
+document.getElementById("addCompetence").addEventListener("click", function() {
+    let container = document.getElementById("competenceContainer");
+    let count = container.getElementsByTagName("input").length + 1;
+
+    let div = document.createElement("div");
+    div.className = "col-lg-6 mt-2";
+
+    let label = document.createElement("label");
+    label.className = "form-label";
+    label.textContent = "Compétence " + count + ":";
+
+    let input = document.createElement("input");
+    input.type = "text";
+    input.name = "competences[]"; // Ensures it's submitted as an array
+    input.className = "form-control";
+    input.placeholder = "Entrez votre compétence";
+
+    div.appendChild(label);
+    div.appendChild(input);
+    container.appendChild(div);
+});
+
 
 // Run on page load to apply the correct state
 window.onload = toggleNiveauOptions;

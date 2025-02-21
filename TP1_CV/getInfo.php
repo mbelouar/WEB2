@@ -77,20 +77,40 @@ for ($i = 0; $i < count($stageStartDate); $i++) {
 
 // Get the experiences
 $experienceCount = $_POST["experience"] ?? "0";
-$experiences = $_POST['experienceNames'] ?? [];  // Correct key for names
-$experienceDesc = $_POST['experienceDescriptions'] ?? [];  // Correct key for descriptions
+$experiences = $_POST['experienceNames'] ?? []; 
+$experienceDesc = $_POST['experienceDescriptions'] ?? []; 
+$experienceStartDate = $_POST['experienceStartDates'] ?? []; 
+$experienceEndDate = $_POST['experienceEndDates'] ?? [];  
+$experienceEntreprise = $_POST['experienceEntreprises'] ?? [];  
+$experienceLocation = $_POST['experienceLocations'] ?? [];  
+$experiencePosition = $_POST['experiencePositions'] ?? [];
+
+// check if the experience start date is before the end date
+for ($i = 0; $i < count($experienceStartDate); $i++) {
+    if ($experienceStartDate[$i] > $experienceEndDate[$i]) {
+        $error_message = "La date de début de l'expérience " . ($i + 1) . " doit être avant la date de fin.";
+        include "formulaire.php";
+        exit();
+    }
+}
 
 // Get the competences
-$competence1 = $_POST["competence1"] ?? "";
-$competence2 = $_POST["competence2"] ?? "";
-$competence3 = $_POST["competence3"] ?? "";
-$competence4 = $_POST["competence4"] ?? "";
+$competences = $_POST["competences"] ?? [];
+
+if (!empty($competences)) {
+    foreach ($competences as $index => $competence) {
+        $competences[$index] = htmlspecialchars(trim($competence)); // Sanitize input
+    }
+}
 
 // Get the interests
-$interest1 = $_POST["interest1"] ?? "";
-$interest2 = $_POST["interest2"] ?? "";
-$interest3 = $_POST["interest3"] ?? "";
-$interest4 = $_POST["interest4"] ?? "";
+$interests = $_POST["interests"] ?? [];
+
+if (!empty($interests)) {
+    foreach ($interests as $index => $interest) {
+        $interests[$index] = htmlspecialchars(trim($interest)); // Sanitize input
+    }
+}
 
 // Get the languages
 $langue1 = $_POST["langue1"] ?? "";
@@ -134,7 +154,6 @@ if (!empty($projects)) {
 }
 
 $data .= "------------------------ Stages ------------------------\n";
-$data .= "Stages réalisés: \n";
 if (!empty($stages)) {
     foreach ($stages as $key => $stage) {
         $data .= "Stage " . ($key + 1) . ": $stage\n";
@@ -147,34 +166,35 @@ if (!empty($stages)) {
 }
 
 $data .= "--------------------- Expériences ----------------------\n";
-$data .= "Expériences professionnelles: \n";
 if (!empty($experiences)) {
     foreach ($experiences as $key => $experience) {
         $data .= "Expérience " . ($key + 1) . ": $experience\n";
         $data .= "Description: " . ($experienceDesc[$key] ?? "N/A") . "\n";
+        $data .= "Date de début: " . ($experienceStartDate[$key] ?? "N/A") . "\n";
+        $data .= "Date de fin: " . ($experienceEndDate[$key] ?? "N/A") . "\n";
+        $data .= "Entreprise: " . ($experienceEntreprise[$key] ?? "N/A") . "\n";
+        $data .= "Location: " . ($experienceLocation[$key] ?? "N/A") . "\n";
+        $data .= "Poste: " . ($experiencePosition[$key] ?? "N/A") . "\n";
     }
 }
 
-$data .= "---------------------- Competences ---------------------\n";
-if (!empty($competence1))
-    $data .= "Compétence 1: $competence1\n";
-if (!empty($competence2))
-    $data .= "Compétence 2: $competence2\n";
-if (!empty($competence3))
-    $data .= "Compétence 3: $competence3\n";
-if (!empty($competence4))
-    $data .= "Compétence 4: $competence4\n";
-
+$data .= "---------------------- Compétences ---------------------\n";
+if (!empty($_POST["competences"])) {
+    foreach ($_POST["competences"] as $index => $competence) {
+        if (!empty($competence)) {
+            $data .= "Compétence " . ($index + 1) . ": " . htmlspecialchars(trim($competence)) . "\n";
+        }
+    }
+}
 
 $data .= "------------------- Centre d'intérêt -------------------\n";
-if (!empty($interest1))
-    $data .= "Intérêt 1: $interest1\n";
-if (!empty($interest2))
-    $data .= "Intérêt 2: $interest2\n";
-if (!empty($interest3))
-    $data .= "Intérêt 3: $interest3\n";
-if (!empty($interest4))
-    $data .= "Intérêt 4: $interest4\n";
+if (!empty($_POST["interests"])) {
+    foreach ($_POST["interests"] as $index => $interest) {
+        if (!empty($interest)) {
+            $data .= "Intérêt " . ($index + 1) . ": " . htmlspecialchars(trim($interest)) . "\n";
+        }
+    }
+}
 
 $data .= "----------------------- Langues ------------------------\n";
 if (!empty($langue1))
@@ -231,16 +251,17 @@ $_SESSION['cv_data'] = [
     'experienceCount'=> $experienceCount,
     'experiences'    => $experiences,
     'experienceDesc' => $experienceDesc,
+    'experienceStartDate' => $experienceStartDate,
+    'experienceEndDate' => $experienceEndDate,
+    'experienceEntreprise' => $experienceEntreprise,
+    'experienceLocation' => $experienceLocation,
+    'experiencePosition' => $experiencePosition,
 
-    'competence1'    => $competence1,
-    'competence2'    => $competence2,
-    'competence3'    => $competence3,
-    'competence4'    => $competence4,
+    // Store competences dynamically as an array
+    'competences'    => !empty($_POST['competences']) ? array_filter($_POST['competences'], 'trim') : [],
 
-    'interest1'      => $interest1,
-    'interest2'      => $interest2,
-    'interest3'      => $interest3,
-    'interest4'      => $interest4,
+    // Store interests dynamically as an array
+    'interests'      => !empty($_POST['interests']) ? array_filter($_POST['interests'], 'trim') : [],
 
     'langue1'        => $langue1,
     'niveau1'        => $niveau1,
@@ -251,5 +272,6 @@ $_SESSION['cv_data'] = [
     
     'message'        => $message,
 ];
+
 
 ?>

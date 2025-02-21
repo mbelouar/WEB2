@@ -15,6 +15,7 @@ if (!is_array($modules)) {
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -227,49 +228,51 @@ if (!is_array($modules)) {
 
                 <!-- Competences -->
                 <div class="section">
-                    <div class="section-title">Competences</div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <label for="competence1" class="form-label">Competence 1: <span class="blue">*</span></label>
-                            <input id="competence1" type="text" name="competence1" value="<?php echo $_SESSION['cv_data']['competence1'] ?? ''; ?>" class="form-control" placeholder="Entrez votre competence" required>
-                        </div>
-                        <div class="col-lg-6">
-                            <label for="competence2" class="form-label">Competence 2: <span class="blue">*</span></label>
-                            <input id="competence2" type="text" name="competence2" value="<?php echo $_SESSION['cv_data']['competence2'] ?? ''; ?>" class="form-control" placeholder="Entrez votre competence" required>
-                        </div>
-                        <div class="col-lg-6 mt-2">
-                            <label for="competence3" class="form-label">Competence 3:</label>
-                            <input id="competence3" type="text" name="competence3" value="<?php echo $_SESSION['cv_data']['competence3'] ?? ''; ?>" class="form-control" placeholder="Entrez votre competence">
-                        </div>
-                        <div class="col-lg-6 mt-2">
-                            <label for="competence4" class="form-label">Competence 4:</label>
-                            <input id="competence4" type="text" name="competence4" value="<?php echo $_SESSION['cv_data']['competence4'] ?? ''; ?>" class="form-control" placeholder="Entrez votre competence">
-                        </div>
+                    <div class="section-title">Compétences</div>
+                    <div class="row" id="competenceContainer">
+                        <?php
+                        $competences = $_SESSION['cv_data']['competences'] ?? ["", ""]; // Default 2 inputs
+                        foreach ($competences as $index => $competence) {
+                            echo '
+                            <div class="col-lg-6 mt-2">
+                                <label class="form-label">Compétence ' . ($index + 1) . ':</label>
+                                <input type="text" name="competences[]" value="' . htmlspecialchars($competence) . '" class="form-control" placeholder="Entrez votre compétence">
+                            </div>';
+                        }
+                        ?>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="button" class="btn w-100 d-flex align-items-center justify-content-center custom-btn" id="addCompetence">
+                            <i class="fa fa-plus me-2"></i> Ajouter
+                        </button>
                     </div>
                 </div>
+
 
                 <!-- Centre d'interet -->
                 <div class="section">
                     <div class="section-title">Centre d'intérêt</div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <label for="interest1" class="form-label">Centre d'intérêt 1: <span class="blue">*</span></label>
-                            <input id="interest1" type="text" name="interest1" value="<?php echo $_SESSION['cv_data']['interest1'] ?? ''; ?>" class="form-control" placeholder="Entrez votre intérêt" required>
-                        </div>
-                        <div class="col-lg-6">
-                            <label for="interest2" class="form-label">Centre d'intérêt 2: <span class="blue">*</span></label>
-                            <input id="interest2" type="text" name="interest2" value="<?php echo $_SESSION['cv_data']['interest2'] ?? ''; ?>" class="form-control" placeholder="Entrez votre intérêt" required>
-                        </div>
-                        <div class="col-lg-6 mt-2">
-                            <label for="interest3" class="form-label">Centre d'intérêt 3:</label>
-                            <input id="interest3" type="text" name="interest3" value="<?php echo $_SESSION['cv_data']['interest3'] ?? ''; ?>" class="form-control" placeholder="Entrez votre intérêt">
-                        </div>
-                        <div class="col-lg-6 mt-2">
-                            <label for="interest4" class="form-label">Centre d'intérêt 4:</label>
-                            <input id="interest4" type="text" name="interest4" value="<?php echo $_SESSION['cv_data']['interest4'] ?? ''; ?>" class="form-control" placeholder="Entrez votre intérêt">
-                        </div>
+                    <div class="row" id="interestContainer">
+                        <?php
+                        $interests = $_SESSION['cv_data']['interests'] ?? ["", ""]; // Default 2 fields
+                        foreach ($interests as $index => $interest) {
+                            echo '
+                            <div class="col-lg-6 mt-2">
+                                <label class="form-label">Centre d\'intérêt ' . ($index + 1) . ':</label>
+                                <input type="text" name="interests[]" value="' . htmlspecialchars($interest) . '" class="form-control" placeholder="Entrez votre intérêt">
+                            </div>';
+                        }
+                        ?>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="button" class="btn custom-btn w-100 d-flex align-items-center justify-content-center" id="addInterest">
+                            <i class="fa fa-plus me-2"></i> Ajouter
+                        </button>
                     </div>
                 </div>
+
 
                 <!-- Langues -->
                 <div class="section">
@@ -323,11 +326,12 @@ if (!is_array($modules)) {
                     <div class="section-title">Profile <span class="blue">*</span></div>
                     <div class="row">
                         <div class="">
-                        <textarea id="profile_desc" name="profile_desc" class="form-control" placeholder="Votre profile" required>
-                        <?php 
-                            echo isset($_SESSION['cv_data']['message']) ? $_SESSION['cv_data']['message'] : '';
-                        ?>
-                        </textarea>
+                            <textarea id="profile_desc" name="profile_desc" class="form-control" placeholder="Votre profile" required>
+                                <?php 
+                                    // Trim the session message to remove leading/trailing spaces
+                                    echo isset($_SESSION['cv_data']['message']) ? trim($_SESSION['cv_data']['message']) : '';
+                                ?>
+                            </textarea>
                         </div>
                         <!-- upload the picture -->
                         <div class="col-lg-12">
@@ -372,6 +376,16 @@ if (!is_array($modules)) {
                 <?= htmlspecialchars(json_encode($_SESSION['cv_data']['experiences'] ?? [])) ?>'>
                 <input type="hidden" id="savedExperienceDescriptions" name="savedExperienceDescriptions" value='
                 <?= htmlspecialchars(json_encode($_SESSION['cv_data']['experienceDesc'] ?? [])) ?>'>
+                <input type="hidden" id="savedExperienceStartDate" name="savedExperienceStartDate" value='
+                <?= htmlspecialchars(json_encode($_SESSION['cv_data']['experienceStartDate'] ?? [])) ?>'>
+                <input type="hidden" id="savedExperienceEndDate" name="savedExperienceEndDate" value='
+                <?= htmlspecialchars(json_encode($_SESSION['cv_data']['experienceEndDate'] ?? [])) ?>'>
+                <input type="hidden" id="savedExperienceEntreprises" name="savedExperienceEntreprises" value='
+                <?= htmlspecialchars(json_encode($_SESSION['cv_data']['experienceEntreprise'] ?? [])) ?>'>
+                <input type="hidden" id="savedExperienceLocations" name="savedExperienceLocations" value='
+                <?= htmlspecialchars(json_encode($_SESSION['cv_data']['experienceLocation'] ?? [])) ?>'>
+                <input type="hidden" id="savedExperiencePositions" name="savedExperiencePositions" value='
+                <?= htmlspecialchars(json_encode($_SESSION['cv_data']['experiencePosition'] ?? [])) ?>'>
 
 
                 <div class="d-flex justify-content-between mt-3">

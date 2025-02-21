@@ -112,3 +112,16 @@ h2 {
     height: 100%;
     z-index: -1;
 }
+
+.custom-btn {
+    background-color: #FFCF50 !important;
+    border-color: #626F47 !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+.custom-btn:hover {
+    background-color: #e6b947 !important;
+    border-color: #e6b947 !important;
+    color: #626F47 !important;
+}
