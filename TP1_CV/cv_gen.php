@@ -1,35 +1,57 @@
-<?php session_start(); 
-
-// Retrieve experiences from session
-$experienceCount = $_SESSION['cv_data']['experienceCount'] ?? 0;
-$experiences = $_SESSION['cv_data']['experiences'] ?? [];
-$experienceDesc = $_SESSION['cv_data']['experienceDesc'] ?? [];
-
+<?php
+session_start();
 
 // Retrieve projects from session
 $projectCount = $_SESSION['cv_data']['projectCount'] ?? 0;
 $projects = $_SESSION['cv_data']['projects'] ?? [];
-$projectDesc = $_SESSION['cv_data']['projectDesc'] ?? [];
-
-// Assign experiences dynamically
-$experienceList = [];
-$experienceDesc = [];
-
-for ($i = 0; $i < $experienceCount; $i++) {
-    $experienceList[] = $experiences[$i] ?? ''; // Ensure no errors if the index is missing
-    $experienceDesc[] = $experienceDesc[$i] ?? ''; // Ensure no errors if the index is missing
-}
+$projectDescriptions = $_SESSION['cv_data']['projectDesc'] ?? []; 
+$projectStartDates = $_SESSION['cv_data']['projectStartDate'] ?? [];
+$projectEndDates = $_SESSION['cv_data']['projectEndDate'] ?? [];
 
 // Assign projects dynamically
 $projectList = [];
-$projectDesc = [];
+$projectDescList = [];  
+$projectStartList = [];
+$projectEndList = [];
 
 for ($i = 0; $i < $projectCount; $i++) {
-    $projectList[] = $projects[$i] ?? ''; // Ensure no errors if the index is missing
-    $projectDesc[] = $projectDesc[$i] ?? ''; // Ensure no errors if the index is missing
+    $projectList[] = $projects[$i] ?? ''; 
+    $projectDescList[] = $projectDescriptions[$i] ?? ''; 
+    $projectStartList[] = $projectStartDates[$i] ?? '';
+    $projectEndList[] = $projectEndDates[$i] ?? '';
+}
+
+// Retrieve experiences from session
+$experienceCount = $_SESSION['cv_data']['experienceCount'] ?? 0;
+$experiences = $_SESSION['cv_data']['experiences'] ?? [];
+$experienceDescriptions = $_SESSION['cv_data']['experienceDesc'] ?? [];
+$experienceStartDates = $_SESSION['cv_data']['experienceStartDate'] ?? [];
+$experienceEndDates = $_SESSION['cv_data']['experienceEndDate'] ?? [];
+$experienceEntreprises = $_SESSION['cv_data']['experienceEntreprise'] ?? [];
+$experienceLocations = $_SESSION['cv_data']['experienceLocation'] ?? [];
+$experiencePositions = $_SESSION['cv_data']['experiencePosition'] ?? [];
+
+// Assign experiences dynamically
+$experienceList = [];
+$experienceDescList = [];
+$experienceStartList = [];
+$experienceEndList = [];
+$experienceEntreList = [];
+$experienceLocList = [];
+$experiencePosList = [];
+
+for ($i = 0; $i < $experienceCount; $i++) {
+    $experienceList[] = $experiences[$i] ?? '';
+    $experienceDescList[] = $experienceDescriptions[$i] ?? '';
+    $experienceStartList[] = $experienceStartDates[$i] ?? '';
+    $experienceEndList[] = $experienceEndDates[$i] ?? '';
+    $experienceEntreList[] = $experienceEntreprises[$i] ?? '';
+    $experienceLocList[] = $experienceLocations[$i] ?? '';
+    $experiencePosList[] = $experiencePositions[$i] ?? '';
 }
 
 ?>
+
 
 <html>
 <head>
@@ -111,15 +133,13 @@ for ($i = 0; $i < $projectCount; $i++) {
       <section id="competences">
         <h2>Competences</h2>
         <ul>
-          <li><?php echo $_SESSION['cv_data']['competence1'] ?></li>
-          <li><?php echo $_SESSION['cv_data']['competence2'] ?></li>
-          <?php if (!empty($_SESSION['cv_data']['competence3'])) { ?>
-            <li><?php echo $_SESSION['cv_data']['competence3'] ?></li>
-          <?php } ?>
-          <?php if (!empty($_SESSION['cv_data']['competence4'])) { ?>
-            <li><?php echo $_SESSION['cv_data']['competence4'] ?></li>
-          <?php } ?>
+          <?php if (!empty($_SESSION['cv_data']['competences'])): ?>
+            <?php foreach ($_SESSION['cv_data']['competences'] as $competence): ?>
+              <li><?php echo htmlspecialchars($competence); ?></li>
+            <?php endforeach; ?>
+          <?php endif; ?>
         </ul>
+
         
         <h2>Languages</h2>
         <ul>
@@ -132,14 +152,11 @@ for ($i = 0; $i < $projectCount; $i++) {
 
         <h2>Interests</h2>
         <ul>
-          <li><?php echo $_SESSION['cv_data']['interest1'] ?></li>
-          <li><?php echo $_SESSION['cv_data']['interest2'] ?></li>
-          <?php if (!empty($_SESSION['cv_data']['interest3'])) { ?>
-            <li><?php echo $_SESSION['cv_data']['interest3'] ?></li>
-          <?php } ?>
-          <?php if (!empty($_SESSION['cv_data']['interest4'])) { ?>
-            <li><?php echo $_SESSION['cv_data']['interest4'] ?></li>
-          <?php } ?>
+          <?php if (!empty($_SESSION['cv_data']['interests'])): ?>
+            <?php foreach ($_SESSION['cv_data']['interests'] as $interest): ?>
+              <li><?php echo htmlspecialchars($interest); ?></li>
+            <?php endforeach; ?>
+          <?php endif; ?>
         </ul>
       </section>
     </div>
@@ -163,50 +180,47 @@ for ($i = 0; $i < $projectCount; $i++) {
 
         <?php if (!empty($experienceList[0])) { ?>
           <div class="experience">
-            <h3><?php echo $experienceList[0] ?></h3>
-            <p class="date">January 2023 - December 2023</p>
+            <h3><?php echo $experienceList[0]?> - <?php echo $experienceEntreList[0] ?></h3>
+            <p class="date"> <?php echo $experienceStartList[0] ?> - <?php echo $experienceEndList[0] ?></p>
             <ul>
-              <li><?php echo $experienceDesc[0] ?></li>
+              <li><?php echo $experienceDescList[0] ?></li>
             </ul>
           </div>
         <?php } ?>
 
         <?php if (!empty($experienceList[1])) { ?>
           <div class="experience">
-            <h3><?php echo $experienceList[1] ?></h3>
-            <p class="date">January 2022 - December 2022</p>
+            <h3><?php echo $experienceList[1] ?> - <?php echo $experienceEntreList[1] ?></h3>
+            <p class="date"> <?php echo $experienceStartList[1] ?> - <?php echo $experienceEndList[1] ?></p>
             <ul>
-              <li><?php echo $experienceDesc[1] ?></li>
-            </ul>
+              <li><?php echo $experienceDescList[1] ?></li>
           </div> 
         <?php } ?>
 
         <?php if (!empty($experienceList[2])) { ?>
           <div class="experience">
-            <h3><?php echo $experienceList[2] ?></h3>
-            <p class="date">January 2021 - December 2021</p>
+            <h3><?php echo $experienceList[2] ?> - <?php echo $experienceEntreList[2] ?></h3>
+            <p class="date"> <?php echo $experienceStartList[2] ?> - <?php echo $experienceEndList[2] ?></p>
             <ul>
-              <li><?php echo $experienceDesc[2] ?></li>
-            </ul>
+              <li><?php echo $experienceDescList[2] ?></li>
           </div>
         <?php } ?>
 
         <?php if (!empty($experienceList[3])) { ?>
           <div class="experience">
-            <h3><?php echo $experienceList[3] ?></h3>
-            <p class="date">January 2020 - December 2020</p>
+            <h3><?php echo $experienceList[3] ?> - <?php echo $experienceEntreList[3] ?></h3>
+            <p class="date"> <?php echo $experienceStartList[3] ?> - <?php echo $experienceEndList[3] ?></p>
             <ul>
-              <li><?php echo $experienceDesc[3] ?></li>
-            </ul>
+              <li><?php echo $experienceDescList[3] ?></li>
           </div>
         <?php } ?>
 
         <?php if (!empty($experienceList[4])) { ?>
           <div class="experience">
-            <h3><?php echo $experienceList[4] ?></h3>
-            <p class="date">January 2019 - December 2019</p>
+            <h3><?php echo $experienceList[4] ?> - <?php echo $experienceEntreList[4] ?></h3>
+            <p class="date"> <?php echo $experienceStartList[4] ?> - <?php echo $experienceEndList[4] ?></p>
             <ul>
-              <li><?php echo $experienceDesc[4] ?></li>
+              <li><?php echo $experienceDescList[4] ?></li>
             </ul>
           </div>
         <?php } ?>
@@ -219,9 +233,9 @@ for ($i = 0; $i < $projectCount; $i++) {
        <?php if (!empty($projectList[0])) { ?>
           <div class="project">
             <h3><?php echo $projectList[0] ?></h3>
-            <p class="date">2023</p>
+            <p class="date"> <?php echo $projectStartList[0] ?> - <?php echo $projectEndList[0] ?></p>
             <ul>
-              <li> <?php echo $projectDesc[0] ?></li>
+              <li> <?php echo $projectDescList[0] ?></li>
             </ul>
           </div>
         <?php } ?>
@@ -229,9 +243,9 @@ for ($i = 0; $i < $projectCount; $i++) {
         <?php if (!empty($projectList[1])) { ?>
           <div class="project">
             <h3><?php echo $projectList[1] ?></h3>
-            <p class="date">2022</p>
+            <p class="date"> <?php echo $projectStartList[1] ?> - <?php echo $projectEndList[1] ?></p>
             <ul>
-              <li> <?php echo $projectDesc[1] ?></li>
+              <li> <?php echo $projectDescList[1] ?></li>
             </ul>
           </div>
         <?php } ?>
@@ -239,9 +253,9 @@ for ($i = 0; $i < $projectCount; $i++) {
         <?php if (!empty($projectList[2])) { ?>
           <div class="project">
             <h3><?php echo $projectList[2] ?></h3>
-            <p class="date">2021</p>
+            <p class="date"> <?php echo $projectStartList[2] ?> - <?php echo $projectEndList[2] ?></p>
             <ul>
-              <li> <?php echo $projectDesc[2] ?></li>
+              <li> <?php echo $projectDescList[2] ?></li>
             </ul>
           </div>
         <?php } ?>
@@ -249,9 +263,9 @@ for ($i = 0; $i < $projectCount; $i++) {
         <?php if (!empty($projectList[3])) { ?>
           <div class="project">
             <h3><?php echo $projectList[3] ?></h3>
-            <p class="date">2020</p>
+            <p class="date"> <?php echo $projectStartList[3] ?> - <?php echo $projectEndList[3] ?></p>
             <ul>
-              <li> <?php echo $projectDesc[3] ?></li>
+              <li> <?php echo $projectDescList[3] ?></li>
             </ul>
           </div>
         <?php } ?>
@@ -259,9 +273,9 @@ for ($i = 0; $i < $projectCount; $i++) {
         <?php if (!empty($projectList[4])) { ?>
           <div class="project">
             <h3><?php echo $projectList[4] ?></h3>
-            <p class="date">2019</p>
+            <p class="date"> <?php echo $projectStartList[4] ?> - <?php echo $projectEndList[4] ?></p>
             <ul>
-              <li> <?php echo $projectDesc[4] ?></li>
+              <li> <?php echo $projectDescList[4] ?></li>
             </ul>
           </div>
         <?php } ?>

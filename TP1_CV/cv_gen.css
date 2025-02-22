@@ -100,13 +100,12 @@ ul {
 }
 
 .header img {
-  border-radius: 50%;
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border: 3px solid #007bff;
-  margin-bottom: 20px;
+  width: 150px; /* Adjust size */
+  height: 150px; /* Adjust size */
+  object-fit: cover; /* Ensure proper scaling */
+  border-radius: 50%; /* Make it round */
 }
+
 
 .header h1 {
   color: #343a40;

@@ -1,0 +1,42 @@
+---------------- Renseignement Personnel ----------------
+Nom: BELOUARRAQ
+Prénom: Mohammed
+Age: 23
+Email: d@gmail.com
+Téléphone: 0688191812
+Adresse: nr 98 appt 7
+Github: 
+Linkedin: 
+--------------- Renseignement Académique ---------------
+Formation: 2AP
+Niveau: 1er année
+Modules suivis: compilation, bd
+Nombre de projets: 2
+Projets réalisés: 
+Projet 1: Inception
+Description: desc of inecption
+Date de début: 2025-02-13
+Date de fin: 2025-02-20
+Projet 2: FT_irc
+Description: desc of irc
+Date de début: 2025-02-04
+Date de fin: 2025-02-28
+------------------------ Stages ------------------------
+--------------------- Expériences ----------------------
+Expérience 1: President of ADE
+Description: desc of the President of ADE
+Date de début: 2025-02-11
+Date de fin: 2025-02-21
+Entreprise: ADE ENSA TETOUAN
+Location: TETOUAN
+Poste: President
+---------------------- Compétences ---------------------
+------------------- Centre d'intérêt -------------------
+----------------------- Langues ------------------------
+Langue 1: Anglais => Niveau: debutant
+Langue 2: Francais => Niveau: debutant
+------------------------ Profile -----------------------
+Profile: Récemment diplômé en école d’informatique, je suis prêt à m’ouvrir au monde du travail et mettre mes compétences à profit. Ma passion pour le web et mon savoir-faire en matière d’assistance informatique sont mes principaux atouts.
+---------------------- picture path --------------------
+picture path: uploads/profile.png
+---------------------- Fin du CV -----------------------

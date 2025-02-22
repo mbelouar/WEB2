@@ -10,14 +10,42 @@ document.getElementById("generatePdf").addEventListener("click", function () {
     document.body.appendChild(iframe);
 
     iframe.onload = function () {
-        setTimeout(() => {
-            let content = iframe.contentDocument.body; // Get the content of the iframe
+        // Wait until all resources are fully loaded before proceeding
+        let content = iframe.contentDocument || iframe.contentWindow.document;
+        
+        let images = content.getElementsByTagName("img");
+        let loadedImages = 0;
+        
+        function checkImagesLoaded() {
+            loadedImages++;
+            if (loadedImages === images.length) {
+                generatePDF(content.body);
+            }
+        }
 
+        if (images.length > 0) {
+            for (let img of images) {
+                if (img.complete) {
+                    checkImagesLoaded();
+                } else {
+                    img.onload = checkImagesLoaded;
+                    img.onerror = checkImagesLoaded;
+                }
+            }
+        } else {
+            generatePDF(content.body);
+        }
+    };
+
+    iframe.src = url; // Load the target page inside the iframe
+
+    function generatePDF(content) {
+        setTimeout(() => {
             html2canvas(content, {
-                scale: window.devicePixelRatio,  // Adjust for high-DPI screens
-                useCORS: true,                   // Allows external images
-                letterRendering: true,           // Improves text rendering
-                logging: false                   // Disable logging
+                scale: 2, // More stable for high-resolution screens
+                useCORS: true,
+                letterRendering: true,
+                logging: false
             }).then(canvas => {
                 const { jsPDF } = window.jspdf;
                 let pdf = new jsPDF("p", "mm", "a4");
@@ -26,7 +54,7 @@ document.getElementById("generatePdf").addEventListener("click", function () {
                 let imgHeight = (canvas.height * imgWidth) / canvas.width;
 
                 if (imgHeight > 297) { // A4 height is 297mm
-                    pdf = new jsPDF("p", "mm", [imgWidth, imgHeight]);
+                    imgHeight = 297; // Ensure it fits within A4
                 }
 
                 pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, imgWidth, imgHeight);
@@ -34,8 +62,6 @@ document.getElementById("generatePdf").addEventListener("click", function () {
 
                 document.body.removeChild(iframe); // Cleanup
             });
-        }, 1500); // Wait for the iframe content to load and render
-    };
-
-    iframe.src = url; // Load the target page inside the iframe
+        }, 500); // Reduced timeout after images load
+    }
 });
