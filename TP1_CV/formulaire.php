@@ -34,7 +34,7 @@ if (!is_array($modules)) {
                 
                 <!-- Renseignement Personnel -->
                 <div class="section">
-                    <div class="section-title">Renseignement Personnel</div>
+                    <div class="section-title custom-header">Renseignement Personnel</div>
                     <div class="row">
                         <div class="col-lg-6">
                             <label for="firstname" class="form-label">Prénom <span class="blue">*</span></label>
@@ -76,7 +76,7 @@ if (!is_array($modules)) {
 
                 <!-- Renseignement Académique -->
                 <div class="section">
-                    <div class="section-title">Renseignement Académique</div>
+                    <div class="section-title custom-header">Renseignement Académique</div>
                     <div class="row">
                         <div class="col-lg-12">
                             <label for="formation" class="form-label">Vous êtes en: <span class="blue">*</span></label><br>
@@ -182,7 +182,7 @@ if (!is_array($modules)) {
 
                 <!-- Stage -->
                 <div class="section">
-                    <div class="section-title">Stages</div>
+                    <div class="section-title custom-header">Stages</div>
                     <div class="row">
                         <div class="col-lg-12">
                             <label for="stage" class="form-label">Nombre de stages réalisés cette année: <span class="blue">*</span></label>
@@ -205,7 +205,7 @@ if (!is_array($modules)) {
 
                 <!-- Experiences -->
                 <div class="section">
-                    <div class="section-title">Experiences</div>
+                    <div class="section-title custom-header">Experiences</div>
                     <div class="row">
                         <div class="col-lg-12">
                             <label for="experience" class="form-label">Nombre des experiences: <span class="blue">*</span></label>
@@ -228,7 +228,7 @@ if (!is_array($modules)) {
 
                 <!-- Competences -->
                 <div class="section">
-                    <div class="section-title">Compétences</div>
+                    <div class="section-title custom-header">Compétences</div>
                     <div class="row" id="competenceContainer">
                         <?php
                         $competences = $_SESSION['cv_data']['competences'] ?? ["", ""]; // Default 2 inputs
@@ -252,7 +252,7 @@ if (!is_array($modules)) {
 
                 <!-- Centre d'interet -->
                 <div class="section">
-                    <div class="section-title">Centre d'intérêt</div>
+                    <div class="section-title custom-header">Centre d'intérêt</div>
                     <div class="row" id="interestContainer">
                         <?php
                         $interests = $_SESSION['cv_data']['interests'] ?? ["", ""]; // Default 2 fields
@@ -276,7 +276,7 @@ if (!is_array($modules)) {
 
                 <!-- Langues -->
                 <div class="section">
-                    <div class="section-title">Langues</div>
+                    <div class="section-title custom-header">Langues</div>
                     <div class="row">
                         <div class="col-lg-6">
                             <label for="langue1" class="form-label">Langue 1: <span class="blue">*</span></label>
@@ -291,7 +291,7 @@ if (!is_array($modules)) {
                             </select>
                         </div>
 
-                        <div class="col-lg-6 mt-2">
+                        <div class="col-lg-6">
                             <label for="langue2" class="form-label">Langue 2: <span class="blue">*</span></label>
                             <input id="langue2" type="text" name="langue2" value="<?php echo $_SESSION['cv_data']['langue2'] ?? ''; ?>" class="form-control" placeholder="Entrez la langue" required>
                         </div>
@@ -304,7 +304,7 @@ if (!is_array($modules)) {
                             </select>
                         </div>
 
-                        <div class="col-lg-6 mt-2">
+                        <div class="col-lg-6">
                             <label for="langue3" class="form-label">Langue 3:</label>
                             <input id="langue3" type="text" name="langue3" value="<?php echo $_SESSION['cv_data']['langue3'] ?? ''; ?>" class="form-control" placeholder="Entrez la langue">
                         </div>
@@ -323,7 +323,7 @@ if (!is_array($modules)) {
 
                 <!-- Profile and picture -->
                 <div class="section">
-                    <div class="section-title">Profile <span class="blue">*</span></div>
+                    <div class="section-title custom-header">Profile</div>
                     <div class="row">
                         <div class="">
                             <textarea id="profile_desc" name="profile_desc" class="form-control" placeholder="Votre profile" required>

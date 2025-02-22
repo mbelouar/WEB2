@@ -125,3 +125,13 @@ h2 {
     border-color: #e6b947 !important;
     color: #626F47 !important;
 }
+
+.custom-header {
+    background-color: #eee;
+    color: #626F47;
+    text-align: center; /* Center the text */
+    padding: 10px 0; /* Add some padding for a better look */
+    font-size: 1.25em; /* Adjust font size */
+    font-weight: bold; /* Make the text bold */
+    border-radius: 5px; /* Optional: rounded corners for the header */
+}
