@@ -1,0 +1,142 @@
+body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(to right, #626F47, #4a5339);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: white;
+    overflow: hidden; /* Prevent scrollbars during animation */
+  }
+  
+  .container {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 50px;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease-in-out;
+    position: relative; /* For confetti positioning */
+    z-index: 1; /* Ensure container is above confetti */
+  }
+  
+  .container:hover {
+    transform: scale(1.05);
+  }
+  
+  h1 {
+    color: #626F47;
+    margin-bottom: 30px;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+    font-size: 1.8em;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  
+  p {
+    color: #626F47;
+    font-size: 1.3em;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Animated Checkmark Styles */
+  .checkmark-container {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 40px;
+    position: relative;
+  }
+  
+  .checkmark-circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 3;
+    stroke-miterlimit: 10;
+    stroke: #FFCF50;
+    fill: none;
+    animation: stroke 1.5s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+  }
+  
+  .checkmark {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .checkmark-check {
+    transform-origin: 50% 50%;
+    stroke-width: 3;
+    stroke: white;
+    fill: none;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke 0.8s cubic-bezier(0.65, 0, 0.45, 1) 1.5s forwards;
+  }
+  
+  @keyframes stroke {
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+  
+  /* Confetti styles */
+  .confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #f00; /* Initial color, will be randomized */
+    border-radius: 50%;
+    top: -10px; /* Start above the screen */
+    z-index: 0; /* Behind the container */
+  }
+  
+  /* Keyframes for confetti animation */
+  @keyframes fall {
+    to {
+      transform: translateY(105vh) translateX(var(--random-x)) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  
+  /* Button Styles */
+  .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+  }
+  
+  .button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .button:hover {
+    opacity: 0.8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .modifier-button {
+    background-color: #FFCF50;
+  }
+  
+  .generator-button {
+    background-color: #FFCF50;
+  }

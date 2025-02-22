@@ -422,26 +422,6 @@ function generateExperience() {
     }
 }
 
-function validateCheckboxes() {
-    const checkboxes = document.querySelectorAll('input[name="modules[]"]');
-    const errorMessage = document.getElementById('error-message');
-    
-    let checked = false;
-    checkboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-            checked = true;
-        }
-    });
-
-    if (!checked) {
-        errorMessage.style.display = 'block';
-        return false; // Prevent form submission
-    } else {
-        errorMessage.style.display = 'none';
-        return true; // Allow form submission
-    }
-}
-
 function toggleNiveauOptions() {
     var selectedFormation = document.querySelector('input[name="formation"]:checked').value;
     var niveau3Container = document.getElementById('niveau_3_container');
@@ -496,7 +476,6 @@ document.getElementById("addCompetence").addEventListener("click", function() {
     div.appendChild(input);
     container.appendChild(div);
 });
-
 
 // Run on page load to apply the correct state
 window.onload = toggleNiveauOptions;

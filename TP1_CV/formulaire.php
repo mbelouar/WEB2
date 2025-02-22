@@ -1,5 +1,7 @@
 <?php 
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 $modules = $_SESSION['cv_data']['modules'] ?? [];
 if (!is_array($modules)) {
@@ -14,11 +16,11 @@ if (!is_array($modules)) {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="style.css">
     </head>
@@ -163,6 +165,7 @@ if (!is_array($modules)) {
                                 <label class="form-check-label" for="bd">BD</label>
                             </div>
                         </div>
+
                         <div class="col-lg-12">
                             <label for="project" class="form-label">Nombre de projets réalisés cette année: <span class="blue">*</span></label>
                             <select id="project" name="project" class="form-control" onchange="generateProjectFields()" required>
@@ -342,7 +345,6 @@ if (!is_array($modules)) {
                 </div>
 
 
-                <p id="error-message" style="color: red; display: none;">Veuillez sélectionner au moins un module.</p>
                 <p id="error-message" style="color: red; <?= !empty($error_message) ? 'display: block;' : 'display: none;'; ?>">
                     <?= $error_message; ?>
                 </p>
@@ -389,12 +391,12 @@ if (!is_array($modules)) {
 
 
                 <div class="d-flex justify-content-between mt-3">
-                    <button type="submit" onclick="return validateCheckboxesf()" class="button-env btn btn-primary">Envoyer</button>
+                    <button type="submit" class="button-env btn btn-primary">Envoyer</button>
                 </div>
                         
 
             </form>
-            <?php session_destroy(); // Completely destroys the session ?>
+            <?php session_destroy(); ?>
         </div>
 
         <script src="particles.js"></script>

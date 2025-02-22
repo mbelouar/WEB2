@@ -31,12 +31,13 @@ body {
 }
 
 .success-message {
-    background-color: #626F47;
-    color: white;
+    background-color: #f0f0f0;
+    color: #626F47;
     padding: 20px;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 20px;
     margin-bottom: 30px;
+    max-height: 120px;
 }
 
 .success-message h2 {
@@ -52,6 +53,7 @@ body {
     font-size: 18px;
     font-style: italic;
     font-family: initial;
+    margin-top: -18px;
 }
 
 .form-controls {
@@ -78,7 +80,7 @@ body {
     display: inline-block;
     margin-top: 20px;
     font-size: 16px;
-    color: #007BFF;
+    color: #FBA518;
     text-decoration: none;
 }
 .back-link:hover {

@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Lato', sans-serif;
-    background: #626F47;
+    background: linear-gradient(to right, #626F47, #4a5339);
     position: relative;
     isolation: isolate;
 }
@@ -131,7 +131,8 @@ h2 {
     color: #626F47;
     text-align: center; /* Center the text */
     padding: 10px 0; /* Add some padding for a better look */
-    font-size: 1.25em; /* Adjust font size */
+    font-size: 1.5em; /* Adjust font size */
     font-weight: bold; /* Make the text bold */
     border-radius: 5px; /* Optional: rounded corners for the header */
 }
+
