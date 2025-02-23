@@ -50,6 +50,29 @@ for ($i = 0; $i < $experienceCount; $i++) {
     $experiencePosList[] = $experiencePositions[$i] ?? '';
 }
 
+// Retrieve stages from session
+$stageCount = $_SESSION['cv_data']['stageCount'] ?? 0;
+$stages = $_SESSION['cv_data']['stages'] ?? [];
+$stageDescriptions = $_SESSION['cv_data']['stageDesc'] ?? [];
+$stageStartDates = $_SESSION['cv_data']['stageStartDate'] ?? [];
+$stageEndDates = $_SESSION['cv_data']['stageEndDate'] ?? [];
+$stageEntreprises = $_SESSION['cv_data']['stageEntreprise'] ?? [];
+
+// Assign stages dynamically
+$stageList = [];
+$stageDescList = [];
+$stageStartList = [];
+$stageEndList = [];
+$stageEntreList = [];
+
+for ($i = 0; $i < $stageCount; $i++) {
+    $stageList[] = $stages[$i] ?? '';
+    $stageDescList[] = $stageDescriptions[$i] ?? '';
+    $stageStartList[] = $stageStartDates[$i] ?? '';
+    $stageEndList[] = $stageEndDates[$i] ?? '';
+    $stageEntreList[] = $stageEntreprises[$i] ?? '';
+}
+
 ?>
 
 
@@ -178,49 +201,22 @@ for ($i = 0; $i < $experienceCount; $i++) {
       <section id="experience">
         <h2>Experiences</h2>
 
-        <?php if (!empty($experienceList[0])) { ?>
-          <div class="experience">
-            <h3><?php echo $experienceList[0]?> - <?php echo $experienceEntreList[0] ?></h3>
-            <p class="date"> <?php echo $experienceStartList[0] ?> - <?php echo $experienceEndList[0] ?></p>
+        <?php for ($i = 0; $i < $experienceCount; $i++) { ?>
+          <div class="experience" id="experience">
+            <h3><?php echo $experienceList[$i] ?> - <?php echo $experienceEntreList[$i] ?></h3>
+            <p class="date"> <?php echo $experienceStartList[$i] ?> - <?php echo $experienceEndList[$i] ?></p>
             <ul>
-              <li><?php echo $experienceDescList[0] ?></li>
+              <li><?php echo $experienceDescList[$i] ?></li>
             </ul>
           </div>
         <?php } ?>
 
-        <?php if (!empty($experienceList[1])) { ?>
-          <div class="experience">
-            <h3><?php echo $experienceList[1] ?> - <?php echo $experienceEntreList[1] ?></h3>
-            <p class="date"> <?php echo $experienceStartList[1] ?> - <?php echo $experienceEndList[1] ?></p>
+        <?php for ($i = 0; $i < $stageCount; $i++) { ?>
+          <div class="experience" id="stage">
+            <h3><?php echo $stageList[$i] ?> - <?php echo $stageEntreList[$i] ?></h3>
+            <p class="date"> <?php echo $stageStartList[$i] ?> - <?php echo $stageEndList[$i] ?></p>
             <ul>
-              <li><?php echo $experienceDescList[1] ?></li>
-          </div> 
-        <?php } ?>
-
-        <?php if (!empty($experienceList[2])) { ?>
-          <div class="experience">
-            <h3><?php echo $experienceList[2] ?> - <?php echo $experienceEntreList[2] ?></h3>
-            <p class="date"> <?php echo $experienceStartList[2] ?> - <?php echo $experienceEndList[2] ?></p>
-            <ul>
-              <li><?php echo $experienceDescList[2] ?></li>
-          </div>
-        <?php } ?>
-
-        <?php if (!empty($experienceList[3])) { ?>
-          <div class="experience">
-            <h3><?php echo $experienceList[3] ?> - <?php echo $experienceEntreList[3] ?></h3>
-            <p class="date"> <?php echo $experienceStartList[3] ?> - <?php echo $experienceEndList[3] ?></p>
-            <ul>
-              <li><?php echo $experienceDescList[3] ?></li>
-          </div>
-        <?php } ?>
-
-        <?php if (!empty($experienceList[4])) { ?>
-          <div class="experience">
-            <h3><?php echo $experienceList[4] ?> - <?php echo $experienceEntreList[4] ?></h3>
-            <p class="date"> <?php echo $experienceStartList[4] ?> - <?php echo $experienceEndList[4] ?></p>
-            <ul>
-              <li><?php echo $experienceDescList[4] ?></li>
+              <li><?php echo $stageDescList[$i] ?></li>
             </ul>
           </div>
         <?php } ?>
@@ -230,52 +226,12 @@ for ($i = 0; $i < $experienceCount; $i++) {
       <section id="projects">
         <h2>Projects</h2>
 
-       <?php if (!empty($projectList[0])) { ?>
+        <?php for ($i = 0; $i < $projectCount; $i++) { ?>
           <div class="project">
-            <h3><?php echo $projectList[0] ?></h3>
-            <p class="date"> <?php echo $projectStartList[0] ?> - <?php echo $projectEndList[0] ?></p>
+            <h3><?php echo $projectList[$i] ?></h3>
+            <p class="date"> <?php echo $projectStartList[$i] ?> - <?php echo $projectEndList[$i] ?></p>
             <ul>
-              <li> <?php echo $projectDescList[0] ?></li>
-            </ul>
-          </div>
-        <?php } ?>
-
-        <?php if (!empty($projectList[1])) { ?>
-          <div class="project">
-            <h3><?php echo $projectList[1] ?></h3>
-            <p class="date"> <?php echo $projectStartList[1] ?> - <?php echo $projectEndList[1] ?></p>
-            <ul>
-              <li> <?php echo $projectDescList[1] ?></li>
-            </ul>
-          </div>
-        <?php } ?>
-
-        <?php if (!empty($projectList[2])) { ?>
-          <div class="project">
-            <h3><?php echo $projectList[2] ?></h3>
-            <p class="date"> <?php echo $projectStartList[2] ?> - <?php echo $projectEndList[2] ?></p>
-            <ul>
-              <li> <?php echo $projectDescList[2] ?></li>
-            </ul>
-          </div>
-        <?php } ?>
-
-        <?php if (!empty($projectList[3])) { ?>
-          <div class="project">
-            <h3><?php echo $projectList[3] ?></h3>
-            <p class="date"> <?php echo $projectStartList[3] ?> - <?php echo $projectEndList[3] ?></p>
-            <ul>
-              <li> <?php echo $projectDescList[3] ?></li>
-            </ul>
-          </div>
-        <?php } ?>
-
-        <?php if (!empty($projectList[4])) { ?>
-          <div class="project">
-            <h3><?php echo $projectList[4] ?></h3>
-            <p class="date"> <?php echo $projectStartList[4] ?> - <?php echo $projectEndList[4] ?></p>
-            <ul>
-              <li> <?php echo $projectDescList[4] ?></li>
+              <li><?php echo $projectDescList[$i] ?></li>
             </ul>
           </div>
         <?php } ?>

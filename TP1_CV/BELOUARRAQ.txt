@@ -5,38 +5,58 @@ Age: 23
 Email: d@gmail.com
 Téléphone: 0688191812
 Adresse: nr 98 appt 7
-Github: 
-Linkedin: 
+Github: mbelouar
+Linkedin: BELOUARRAQ Mohammed
 --------------- Renseignement Académique ---------------
 Formation: 2AP
-Niveau: 1er année
+Niveau: 2ème année
 Modules suivis: compilation, bd
-Nombre de projets: 2
+Nombre de projets: 1
 Projets réalisés: 
 Projet 1: Inception
-Description: desc of inecption
-Date de début: 2025-02-13
-Date de fin: 2025-02-20
-Projet 2: FT_irc
-Description: desc of irc
-Date de début: 2025-02-04
-Date de fin: 2025-02-28
+Description: desc of inception
+Date de début: 2025-02-11
+Date de fin: 2025-02-27
 ------------------------ Stages ------------------------
+Stage 1: GDS
+Description: desc of internship in gds
+Date de début: 2025-02-04
+Date de fin: 2025-02-18
+Entreprise: GDS GED SERVICE
+Location: CASABLANCA
+Stage 2: Oracle
+Description: desc of oracle internship
+Date de début: 2025-01-15
+Date de fin: 2025-02-20
+Entreprise: Oracle
+Location: CASABLANCA
 --------------------- Expériences ----------------------
 Expérience 1: President of ADE
-Description: desc of the President of ADE
-Date de début: 2025-02-11
-Date de fin: 2025-02-21
+Description: desc of the first experience at ade
+Date de début: 2025-02-04
+Date de fin: 2025-02-28
 Entreprise: ADE ENSA TETOUAN
 Location: TETOUAN
 Poste: President
 ---------------------- Compétences ---------------------
+Compétence 1: C/C++
+Compétence 2: DB
+Compétence 3: docker
+Compétence 4: Java
+Compétence 5: flask
+Compétence 6: git/github
 ------------------- Centre d'intérêt -------------------
+Intérêt 1: Cars
+Intérêt 2: Coding
+Intérêt 3: Movies
+Intérêt 4: Football
+Intérêt 5: fishing
 ----------------------- Langues ------------------------
-Langue 1: Anglais => Niveau: debutant
-Langue 2: Francais => Niveau: debutant
+Langue 1: Anglais => Niveau: intermediaire
+Langue 2: Francais => Niveau: intermediaire
+Langue 3: Arabe => Niveau: avance
 ------------------------ Profile -----------------------
-Profile: Récemment diplômé en école d’informatique, je suis prêt à m’ouvrir au monde du travail et mettre mes compétences à profit. Ma passion pour le web et mon savoir-faire en matière d’assistance informatique sont mes principaux atouts.
+Profile: Candidate dynamique et motivée, je recherche un poste d'hôtesse de caisse dans la région de Rennes. Diplômée d'un BEP vente-action marchande, je souhaite développer mon parcours professionnel au sein de la grande distribution. De nature serviable et organisée, je saurai m'adapter rapidement à mon nouvel environnement de travail tout en intégrant les différentes tâches liées au poste.
 ---------------------- picture path --------------------
 picture path: uploads/profile.png
 ---------------------- Fin du CV -----------------------
