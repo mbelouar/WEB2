@@ -84,6 +84,11 @@ for ($i = 0; $i < $stageCount; $i++) {
   <link rel="stylesheet" href="cv_gen.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
+    
+    body {
+      min-height: 297mm;
+      display: flex;
+    }
     .header {
       display: flex;
       justify-content: space-between;
@@ -112,18 +117,17 @@ for ($i = 0; $i < $stageCount; $i++) {
       background-color: #fff;
       padding: 20px;
       box-shadow: -3px 0 5px rgba(0, 0, 0, 0.1);
-      /*float: right;*/
-      /* position: relative; */ 
+
       margin-top: 10px;
     }
 
     .container {
       display: flex;
     }
+
   </style>
 </head>
 <body>
-
   <div class="container">
     <div class="sidebar">
       <div class="header">
@@ -132,7 +136,7 @@ for ($i = 0; $i < $stageCount; $i++) {
       <section id="contact-info">
         <h2>Contact</h2>
         <!-- retrieve the email, phone, linkedin, and github from the session -->
-        <p><i class="fas fa-envelope icon"></i> <?php echo $_SESSION['cv_data']['email']; ?></p>
+        <p><i class="fas fa-envelope icon"></i> <?php echo $_SESSION['cv_data']['picture']; ?></p>
         <p><i class="fas fa-phone icon"></i> (+212) <?php echo $_SESSION['cv_data']['phone'] ?></p>
         <?php if (!empty($_SESSION['cv_data']['linkedin'])) { ?>
           <p><i class="fab fa-linkedin icon"></i> <?php echo $_SESSION['cv_data']['linkedin'] ?></p>
@@ -188,11 +192,13 @@ for ($i = 0; $i < $stageCount; $i++) {
       <div class="header-name">
         <h1><?php echo $_SESSION['cv_data']['firstname'] . " " . $_SESSION['cv_data']['lastname']; ?></h1>
       </div>
+      
       <div class="divider">
         <svg width="100" height="3" viewBox="0 0 0 3" fill="none" xmlns="http://www.w3.org/2000/svg">
           <line x1="0" y1="1.5" x2="100" y2="1.5" stroke="#007bff" stroke-width="3" stroke-linecap="round"/>
         </svg>
       </div>
+      
       <section id="summary">
         <h2>Profile</h2>
         <p><?php echo $_SESSION['cv_data']['message'] ?></p>
@@ -237,8 +243,6 @@ for ($i = 0; $i < $stageCount; $i++) {
         <?php } ?>
 
       </section>
-      
-
     </div>
   </div>
   

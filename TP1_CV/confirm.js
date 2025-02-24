@@ -35,14 +35,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Button click handlers (example)
     const modifierButton = document.querySelector('.modifier-button');
     const generatorButton = document.querySelector('.generator-button');
-  
-    modifierButton.addEventListener('click', () => {
-      alert('Modifier button clicked!');
-      // Add your modifier functionality here
-    });
-  
-    generatorButton.addEventListener('click', () => {
-      alert('Generator button clicked!');
-      // Add your generator functionality here
-    });
+
   });

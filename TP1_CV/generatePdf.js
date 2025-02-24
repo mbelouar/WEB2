@@ -4,8 +4,8 @@ document.getElementById("generatePdf").addEventListener("click", function () {
     // Create an invisible iframe
     let iframe = document.createElement("iframe");
     iframe.style.position = "absolute";
-    iframe.style.width = "100%";
-    iframe.style.height = "100vh";
+    iframe.style.width = "210mm";
+    iframe.style.height = "297mm";
     iframe.style.visibility = "hidden";
     document.body.appendChild(iframe);
 
@@ -60,7 +60,7 @@ document.getElementById("generatePdf").addEventListener("click", function () {
                 pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, imgWidth, imgHeight);
                 pdf.save("Generated_Page.pdf");
 
-                document.body.removeChild(iframe); // Cleanup
+                // document.body.removeChild(iframe); // Cleanup
             });
         }, 500); // Reduced timeout after images load
     }

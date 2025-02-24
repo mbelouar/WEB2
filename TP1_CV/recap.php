@@ -1,7 +1,7 @@
 <?php
 session_start();
-include "handle_upload.php";
 include "getInfo.php";
+include "handle_upload.php";
 ?>
 
 <!DOCTYPE html>
@@ -17,6 +17,9 @@ include "getInfo.php";
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
+    <script>
+        console.log(JSON.parse('<?php echo json_encode($_SESSION['cv_data']); ?>'));
+    </script>
     <div id="particles-js"></div>
     <div class="container">
         <div class="checkmark-container">
