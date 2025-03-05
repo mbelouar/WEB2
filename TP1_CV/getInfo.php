@@ -4,6 +4,234 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// Database connection function - check if it's already defined
+if (!function_exists('connectDB')) {
+    function connectDB() {
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "cv_generator";
+        
+        // Create connection - use mysqli_report to see detailed errors
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        try {
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            return $conn;
+        } catch (Exception $e) {
+            // Output the actual database error for debugging
+            echo "Database connection failed: " . $e->getMessage();
+            die();
+        }
+    }
+}
+
+// Function to retrieve CV data from the database
+if (!function_exists('getCvData')) {
+    function getCvData($userId) {
+        error_log('[getCvData] Starting data retrieval for user: ' . $userId);
+        $conn = connectDB();
+        $data = [];
+        
+        try {
+            // Get user personal information
+            $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($user = $result->fetch_assoc()) {
+                error_log('[getCvData] User found: ' . $user['firstname'] . ' ' . $user['lastname']);
+                $data = [
+                    'firstname' => $user['firstname'],
+                    'lastname' => $user['lastname'],
+                    'email' => $user['email'],
+                    'phone' => $user['phone'],
+                    'age' => $user['age'],
+                    'adresse' => $user['address'],
+                    'github' => $user['github'] ?? '',
+                    'linkedin' => $user['linkedin'] ?? '',
+                    'message' => $user['profile_desc'] ?? '',
+                    'picture' => $user['picture_path'] ?? ''
+                ];
+            } else {
+                // No user found with this ID
+                error_log('[getCvData] No user found with ID: ' . $userId);
+                return [];
+            }
+            $stmt->close();
+            
+            // Get academic information
+            $stmt = $conn->prepare("SELECT * FROM academic_info WHERE user_id = ?");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $academicId = null;
+            if ($academic = $result->fetch_assoc()) {
+                error_log('[getCvData] Academic info found. Formation: ' . $academic['formation'] . ', Niveau: ' . $academic['niveau']);
+                $data['formation'] = $academic['formation'];
+                $data['niveau'] = $academic['niveau'];
+                
+                // Get modules
+                $academicId = $academic['id'];
+            } else {
+                error_log('[getCvData] No academic info found for user: ' . $userId);
+            }
+            $stmt->close();
+            
+            // Get modules if we have an academic ID
+            if ($academicId) {
+                $stmt = $conn->prepare("SELECT module_name FROM modules WHERE academic_id = ?");
+                $stmt->bind_param("i", $academicId);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $modules = [];
+                while ($module = $result->fetch_assoc()) {
+                    $modules[] = $module['module_name'];
+                }
+                $data['modules'] = $modules;
+                error_log('[getCvData] Found ' . count($modules) . ' modules');
+                $stmt->close();
+            } else {
+                $data['modules'] = [];
+                error_log('[getCvData] No modules found (no academic ID)');
+            }
+            
+            // Get projects
+            $stmt = $conn->prepare("SELECT * FROM projects WHERE user_id = ?");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $projects = [];
+            $projectDesc = [];
+            $projectStartDate = [];
+            $projectEndDate = [];
+            while ($project = $result->fetch_assoc()) {
+                $projects[] = $project['name'];
+                $projectDesc[] = $project['description'];
+                $projectStartDate[] = $project['start_date'];
+                $projectEndDate[] = $project['end_date'];
+            }
+            error_log('[getCvData] Found ' . count($projects) . ' projects');
+            $data['projectCount'] = count($projects);
+            $data['projects'] = $projects;
+            $data['projectDesc'] = $projectDesc;
+            $data['projectStartDate'] = $projectStartDate;
+            $data['projectEndDate'] = $projectEndDate;
+            $stmt->close();
+            
+            // Get internships
+            $stmt = $conn->prepare("SELECT * FROM internships WHERE user_id = ?");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stages = [];
+            $stageDesc = [];
+            $stageStartDate = [];
+            $stageEndDate = [];
+            $stageEntreprise = [];
+            $stageLocation = [];
+            while ($stage = $result->fetch_assoc()) {
+                $stages[] = $stage['name'];
+                $stageDesc[] = $stage['description'];
+                $stageStartDate[] = $stage['start_date'];
+                $stageEndDate[] = $stage['end_date'];
+                $stageEntreprise[] = $stage['company'];
+                $stageLocation[] = $stage['location'];
+            }
+            $data['stageCount'] = count($stages);
+            $data['stages'] = $stages;
+            $data['stageDesc'] = $stageDesc;
+            $data['stageStartDate'] = $stageStartDate;
+            $data['stageEndDate'] = $stageEndDate;
+            $data['stageEntreprise'] = $stageEntreprise;
+            $data['stageLocation'] = $stageLocation;
+            $stmt->close();
+            
+            // Get experiences
+            $stmt = $conn->prepare("SELECT * FROM experiences WHERE user_id = ?");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $experiences = [];
+            $experienceDesc = [];
+            $experienceStartDate = [];
+            $experienceEndDate = [];
+            $experienceEntreprise = [];
+            $experienceLocation = [];
+            $experiencePosition = [];
+            while ($experience = $result->fetch_assoc()) {
+                $experiences[] = $experience['name'];
+                $experienceDesc[] = $experience['description'];
+                $experienceStartDate[] = $experience['start_date'];
+                $experienceEndDate[] = $experience['end_date'];
+                $experienceEntreprise[] = $experience['company'];
+                $experienceLocation[] = $experience['location'];
+                $experiencePosition[] = $experience['position'];
+            }
+            $data['experienceCount'] = count($experiences);
+            $data['experiences'] = $experiences;
+            $data['experienceDesc'] = $experienceDesc;
+            $data['experienceStartDate'] = $experienceStartDate;
+            $data['experienceEndDate'] = $experienceEndDate;
+            $data['experienceEntreprise'] = $experienceEntreprise;
+            $data['experienceLocation'] = $experienceLocation;
+            $data['experiencePosition'] = $experiencePosition;
+            $stmt->close();
+            
+            // Get skills
+            $stmt = $conn->prepare("SELECT skill_name FROM skills WHERE user_id = ?");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $competences = [];
+            while ($competence = $result->fetch_assoc()) {
+                $competences[] = $competence['skill_name'];
+            }
+            $data['competences'] = $competences;
+            $stmt->close();
+            
+            // Get interests
+            $stmt = $conn->prepare("SELECT interest_name FROM interests WHERE user_id = ?");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $interests = [];
+            while ($interest = $result->fetch_assoc()) {
+                $interests[] = $interest['interest_name'];
+            }
+            $data['interests'] = $interests;
+            $stmt->close();
+            
+            // Get languages
+            $stmt = $conn->prepare("SELECT language_name, level FROM languages WHERE user_id = ?");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $languages = $result->fetch_all(MYSQLI_ASSOC);
+            if (count($languages) > 0) {
+                $data['langue1'] = $languages[0]['language_name'] ?? '';
+                $data['niveau1'] = $languages[0]['level'] ?? '';
+            }
+            if (count($languages) > 1) {
+                $data['langue2'] = $languages[1]['language_name'] ?? '';
+                $data['niveau2'] = $languages[1]['level'] ?? '';
+            }
+            if (count($languages) > 2) {
+                $data['langue3'] = $languages[2]['language_name'] ?? '';
+                $data['niveau3'] = $languages[2]['level'] ?? '';
+            }
+            $stmt->close();
+            
+        } catch (Exception $e) {
+            error_log("Database retrieval error: " . $e->getMessage());
+            return [];
+        } finally {
+            $conn->close();
+        }
+        
+        return $data;
+    }
+}
+
 // Validate age input
 if (!isset($_POST['age']) || !ctype_digit($_POST['age']) || $_POST['age'] < 1 || $_POST['age'] > 120) {
     $error_message = "Veuillez entrer un âge valide entre 1 et 120.";
@@ -23,8 +251,7 @@ $adresse = $_POST["address"] ?? "Non renseigné";
 $github = $_POST["github"] ?? "Non renseigné";
 $linkedin = $_POST["linkedin"] ?? "Non renseigné";
 
-$file = fopen($lastname . ".txt", "w") or die("Unable to open file!");
-
+// Get formation and level data
 $formation = $_POST["formation"] ?? "Non renseigné";
 
 $niveau = $_POST["niveau"] ?? "Non renseigné";
@@ -50,6 +277,16 @@ $projectDesc = isset($_POST['projectDescriptions']) ? $_POST['projectDescription
 $projectStartDate = isset($_POST['projectStartDates']) ? $_POST['projectStartDates'] : [];
 $projectEndDate = isset($_POST['projectEndDates']) ? $_POST['projectEndDates'] : [];
 
+// Format dates properly for database
+for ($i = 0; $i < count($projectStartDate); $i++) {
+    if (!empty($projectStartDate[$i])) {
+        $projectStartDate[$i] = date('Y-m-d', strtotime($projectStartDate[$i]));
+    }
+    if (!empty($projectEndDate[$i])) {
+        $projectEndDate[$i] = date('Y-m-d', strtotime($projectEndDate[$i]));
+    }
+}
+
 // check if the project start date is before the end date
 for ($i = 0; $i < count($projectStartDate); $i++) {
     if ($projectStartDate[$i] > $projectEndDate[$i]) {
@@ -67,6 +304,16 @@ $stageStartDate = $_POST['stageStartDates'] ?? [];
 $stageEndDate = $_POST['stageEndDates'] ?? [];  
 $stageEntreprise = $_POST['stageEntreprises'] ?? [];
 $stageLocation = $_POST['stageLocations'] ?? [];
+
+// Format dates properly for database
+for ($i = 0; $i < count($stageStartDate); $i++) {
+    if (!empty($stageStartDate[$i])) {
+        $stageStartDate[$i] = date('Y-m-d', strtotime($stageStartDate[$i]));
+    }
+    if (!empty($stageEndDate[$i])) {
+        $stageEndDate[$i] = date('Y-m-d', strtotime($stageEndDate[$i]));
+    }
+}
 
 // check if the stage start date is before the end date
 for ($i = 0; $i < count($stageStartDate); $i++) {
@@ -86,6 +333,16 @@ $experienceEndDate = $_POST['experienceEndDates'] ?? [];
 $experienceEntreprise = $_POST['experienceEntreprises'] ?? [];  
 $experienceLocation = $_POST['experienceLocations'] ?? [];  
 $experiencePosition = $_POST['experiencePositions'] ?? [];
+
+// Format dates properly for database
+for ($i = 0; $i < count($experienceStartDate); $i++) {
+    if (!empty($experienceStartDate[$i])) {
+        $experienceStartDate[$i] = date('Y-m-d', strtotime($experienceStartDate[$i]));
+    }
+    if (!empty($experienceEndDate[$i])) {
+        $experienceEndDate[$i] = date('Y-m-d', strtotime($experienceEndDate[$i]));
+    }
+}
 
 // check if the experience start date is before the end date
 for ($i = 0; $i < count($experienceStartDate); $i++) {
@@ -128,98 +385,6 @@ $message = trim($message);
 
 // Save the picture path in the session
 $picPath = $_SESSION['cv_data']['picture'] ?? "Non renseigné";
-
-// Format the data
-$data = "---------------- Renseignement Personnel ----------------\n";
-$data .= "Nom: $lastname\n";
-$data .= "Prénom: $firstname\n";
-$data .= "Age: $age\n";
-$data .= "Email: $email\n";
-$data .= "Téléphone: $phone\n";
-$data .= "Adresse: $adresse\n";
-$data .= "Github: $github\n";
-$data .= "Linkedin: $linkedin\n";
-
-$data .= "--------------- Renseignement Académique ---------------\n";
-$data .= "Formation: $formation\n";
-$data .= "Niveau: $niveau\n";
-$data .= "Modules suivis: $modulesSuivi\n";
-$data .= "Nombre de projets: $projectCount\n";
-$data .= "Projets réalisés: \n";
-if (!empty($projects)) {
-    foreach ($projects as $key => $project) {
-        $data .= "Projet " . ($key + 1) . ": $project\n";
-        $data .= "Description: " . $projectDesc[$key] . "\n";
-        $data .= "Date de début: " . $projectStartDate[$key] . "\n";
-        $data .= "Date de fin: " . $projectEndDate[$key] . "\n";
-    }
-}
-
-$data .= "------------------------ Stages ------------------------\n";
-if (!empty($stages)) {
-    foreach ($stages as $key => $stage) {
-        $data .= "Stage " . ($key + 1) . ": $stage\n";
-        $data .= "Description: " . ($stageDesc[$key] ?? "N/A") . "\n";
-        $data .= "Date de début: " . ($stageStartDate[$key] ?? "N/A") . "\n";
-        $data .= "Date de fin: " . ($stageEndDate[$key] ?? "N/A") . "\n";
-        $data .= "Entreprise: " . ($stageEntreprise[$key] ?? "N/A") . "\n";
-        $data .= "Location: " . ($stageLocation[$key] ?? "N/A") . "\n";
-    }
-}
-
-$data .= "--------------------- Expériences ----------------------\n";
-if (!empty($experiences)) {
-    foreach ($experiences as $key => $experience) {
-        $data .= "Expérience " . ($key + 1) . ": $experience\n";
-        $data .= "Description: " . ($experienceDesc[$key] ?? "N/A") . "\n";
-        $data .= "Date de début: " . ($experienceStartDate[$key] ?? "N/A") . "\n";
-        $data .= "Date de fin: " . ($experienceEndDate[$key] ?? "N/A") . "\n";
-        $data .= "Entreprise: " . ($experienceEntreprise[$key] ?? "N/A") . "\n";
-        $data .= "Location: " . ($experienceLocation[$key] ?? "N/A") . "\n";
-        $data .= "Poste: " . ($experiencePosition[$key] ?? "N/A") . "\n";
-    }
-}
-
-$data .= "---------------------- Compétences ---------------------\n";
-if (!empty($_POST["competences"])) {
-    foreach ($_POST["competences"] as $index => $competence) {
-        if (!empty($competence)) {
-            $data .= "Compétence " . ($index + 1) . ": " . htmlspecialchars(trim($competence)) . "\n";
-        }
-    }
-}
-
-$data .= "------------------- Centre d'intérêt -------------------\n";
-if (!empty($_POST["interests"])) {
-    foreach ($_POST["interests"] as $index => $interest) {
-        if (!empty($interest)) {
-            $data .= "Intérêt " . ($index + 1) . ": " . htmlspecialchars(trim($interest)) . "\n";
-        }
-    }
-}
-
-$data .= "----------------------- Langues ------------------------\n";
-if (!empty($langue1))
-    $data .= "Langue 1: $langue1 => Niveau: $niveau1\n";
-if (!empty($langue2))
-    $data .= "Langue 2: $langue2 => Niveau: $niveau2\n";
-if (!empty($langue3))
-    $data .= "Langue 3: $langue3 => Niveau: $niveau3\n";
-
-$data .= "------------------------ Profile -----------------------\n";
-if (!empty($message))
-    $data .= "Profile: $message\n";
-else
-    $data .= "Aucun description du profile\n";
-
-$data .= "---------------------- picture path --------------------\n";
-$data .= "picture path: $picPath\n";
-
-$data .= "---------------------- Fin du CV -----------------------\n";
-
-// Save the data to the file
-fwrite($file, $data);
-fclose($file);
 
 // Store all the information in the session as an associative array
 $_SESSION['cv_data'] = [
@@ -275,5 +440,213 @@ $_SESSION['cv_data'] = [
     'message'        => $message,
 ];
 
+// Preserve the user ID if we're in edit mode
+if (isset($_POST['edit_mode']) && $_POST['edit_mode'] == 1 && isset($_POST['user_id'])) {
+    $_SESSION['cv_data']['user_id'] = $_POST['user_id'];
+    $_SESSION['edit_mode'] = true;
+}
+
+// Insert data into database
+try {
+    $conn = connectDB();
+    
+    // Check if we're in update mode - make sure to use string comparison
+    $isUpdateMode = isset($_POST['edit_mode']) && $_POST['edit_mode'] === '1' && isset($_POST['user_id']);
+    $userId = $isUpdateMode ? intval($_POST['user_id']) : null;
+    
+    // Debug log for update mode
+    if ($isUpdateMode) {
+        error_log('UPDATE MODE: editing user ID: ' . $userId . ' (from POST)');
+        error_log('POST data: ' . print_r($_POST, true));
+    } else {
+        error_log('CREATE MODE: creating new user');
+    }
+    
+    // Begin transaction
+    $conn->begin_transaction();
+    
+    try {
+        // 1. Handle user information
+        if ($isUpdateMode) {
+            error_log("UPDATING existing user ID: " . $userId);
+            
+            // First delete all related data except the user
+            $tables = ['academic_info', 'projects', 'internships', 'experiences', 'skills', 'interests', 'languages'];
+            
+            foreach ($tables as $table) {
+                $stmt = $conn->prepare("DELETE FROM $table WHERE user_id = ?");
+                $stmt->bind_param("i", $userId);
+                $stmt->execute();
+                $stmt->close();
+            }
+            
+            // Get the academic ID for module deletion
+            $stmt = $conn->prepare("SELECT id FROM academic_info WHERE user_id = ?");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc()) {
+                $academicId = $row['id'];
+                $stmt = $conn->prepare("DELETE FROM modules WHERE academic_id = ?");
+                $stmt->bind_param("i", $academicId);
+                $stmt->execute();
+            }
+            $stmt->close();
+            
+            // Update user information
+            $stmt = $conn->prepare("UPDATE users SET firstname = ?, lastname = ?, email = ?, phone = ?, age = ?, address = ?, github = ?, linkedin = ?, profile_desc = ? WHERE id = ?");
+            // Don't update picture path if not provided (to avoid overwriting existing picture)
+            $stmt->bind_param("sssssssssi", $firstname, $lastname, $email, $phone, $age, $adresse, $github, $linkedin, $message, $userId);
+            $stmt->execute();
+            $stmt->close();
+            
+            // Update picture path if provided
+            if (!empty($picPath)) {
+                $stmt = $conn->prepare("UPDATE users SET picture_path = ? WHERE id = ?");
+                $stmt->bind_param("si", $picPath, $userId);
+                $stmt->execute();
+                $stmt->close();
+            }
+        } else {
+            // Insert a new user
+            $stmt = $conn->prepare("INSERT INTO users (firstname, lastname, email, phone, age, address, github, linkedin, profile_desc, picture_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssssssss", $firstname, $lastname, $email, $phone, $age, $adresse, $github, $linkedin, $message, $picPath);
+            $stmt->execute();
+            $userId = $conn->insert_id;
+            $stmt->close();
+        }
+        
+        // 2. Insert academic information
+        $stmt = $conn->prepare("INSERT INTO academic_info (user_id, formation, niveau) VALUES (?, ?, ?)");
+        $stmt->bind_param("iss", $userId, $formation, $niveau);
+        $stmt->execute();
+        $academicId = $conn->insert_id;
+        $stmt->close();
+        
+        error_log("Inserted academic info for user ID: " . $userId . ", Academic ID: " . $academicId);
+        
+        // 3. Insert modules
+        if (!empty($selectedModules)) {
+            error_log("Inserting " . count($selectedModules) . " modules for academic ID: " . $academicId);
+            $stmt = $conn->prepare("INSERT INTO modules (academic_id, module_name) VALUES (?, ?)");
+            foreach ($selectedModules as $module) {
+                $stmt->bind_param("is", $academicId, $module);
+                $stmt->execute();
+            }
+            $stmt->close();
+        }
+        
+        // 4. Insert projects
+        if (!empty($projects)) {
+            error_log("Inserting " . count($projects) . " projects for user ID: " . $userId);
+            $stmt = $conn->prepare("INSERT INTO projects (user_id, name, description, start_date, end_date) VALUES (?, ?, ?, ?, ?)");
+            foreach ($projects as $index => $project) {
+                if (!empty($project) && !empty($projectStartDate[$index]) && !empty($projectEndDate[$index])) {
+                    $stmt->bind_param("issss", $userId, $project, $projectDesc[$index], $projectStartDate[$index], $projectEndDate[$index]);
+                    $stmt->execute();
+                }
+            }
+            $stmt->close();
+        }
+        
+        // 5. Insert internships
+        if (!empty($stages)) {
+            $stmt = $conn->prepare("INSERT INTO internships (user_id, name, description, start_date, end_date, company, location) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            foreach ($stages as $index => $stage) {
+                if (!empty($stage) && !empty($stageStartDate[$index]) && !empty($stageEndDate[$index])) {
+                    $stmt->bind_param("issssss", $userId, $stage, $stageDesc[$index], $stageStartDate[$index], $stageEndDate[$index], $stageEntreprise[$index], $stageLocation[$index]);
+                    $stmt->execute();
+                }
+            }
+            $stmt->close();
+        }
+        
+        // 6. Insert experiences
+        if (!empty($experiences)) {
+            $stmt = $conn->prepare("INSERT INTO experiences (user_id, name, description, start_date, end_date, company, location, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            foreach ($experiences as $index => $experience) {
+                if (!empty($experience) && !empty($experienceStartDate[$index]) && !empty($experienceEndDate[$index])) {
+                    $stmt->bind_param("isssssss", $userId, $experience, $experienceDesc[$index], $experienceStartDate[$index], $experienceEndDate[$index], $experienceEntreprise[$index], $experienceLocation[$index], $experiencePosition[$index]);
+                    $stmt->execute();
+                }
+            }
+            $stmt->close();
+        }
+        
+        // 7. Insert skills
+        if (!empty($competences)) {
+            $stmt = $conn->prepare("INSERT INTO skills (user_id, skill_name) VALUES (?, ?)");
+            foreach ($competences as $competence) {
+                if (!empty($competence)) {
+                    $stmt->bind_param("is", $userId, $competence);
+                    $stmt->execute();
+                }
+            }
+            $stmt->close();
+        }
+        
+        // 8. Insert interests
+        if (!empty($interests)) {
+            $stmt = $conn->prepare("INSERT INTO interests (user_id, interest_name) VALUES (?, ?)");
+            foreach ($interests as $interest) {
+                if (!empty($interest)) {
+                    $stmt->bind_param("is", $userId, $interest);
+                    $stmt->execute();
+                }
+            }
+            $stmt->close();
+        }
+        
+        // 9. Insert languages
+        if (!empty($langue1)) {
+            $stmt = $conn->prepare("INSERT INTO languages (user_id, language_name, level) VALUES (?, ?, ?)");
+            $stmt->bind_param("iss", $userId, $langue1, $niveau1);
+            $stmt->execute();
+            if (!empty($langue2)) {
+                $stmt->bind_param("iss", $userId, $langue2, $niveau2);
+                $stmt->execute();
+            }
+            if (!empty($langue3)) {
+                $stmt->bind_param("iss", $userId, $langue3, $niveau3);
+                $stmt->execute();
+            }
+            $stmt->close();
+        }
+        
+        // Commit the transaction
+        $conn->commit();
+        
+    } catch (Exception $e) {
+        // Roll back the transaction in case of error
+        if (isset($conn) && $conn instanceof mysqli) {
+            $conn->rollback();
+        }
+        // Log the error and display a user-friendly message
+        error_log("Database error: " . $e->getMessage());
+        
+        // For debugging purposes - show actual error message
+        $error_message = "Erreur base de données: " . $e->getMessage();
+        include "formulaire.php";
+        exit();
+    } finally {
+        // Close database connection
+        if (isset($conn) && $conn instanceof mysqli) {
+            $conn->close();
+        }
+    }
+
+} catch (Exception $e) {
+    // Roll back the transaction in case of error
+    if (isset($conn) && $conn instanceof mysqli) {
+        $conn->rollback();
+    }
+    // Log the error and display a user-friendly message
+    error_log("Database error: " . $e->getMessage());
+    
+    // For debugging purposes - show actual error message
+    $error_message = "Erreur base de données: " . $e->getMessage();
+    include "formulaire.php";
+    exit();
+}
 
 ?>

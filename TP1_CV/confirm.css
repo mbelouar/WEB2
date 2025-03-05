@@ -140,3 +140,11 @@ body {
   .generator-button {
     background-color: #FFCF50;
   }
+
+  .list-button {
+    background-color: #626F47;
+  }
+
+  .admin-button {
+    background-color: #4a5339;
+  }

@@ -1,4 +1,3 @@
-
 function generateProjectFields() {
     let projectCount = document.getElementById("project").value;
     let projectFields = document.getElementById("projectFields");
@@ -423,13 +422,24 @@ function generateExperience() {
 }
 
 function toggleNiveauOptions() {
-    var selectedFormation = document.querySelector('input[name="formation"]:checked').value;
-    var niveau3Container = document.getElementById('niveau_3_container');
-
-    if (selectedFormation === '2AP' || selectedFormation === 'MS') {
-        niveau3Container.style.display = 'none';
-    } else {
-        niveau3Container.style.display = 'inline-block';
+    try {
+        var selectedFormation = document.querySelector('input[name="formation"]:checked');
+        var niveau3Container = document.getElementById('niveau_3_container');
+        
+        // Safety check for both elements
+        if (!selectedFormation || !niveau3Container) {
+            console.log('Formation or niveau container not found');
+            return;
+        }
+        
+        // Toggle display based on selected value
+        if (selectedFormation.value === '2AP' || selectedFormation.value === 'MS') {
+            niveau3Container.style.display = 'none';
+        } else {
+            niveau3Container.style.display = 'block';
+        }
+    } catch (e) {
+        console.error('Error in toggleNiveauOptions:', e);
     }
 }
 
@@ -477,9 +487,6 @@ document.getElementById("addCompetence").addEventListener("click", function() {
     container.appendChild(div);
 });
 
-// Run on page load to apply the correct state
-window.onload = toggleNiveauOptions;
-
 // Ensure fields are restored on reload
 document.addEventListener("DOMContentLoaded", function () {
     generateProjectFields();
@@ -488,6 +495,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-particlesJS.load('particles-js', 'assets/particles.json', function() {
+particlesJS.load('particles-js', '/WEB2/TP1_CV/assets/particles.json', function() {
     console.log('callback - particles.js config loaded');
 });
