@@ -162,7 +162,7 @@ function getSessionValue($field, $default = '') {
                         </div>
                         <div class="col-lg-6">
                             <label for="name" class="form-label">Nom <span class="blue">*</span></label>
-                            <input id="name" type="text" name="name" value="<?php echo getSessionValue('lastname'); ?>" class="form-control" placeholder="Votre Nom" minlength="5" required>
+                            <input id="name" type="text" name="name" value="<?php echo getSessionValue('name'); ?>" class="form-control" placeholder="Votre Nom" minlength="5" required>
                             <?php if ($isEditMode): ?>
                             <!-- Hidden field to ensure lastname is properly accessible in both formats -->
                             <input type="hidden" name="lastname" value="<?php echo getSessionValue('lastname'); ?>">
@@ -185,7 +185,7 @@ function getSessionValue($field, $default = '') {
                         </div>
                         <div class="col-lg-6">
                             <label for="address" class="form-label">Adresse <span class="blue">*</span></label>
-                            <input id="address" type="text" name="address" value="<?php echo getSessionValue('adresse'); ?>" class="form-control" placeholder="Votre Adresse" required>
+                            <input id="address" type="text" name="address" value="<?php echo getSessionValue('address'); ?>" class="form-control" placeholder="Votre Adresse" required>
                         </div>
                         <div class="col-lg-6">
                             <label for="github" class="form-label">Github</label>
@@ -239,17 +239,17 @@ function getSessionValue($field, $default = '') {
                         <div class="col-lg-12">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="niveau" value="niveau_1" id="niveau_1"
-                                    <?php echo (getSessionValue('niveau') == '1er année') ? 'checked' : ''; ?> required>
+                                    <?php echo (getSessionValue('niveau') == 'niveau_1') ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="niveau_1">1ere annee</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="niveau" value="niveau_2" id="niveau_2"
-                                    <?php echo (getSessionValue('niveau') == '2ème année') ? 'checked' : ''; ?> required>
+                                    <?php echo (getSessionValue('niveau') == 'niveau_2') ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="niveau_2">2eme annee</label>
                             </div>
                             <div class="form-check form-check-inline" id="niveau_3_container">
                                 <input class="form-check-input" type="radio" name="niveau" value="niveau_3" id="niveau_3"
-                                    <?php echo (getSessionValue('niveau') == '3ème année') ? 'checked' : ''; ?> required>
+                                    <?php echo (getSessionValue('niveau') == 'niveau_3') ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="niveau_3">3eme annee</label>
                             </div>
                         </div>
@@ -448,12 +448,7 @@ function getSessionValue($field, $default = '') {
                     <div class="section-title custom-header">Profile</div>
                     <div class="row">
                         <div class="">
-                            <textarea id="profile_desc" name="profile_desc" class="form-control" placeholder="Votre profile" required>
-                                <?php 
-                                    // Trim the session message to remove leading/trailing spaces
-                                    echo isset($_SESSION['cv_data']['message']) ? trim($_SESSION['cv_data']['message']) : '';
-                                ?>
-                            </textarea>
+                            <textarea id="profile_desc" name="profile_desc" class="form-control" placeholder="Votre profile" required><?php echo getSessionValue('profile_desc'); ?></textarea>
                         </div>
                         <!-- upload the picture -->
                         <div class="col-lg-12">
@@ -518,7 +513,7 @@ function getSessionValue($field, $default = '') {
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Créer mon CV</button>
                             <?php endif; ?>
                             
-                            <button type="reset" class="btn btn-secondary"><i class="fas fa-undo"></i> Réinitialiser</button>
+                            <button type="button" class="btn btn-secondary" onclick="customReset()"><i class="fas fa-undo"></i> Réinitialiser</button>
                         </div>
                     </div>
                 </div>
@@ -534,6 +529,115 @@ function getSessionValue($field, $default = '') {
         <script src="/WEB2/TP1_CV/script.js?v=<?php echo time(); ?>"></script>
         
         <script>
+        // Custom reset function that preserves personal information
+        function customReset() {
+            // Store personal information
+            const personalInfo = {
+                firstname: document.getElementById('firstname').value,
+                name: document.getElementById('name').value,
+                age: document.getElementById('age').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                github: document.getElementById('github').value,
+                linkedin: document.getElementById('linkedin').value
+            };
+
+            // Reset the form
+            document.getElementById('contact-form').reset();
+
+            // Restore personal information
+            document.getElementById('firstname').value = personalInfo.firstname;
+            document.getElementById('name').value = personalInfo.name;
+            document.getElementById('age').value = personalInfo.age;
+            document.getElementById('email').value = personalInfo.email;
+            document.getElementById('phone').value = personalInfo.phone;
+            document.getElementById('address').value = personalInfo.address;
+            document.getElementById('github').value = personalInfo.github;
+            document.getElementById('linkedin').value = personalInfo.linkedin;
+
+            // Clear all dynamic fields
+            document.getElementById('projectFields').innerHTML = '';
+            document.getElementById('stageFields').innerHTML = '';
+            document.getElementById('experienceFields').innerHTML = '';
+            
+            // Reset all select dropdowns to 0
+            document.getElementById('project').value = '0';
+            document.getElementById('stage').value = '0';
+            document.getElementById('experience').value = '0';
+            
+            // Reset competence and interest containers to default state
+            document.getElementById('competenceContainer').innerHTML = `
+                <div class="col-lg-6 mt-2">
+                    <label class="form-label">Compétence 1:</label>
+                    <input type="text" name="competences[]" class="form-control" placeholder="Entrez votre compétence">
+                </div>
+                <div class="col-lg-6 mt-2">
+                    <label class="form-label">Compétence 2:</label>
+                    <input type="text" name="competences[]" class="form-control" placeholder="Entrez votre compétence">
+                </div>
+            `;
+            
+            document.getElementById('interestContainer').innerHTML = `
+                <div class="col-lg-6 mt-2">
+                    <label class="form-label">Centre d'intérêt 1:</label>
+                    <input type="text" name="interests[]" class="form-control" placeholder="Entrez votre intérêt">
+                </div>
+                <div class="col-lg-6 mt-2">
+                    <label class="form-label">Centre d'intérêt 2:</label>
+                    <input type="text" name="interests[]" class="form-control" placeholder="Entrez votre intérêt">
+                </div>
+            `;
+            
+            // Clear all hidden inputs
+            document.getElementById('savedProjects').value = '[]';
+            document.getElementById('savedDescriptions').value = '[]';
+            document.getElementById('savedStartDate').value = '[]';
+            document.getElementById('savedEndDate').value = '[]';
+            document.getElementById('savedStages').value = '[]';
+            document.getElementById('savedStageDescriptions').value = '[]';
+            document.getElementById('savedStageStartDate').value = '[]';
+            document.getElementById('savedStageEndDate').value = '[]';
+            document.getElementById('savedStageEntreprises').value = '[]';
+            document.getElementById('savedStageLocations').value = '[]';
+            document.getElementById('savedExperiences').value = '[]';
+            document.getElementById('savedExperienceDescriptions').value = '[]';
+            document.getElementById('savedExperienceStartDate').value = '[]';
+            document.getElementById('savedExperienceEndDate').value = '[]';
+            document.getElementById('savedExperienceEntreprises').value = '[]';
+            document.getElementById('savedExperienceLocations').value = '[]';
+            document.getElementById('savedExperiencePositions').value = '[]';
+            
+            // Clear file input
+            const fileInput = document.querySelector('input[type="file"]');
+            if (fileInput) {
+                fileInput.value = '';
+            }
+            
+            // Reset formation radio buttons
+            const formationInputs = document.querySelectorAll('input[name="formation"]');
+            formationInputs.forEach(input => input.checked = false);
+            
+            // Reset niveau radio buttons
+            const niveauInputs = document.querySelectorAll('input[name="niveau"]');
+            niveauInputs.forEach(input => input.checked = false);
+            
+            // Reset all module checkboxes
+            const moduleCheckboxes = document.querySelectorAll('input[name="modules[]"]');
+            moduleCheckboxes.forEach(checkbox => checkbox.checked = false);
+            
+            // Reset language fields
+            document.getElementById('langue1').value = '';
+            document.getElementById('langue2').value = '';
+            document.getElementById('langue3').value = '';
+            document.getElementById('niveau1').value = 'debutant';
+            document.getElementById('niveau2').value = 'debutant';
+            document.getElementById('niveau3').value = 'debutant';
+            
+            // Reset profile description
+            document.getElementById('profile_desc').value = '';
+        }
+
         // Initialize particles.js with inline configuration
         document.addEventListener("DOMContentLoaded", function() {
             try {

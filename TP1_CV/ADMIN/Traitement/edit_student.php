@@ -81,6 +81,35 @@ $_SESSION['cv_data']['user_id'] = $studentId; // Set user ID for update instead 
 $_SESSION['edit_mode'] = true; // Flag to indicate edit mode
 $_SESSION['preserve_edit_mode'] = true; // Flag to preserve edit mode
 
+// Map database field names to form field names
+$_SESSION['cv_data']['name'] = $_SESSION['cv_data']['lastname']; // Map lastname to name for the form
+$_SESSION['cv_data']['address'] = $_SESSION['cv_data']['adresse']; // Map adresse to address for the form
+
+// Convert niveau values to match form radio button values
+if (isset($_SESSION['cv_data']['niveau'])) {
+    switch ($_SESSION['cv_data']['niveau']) {
+        case '1er année':
+            $_SESSION['cv_data']['niveau'] = 'niveau_1';
+            break;
+        case '2ème année':
+            $_SESSION['cv_data']['niveau'] = 'niveau_2';
+            break;
+        case '3ème année':
+            $_SESSION['cv_data']['niveau'] = 'niveau_3';
+            break;
+        default:
+            // If the value is already in the correct format, keep it
+            if (!in_array($_SESSION['cv_data']['niveau'], ['niveau_1', 'niveau_2', 'niveau_3'])) {
+                $_SESSION['cv_data']['niveau'] = 'niveau_1'; // Default to first year if unknown
+            }
+    }
+    debug_log('Converted niveau value to: ' . $_SESSION['cv_data']['niveau']);
+}
+
+// Map profile description
+$_SESSION['cv_data']['profile_desc'] = $_SESSION['cv_data']['message'] ?? '';
+debug_log('Mapped profile description: ' . $_SESSION['cv_data']['profile_desc']);
+
 // Ensure all array fields are properly set
 $arrayFields = [
     'projects', 'projectDesc', 'projectStartDate', 'projectEndDate',

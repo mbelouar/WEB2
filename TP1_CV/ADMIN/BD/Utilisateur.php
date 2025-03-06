@@ -1,1 +1,0 @@
-// Contain the queries for interact with DB
