@@ -89,8 +89,14 @@ if (!is_array($modules)) {
     $modules = [$modules];
 }
 
+// Debug log for profile description and niveau
+error_log('Profile Description (message): ' . getSessionValue('message'));
+error_log('Profile Description (profile_desc): ' . getSessionValue('profile_desc'));
+error_log('Niveau: ' . getSessionValue('niveau'));
+
 // Helper function to get session value
 function getSessionValue($field, $default = '') {
+    error_log("Getting session value for field: " . $field . ", value: " . (isset($_SESSION['cv_data'][$field]) ? $_SESSION['cv_data'][$field] : 'not set'));
     return isset($_SESSION['cv_data'][$field]) ? $_SESSION['cv_data'][$field] : $default;
 }
 ?>
@@ -162,11 +168,7 @@ function getSessionValue($field, $default = '') {
                         </div>
                         <div class="col-lg-6">
                             <label for="name" class="form-label">Nom <span class="blue">*</span></label>
-                            <input id="name" type="text" name="name" value="<?php echo getSessionValue('name'); ?>" class="form-control" placeholder="Votre Nom" minlength="5" required>
-                            <?php if ($isEditMode): ?>
-                            <!-- Hidden field to ensure lastname is properly accessible in both formats -->
-                            <input type="hidden" name="lastname" value="<?php echo getSessionValue('lastname'); ?>">
-                            <?php endif; ?>
+                            <input id="name" type="text" name="lastname" value="<?php echo getSessionValue('lastname'); ?>" class="form-control" placeholder="Votre Nom" minlength="5" required>
                         </div>
                         <div class="col-lg-6">
                             <label for="age" class="form-label">Age <span class="blue">*</span></label>
@@ -185,7 +187,7 @@ function getSessionValue($field, $default = '') {
                         </div>
                         <div class="col-lg-6">
                             <label for="address" class="form-label">Adresse <span class="blue">*</span></label>
-                            <input id="address" type="text" name="address" value="<?php echo getSessionValue('address'); ?>" class="form-control" placeholder="Votre Adresse" required>
+                            <input id="address" type="text" name="adresse" value="<?php echo getSessionValue('adresse'); ?>" class="form-control" placeholder="Votre Adresse" required>
                         </div>
                         <div class="col-lg-6">
                             <label for="github" class="form-label">Github</label>
@@ -238,18 +240,19 @@ function getSessionValue($field, $default = '') {
 
                         <div class="col-lg-12">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="niveau" value="niveau_1" id="niveau_1"
-                                    <?php echo (getSessionValue('niveau') == 'niveau_1') ? 'checked' : ''; ?> required>
+                                <?php $niveau = getSessionValue('niveau'); error_log("Current niveau value: " . $niveau); ?>
+                                <input class="form-check-input" type="radio" name="niveau" value="1ere annee" id="niveau_1"
+                                    <?php echo (strtolower($niveau) == '1ere annee' || strtolower($niveau) == '1ère année') ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="niveau_1">1ere annee</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="niveau" value="niveau_2" id="niveau_2"
-                                    <?php echo (getSessionValue('niveau') == 'niveau_2') ? 'checked' : ''; ?> required>
+                                <input class="form-check-input" type="radio" name="niveau" value="2eme annee" id="niveau_2"
+                                    <?php echo (strtolower($niveau) == '2eme annee' || strtolower($niveau) == '2ème année') ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="niveau_2">2eme annee</label>
                             </div>
                             <div class="form-check form-check-inline" id="niveau_3_container">
-                                <input class="form-check-input" type="radio" name="niveau" value="niveau_3" id="niveau_3"
-                                    <?php echo (getSessionValue('niveau') == 'niveau_3') ? 'checked' : ''; ?> required>
+                                <input class="form-check-input" type="radio" name="niveau" value="3eme annee" id="niveau_3"
+                                    <?php echo (strtolower($niveau) == '3eme annee' || strtolower($niveau) == '3ème année') ? 'checked' : ''; ?> required>
                                 <label class="form-check-label" for="niveau_3">3eme annee</label>
                             </div>
                         </div>
@@ -448,7 +451,13 @@ function getSessionValue($field, $default = '') {
                     <div class="section-title custom-header">Profile</div>
                     <div class="row">
                         <div class="">
-                            <textarea id="profile_desc" name="profile_desc" class="form-control" placeholder="Votre profile" required><?php echo getSessionValue('profile_desc'); ?></textarea>
+                            <textarea id="profile_desc" name="profile_desc" class="form-control" placeholder="Votre profile" required><?php 
+                                $profile_text = getSessionValue('profile_desc');
+                                if (empty($profile_text)) {
+                                    $profile_text = getSessionValue('message');
+                                }
+                                echo htmlspecialchars($profile_text);
+                            ?></textarea>
                         </div>
                         <!-- upload the picture -->
                         <div class="col-lg-12">

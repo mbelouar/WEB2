@@ -56,6 +56,7 @@ $_SESSION['cv_data'] = [
     'github' => $user['github'] ?? '',
     'linkedin' => $user['linkedin'] ?? '',
     'message' => $user['profile_desc'] ?? '',
+    'profile_desc' => $user['profile_desc'] ?? '',
     'picture' => $user['picture_path'] ?? ''
 ];
 
@@ -65,6 +66,7 @@ if ($result->num_rows > 0) {
     $academic = $result->fetch_assoc();
     $_SESSION['cv_data']['formation'] = $academic['formation'];
     $_SESSION['cv_data']['niveau'] = $academic['niveau'];
+    error_log("Loaded niveau from database: " . $academic['niveau']);
     $academicId = $academic['id'];
     
     // Get modules
