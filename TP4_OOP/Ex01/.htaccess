@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteBase /TP4_OOP/Ex01/
+RewriteRule ^$ index.php [L] 
