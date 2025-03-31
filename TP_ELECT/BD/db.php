@@ -154,6 +154,8 @@ try {
         photo TEXT,
         date_reclamation TEXT NOT NULL,
         statut TEXT NOT NULL DEFAULT 'en attente',
+        reponse TEXT,
+        date_traitement TEXT,
         FOREIGN KEY (client_id) REFERENCES Client(id)
     );
 

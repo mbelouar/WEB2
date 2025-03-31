@@ -1,5 +1,9 @@
 <?php
 session_start();
+
+// Define API_REQUEST constant to prevent any text output from db.php in AJAX calls
+define('API_REQUEST', true);
+
 if (!isset($_SESSION['fournisseur'])) {
     header("Location: login.php");
     exit;
@@ -18,194 +22,321 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])) {
 // Récupération de la liste de tous les clients pour affichage
 $stmt = $pdo->query("SELECT * FROM Client");
 $clients = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Page title
+$pageTitle = "Gestion des Clients";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Gestion des Clients</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><?php echo $pageTitle; ?> - Gestion d'Électricité</title>
+  
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
   <!-- SweetAlert2 CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../../assets/css/fournisseur-style.css">
 </head>
-<body class="bg-light">
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Facturation</a>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
+      <i class="fas fa-bolt me-2"></i>
+      <span>Gestion d'Électricité</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
     <div class="collapse navbar-collapse" id="navbarContent">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link active" href="clients.php">Clients</a></li>
-        <li class="nav-item"><a class="nav-link" href="consumption.php">Consommations</a></li>
-        <li class="nav-item"><a class="nav-link" href="factures.php">Factures</a></li>
-        <li class="nav-item"><a class="nav-link" href="../../traitement/fournisseurTraitement.php?action=logout">Déconnexion</a></li>
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.php">
+            <i class="fas fa-home me-1"></i> Tableau de bord
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="clients.php">
+            <i class="fas fa-users me-1"></i> Clients
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="consumption.php">
+            <i class="fas fa-tachometer-alt me-1"></i> Consommations
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="reclamations.php">
+            <i class="fas fa-comment-alt me-1"></i> Réclamations
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../../traitement/fournisseurTraitement.php?action=logout">
+            <i class="fas fa-sign-out-alt me-1"></i> Déconnexion
+          </a>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
 
+<!-- Main Content -->
 <div class="container my-4">
-  <h2 class="mb-4">Gestion des Clients</h2>
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0" data-aos="fade-right">
+      <i class="fas fa-users me-2 text-primary"></i>
+      <?php echo $pageTitle; ?>
+    </h1>
+    
+    <?php if (!isset($_GET['action']) && !$editingClient): ?>
+    <div data-aos="fade-left">
+      <a href="clients.php?action=add" class="btn btn-accent">
+        <i class="fas fa-plus-circle me-1"></i> Ajouter un client
+      </a>
+    </div>
+    <?php endif; ?>
+  </div>
   
   <?php if (isset($_GET['action']) && $_GET['action'] == 'add'): ?>
     <!-- Formulaire pour ajouter un client -->
-    <div class="card mb-4">
-      <div class="card-header">Ajouter un Client</div>
+    <div class="card shadow mb-4" data-aos="fade-up">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-white">
+          <i class="fas fa-user-plus me-2"></i> Ajouter un Client
+        </h6>
+      </div>
       <div class="card-body">
         <form method="post" action="../../traitement/clientTraitement.php">
           <input type="hidden" name="action" value="addClient">
-          <div class="mb-3">
-            <label class="form-label">CIN</label>
-            <input type="text" name="cin" class="form-control" required>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">CIN</label>
+              <input type="text" name="cin" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Nom</label>
+              <input type="text" name="nom" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Prénom</label>
+              <input type="text" name="prenom" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Téléphone</label>
+              <input type="text" name="telephone" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Adresse</label>
+              <input type="text" name="adresse" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Mot de passe</label>
+              <input type="password" name="password" class="form-control" required>
+            </div>
+            <div class="col-12 mt-4">
+              <button type="submit" class="btn btn-accent">
+                <i class="fas fa-save me-1"></i> Ajouter
+              </button>
+              <a href="clients.php" class="btn btn-secondary">
+                <i class="fas fa-times me-1"></i> Annuler
+              </a>
+            </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Nom</label>
-            <input type="text" name="nom" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Prénom</label>
-            <input type="text" name="prenom" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Téléphone</label>
-            <input type="text" name="telephone" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Adresse</label>
-            <input type="text" name="adresse" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Mot de passe</label>
-            <input type="password" name="password" class="form-control" required>
-          </div>
-          <button type="submit" class="btn btn-success">Ajouter</button>
-          <a href="clients.php" class="btn btn-secondary">Annuler</a>
         </form>
       </div>
     </div>
   <?php elseif ($editingClient): ?>
     <!-- Formulaire pour modifier un client -->
-    <div class="card mb-4">
-      <div class="card-header">Modifier un Client</div>
+    <div class="card shadow mb-4" data-aos="fade-up">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-white">
+          <i class="fas fa-user-edit me-2"></i> Modifier un Client
+        </h6>
+      </div>
       <div class="card-body">
         <form method="post" action="../../traitement/clientTraitement.php">
           <input type="hidden" name="action" value="editClient">
           <input type="hidden" name="id" value="<?php echo $editingClient['id']; ?>">
-          <div class="mb-3">
-            <label class="form-label">CIN</label>
-            <input type="text" name="cin" class="form-control" value="<?php echo $editingClient['cin']; ?>" required>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">CIN</label>
+              <input type="text" name="cin" class="form-control" value="<?php echo htmlspecialchars($editingClient['cin']); ?>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Nom</label>
+              <input type="text" name="nom" class="form-control" value="<?php echo htmlspecialchars($editingClient['nom']); ?>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Prénom</label>
+              <input type="text" name="prenom" class="form-control" value="<?php echo htmlspecialchars($editingClient['prenom']); ?>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($editingClient['email']); ?>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Téléphone</label>
+              <input type="text" name="telephone" class="form-control" value="<?php echo htmlspecialchars($editingClient['telephone']); ?>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Adresse</label>
+              <input type="text" name="adresse" class="form-control" value="<?php echo htmlspecialchars($editingClient['adresse']); ?>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Mot de passe (laisser vide pour conserver l'actuel)</label>
+              <input type="password" name="password" class="form-control">
+            </div>
+            <div class="col-12 mt-4">
+              <button type="submit" class="btn btn-warning">
+                <i class="fas fa-save me-1"></i> Enregistrer les modifications
+              </button>
+              <a href="clients.php" class="btn btn-secondary">
+                <i class="fas fa-undo me-1"></i> Annuler
+              </a>
+            </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Nom</label>
-            <input type="text" name="nom" class="form-control" value="<?php echo $editingClient['nom']; ?>" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Prénom</label>
-            <input type="text" name="prenom" class="form-control" value="<?php echo $editingClient['prenom']; ?>" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" value="<?php echo $editingClient['email']; ?>" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Téléphone</label>
-            <input type="text" name="telephone" class="form-control" value="<?php echo $editingClient['telephone']; ?>" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Adresse</label>
-            <input type="text" name="adresse" class="form-control" value="<?php echo $editingClient['adresse']; ?>" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Mot de passe (laisser vide pour conserver l'actuel)</label>
-            <input type="password" name="password" class="form-control">
-          </div>
-          <button type="submit" class="btn btn-warning">Modifier</button>
-          <a href="clients.php" class="btn btn-secondary">Annuler</a>
         </form>
       </div>
-    </div>
-  <?php else: ?>
-    <div class="mb-3 text-end">
-      <a href="clients.php?action=add" class="btn btn-success">+ Ajouter un client</a>
     </div>
   <?php endif; ?>
 
   <!-- Affichage de la liste des clients -->
-  <div class="table-responsive shadow">
-    <table class="table table-striped table-hover align-middle">
-      <thead class="table-primary">
-        <tr>
-          <th>ID</th>
-          <th>CIN</th>
-          <th>Nom</th>
-          <th>Prénom</th>
-          <th>Email</th>
-          <th>Téléphone</th>
-          <th>Adresse</th>
-          <th class="text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($clients as $c): ?>
-        <tr>
-          <td><?php echo $c['id']; ?></td>
-          <td><?php echo $c['cin']; ?></td>
-          <td><?php echo $c['nom']; ?></td>
-          <td><?php echo $c['prenom']; ?></td>
-          <td><?php echo $c['email']; ?></td>
-          <td><?php echo $c['telephone']; ?></td>
-          <td><?php echo $c['adresse']; ?></td>
-          <td class="text-center">
-            <a href="clients.php?action=edit&id=<?php echo $c['id']; ?>" class="btn btn-sm btn-warning">Modifier</a>
-            <a href="#" class="btn btn-sm btn-danger" onclick="confirmDelete(<?php echo $c['id']; ?>)">Supprimer</a>
-          </td>
-        </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+  <div class="card shadow mb-4" data-aos="fade-up" data-aos-delay="<?php echo (isset($_GET['action']) || $editingClient) ? '100' : '0'; ?>">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-white">
+        <i class="fas fa-list me-2"></i> Liste des Clients
+      </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle">
+          <thead class="bg-light">
+            <tr>
+              <th>ID</th>
+              <th>CIN</th>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Email</th>
+              <th>Téléphone</th>
+              <th>Adresse</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php if (!empty($clients)): ?>
+              <?php foreach ($clients as $c): ?>
+              <tr>
+                <td><?php echo $c['id']; ?></td>
+                <td><?php echo htmlspecialchars($c['cin']); ?></td>
+                <td><?php echo htmlspecialchars($c['nom']); ?></td>
+                <td><?php echo htmlspecialchars($c['prenom']); ?></td>
+                <td><?php echo htmlspecialchars($c['email']); ?></td>
+                <td><?php echo htmlspecialchars($c['telephone']); ?></td>
+                <td><?php echo htmlspecialchars($c['adresse']); ?></td>
+                <td>
+                  <a href="clients.php?action=edit&id=<?php echo $c['id']; ?>" class="btn btn-sm btn-warning">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <button class="btn btn-sm btn-danger delete-client" onclick="confirmDelete(<?php echo $c['id']; ?>)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <tr><td colspan="8" class="text-center py-3">Aucun client trouvé</td></tr>
+            <?php endif; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 
-<footer class="bg-light text-center py-3 mt-auto">
-  <span>&copy; 2025 - Fournisseur d'Électricité</span>
+<!-- Footer -->
+<footer class="py-4 mt-auto">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center small">
+      <div class="text-light">
+        &copy; <?php echo date('Y'); ?> Gestion d'Électricité - Interface Fournisseur
+      </div>
+      <div>
+        <a href="#" class="text-light">Conditions d'utilisation</a>
+        &middot;
+        <a href="#" class="text-light">Politique de confidentialité</a>
+      </div>
+    </div>
+  </div>
 </footer>
 
+<!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- AOS Animation Library -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <!-- SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-<script>
-// 1. Confirmation de suppression stylée avec SweetAlert2
-function confirmDelete(clientId) {
-    Swal.fire({
-        title: 'Êtes-vous sûr ?',
-        text: "Vous êtes sur le point de supprimer ce client.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#bb3d5d',
-        cancelButtonColor: '#f8a9b7',
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Annuler'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = "../../traitement/clientTraitement.php?action=deleteClient&id=" + clientId;
-        }
-    });
-}
 
-// 2. Affichage d'un message d'erreur stylé si l'email existe déjà
-<?php if (isset($_GET['error']) && $_GET['error'] === 'emailUsed'): ?>
-Swal.fire({
-    title: 'Erreur',
-    text: 'Cette adresse e-mail est déjà utilisée !',
+<script>
+  // Initialize AOS animations
+  AOS.init({
+    duration: 800,
+    once: true
+  });
+
+  // 1. Confirmation de suppression stylée avec SweetAlert2
+  function confirmDelete(clientId) {
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: "Vous êtes sur le point de supprimer ce client. Cette action est irréversible.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc3545',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Oui, supprimer',
+      cancelButtonText: 'Annuler'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "../../traitement/clientTraitement.php?action=deleteClient&id=" + clientId;
+      }
+    });
+  }
+
+  // 2. Affichage d'un message d'erreur stylé si l'email existe déjà
+  <?php if (isset($_GET['error']) && $_GET['error'] === 'emailUsed'): ?>
+  Swal.fire({
     icon: 'error',
-    confirmButtonColor: '#bb3d5d',
-    confirmButtonText: 'OK'
-});
-<?php endif; ?>
+    title: 'Erreur',
+    text: 'Cet email est déjà utilisé par un autre client !',
+    confirmButtonColor: '#2B6041'
+  });
+  <?php endif; ?>
+
+  // 3. Affichage d'un message de succès
+  <?php if (isset($_GET['success'])): ?>
+  Swal.fire({
+    icon: 'success',
+    title: 'Succès',
+    text: '<?php echo $_GET['success'] === 'added' ? 'Client ajouté avec succès !' : ($_GET['success'] === 'edited' ? 'Client modifié avec succès !' : 'Client supprimé avec succès !'); ?>',
+    confirmButtonColor: '#2B6041'
+  });
+  <?php endif; ?>
 </script>
+
 </body>
 </html>

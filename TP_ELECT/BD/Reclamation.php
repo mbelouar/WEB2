@@ -31,5 +31,24 @@ class Reclamation {
         $stmt->execute([$clientId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // Récupérer toutes les réclamations avec les détails du client
+    public function getAllReclamations() {
+        try {
+            $sql = "SELECT r.*, c.nom as client_nom, c.prenom as client_prenom
+                    FROM Reclamation r
+                    JOIN Client c ON r.client_id = c.id
+                    ORDER BY r.date_reclamation DESC";
+            
+            $stmt = $this->pdo->query($sql);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $results;
+            
+        } catch (PDOException $e) {
+            error_log("Error in getAllReclamations: " . $e->getMessage());
+            return [];
+        }
+    }
 }
 ?>

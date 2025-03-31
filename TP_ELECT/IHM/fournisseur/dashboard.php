@@ -1,3 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de Bord Fournisseur - Gestion d'Électricité</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../../assets/css/fournisseur-style.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
+      <i class="fas fa-bolt me-2"></i>
+      <span>Gestion d'Électricité</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" href="dashboard.php">
+            <i class="fas fa-home me-1"></i> Tableau de bord
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="clients.php">
+            <i class="fas fa-users me-1"></i> Clients
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="consumption.php">
+            <i class="fas fa-tachometer-alt me-1"></i> Consommations
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="reclamations.php">
+            <i class="fas fa-comment-alt me-1"></i> Réclamations
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../../traitement/fournisseurTraitement.php?action=logout">
+            <i class="fas fa-sign-out-alt me-1"></i> Déconnexion
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
 <?php
 session_start();
 if (!isset($_SESSION['fournisseur'])) {
@@ -11,81 +74,268 @@ $stmt = $pdo->query("SELECT COUNT(*) AS nbClients FROM Client");
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
 $nbClients = $result['nbClients'];
 
-// Vous pouvez également récupérer d'autres statistiques si nécessaire
-$nbImpayees = 20; 
-$consoTotale = 15000; 
-$revenus = 85000;
+// Récupérer le nombre de réclamations en attente
+$stmt = $pdo->query("SELECT COUNT(*) AS nbReclamations FROM Reclamation WHERE statut = 'en attente'");
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+$nbReclamations = $result['nbReclamations'] ?? 0;
+
+// Récupérer le nombre de consommations à valider (toutes les consommations récentes)
+$stmt = $pdo->query("SELECT COUNT(*) AS nbConsommations FROM Consumption");
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+$nbConsommations = $result['nbConsommations'] ?? 0;
+
+// Date du jour actuel
+$dateActuelle = date('d/m/Y');
+$jourActuel = (int)date('d');
+$moisActuel = (int)date('m');
+$anneeActuelle = (int)date('Y');
+
+// Vérifier si nous sommes le 18 du mois (pour activation des saisies)
+$estJourSaisie = ($jourActuel == 18);
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard - Facturation Électricité</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <!-- ... la même navbar que dans la maquette ... -->
-  <div class="collapse navbar-collapse" id="navbarContent">
-    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-      <li class="nav-item"><a class="nav-link active" href="dashboard.php">Dashboard</a></li>
-      <li class="nav-item"><a class="nav-link" href="clients.php">Clients</a></li>
-      <li class="nav-item"><a class="nav-link" href="consumption.php">Consommations</a></li>
-      <li class="nav-item"><a class="nav-link" href="factures.php">Factures</a></li>
-      <li class="nav-item"><a class="nav-link" href="../../traitement/fournisseurTraitement.php?action=logout">Déconnexion</a></li>
-    </ul>
-  </div>
-</nav>
 
+<!-- Main Content -->
 <div class="container my-4">
-  <h2 class="mb-4">Tableau de bord</h2>
-  <div class="row g-4">
-    <div class="col-md-3">
-      <div class="card text-center shadow">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0" data-aos="fade-right">
+      <i class="fas fa-tachometer-alt me-2 text-primary"></i>
+      Tableau de Bord Fournisseur
+    </h1>
+    <div data-aos="fade-left">
+      <span class="badge bg-primary p-2">
+        <i class="fas fa-calendar me-1"></i> <?php echo $dateActuelle; ?>
+      </span>
+    </div>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="row" data-aos="fade-up">
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card stat-card h-100">
         <div class="card-body">
-          <h5 class="card-title">Clients</h5>
-          <p class="display-6"><?php echo $nbClients; ?></p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="text-xs font-weight-bold text-uppercase mb-1">Clients</div>
+              <div class="h5 mb-0 font-weight-bold"><?php echo $nbClients; ?></div>
+            </div>
+            <div class="fa-3x text-white-50 opacity-25">
+              <i class="fas fa-users"></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card text-center shadow">
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card stat-card h-100">
         <div class="card-body">
-          <h5 class="card-title">Factures impayées</h5>
-          <p class="display-6"><?php echo $nbImpayees; ?></p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="text-xs font-weight-bold text-uppercase mb-1">Réclamations</div>
+              <div class="h5 mb-0 font-weight-bold"><?php echo $nbReclamations; ?></div>
+            </div>
+            <div class="fa-3x text-white-50 opacity-25">
+              <i class="fas fa-comment-alt"></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card text-center shadow">
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card stat-card h-100">
         <div class="card-body">
-          <h5 class="card-title">Conso totale (kWh)</h5>
-          <p class="display-6"><?php echo $consoTotale; ?></p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="text-xs font-weight-bold text-uppercase mb-1">Consommations</div>
+              <div class="h5 mb-0 font-weight-bold"><?php echo $nbConsommations; ?></div>
+            </div>
+            <div class="fa-3x text-white-50 opacity-25">
+              <i class="fas fa-tachometer-alt"></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card text-center shadow">
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card stat-card h-100">
         <div class="card-body">
-          <h5 class="card-title">Revenus (DH)</h5>
-          <p class="display-6"><?php echo $revenus; ?></p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="text-xs font-weight-bold text-uppercase mb-1">Jour de saisie</div>
+              <div class="h5 mb-0 font-weight-bold"><?php echo $estJourSaisie ? 'Actif' : 'Inactif'; ?></div>
+            </div>
+            <div class="fa-3x text-white-50 opacity-25">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="card shadow mt-4">
+  <!-- Features Section -->
+  <div class="card shadow mb-4" data-aos="fade-up" data-aos-delay="100">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-white">
+        <i class="fas fa-cogs me-2"></i> Fonctionnalités Fournisseur
+      </h6>
+    </div>
     <div class="card-body">
-      <h5 class="card-title">Graphiques & Statistiques</h5>
-      <p class="card-text">Intégrer un graphique ici...</p>
+      <div class="row g-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card feature-card h-100 shadow-sm">
+            <div class="card-body">
+              <div class="feature-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <h5 class="card-title">Gestion des Clients</h5>
+              <p class="card-text">Ajouter, modifier et gérer les informations des clients du système.</p>
+              <a href="clients.php" class="btn btn-sm btn-primary mt-2">
+                <i class="fas fa-arrow-right me-1"></i> Accéder
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+          <div class="card feature-card h-100 shadow-sm">
+            <div class="card-body">
+              <div class="feature-icon">
+                <i class="fas fa-comment-alt"></i>
+              </div>
+              <h5 class="card-title">Traitement des Réclamations</h5>
+              <p class="card-text">Traiter les réclamations soumises par les clients et leur envoyer des notifications.</p>
+              <a href="reclamations.php" class="btn btn-sm btn-primary mt-2">
+                <i class="fas fa-arrow-right me-1"></i> Accéder
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+          <div class="card feature-card h-100 shadow-sm">
+            <div class="card-body">
+              <div class="feature-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <h5 class="card-title">Gestion des Anomalies</h5>
+              <p class="card-text">Traiter les anomalies de saisie et modifier les consommations avant la génération des factures.</p>
+              <a href="consumption.php" class="btn btn-sm btn-primary mt-2">
+                <i class="fas fa-arrow-right me-1"></i> Accéder
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+          <div class="card feature-card h-100 shadow-sm">
+            <div class="card-body">
+              <div class="feature-icon">
+                <i class="fas fa-calendar-alt"></i>
+              </div>
+              <h5 class="card-title">Activation des Saisies</h5>
+              <p class="card-text">Activer la saisie des consommations le 18 de chaque mois pour les clients.</p>
+              <?php if ($estJourSaisie): ?>
+              <a href="#" class="btn btn-sm btn-success mt-2" id="activateSaisie">
+                <i class="fas fa-check-circle me-1"></i> Activer les saisies
+              </a>
+              <?php else: ?>
+              <button class="btn btn-sm btn-secondary mt-2" disabled>
+                <i class="fas fa-clock me-1"></i> Disponible le 18 du mois
+              </button>
+              <?php endif; ?>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<footer class="bg-light text-center py-3 mt-auto">
-  <span>&copy; 2025 - Fournisseur d'Électricité</span>
+<!-- Footer -->
+<footer class="py-4 mt-auto">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center small">
+      <div class="text-light">
+        &copy; <?php echo date('Y'); ?> Gestion d'Électricité - Interface Fournisseur
+      </div>
+      <div>
+        <a href="#" class="text-light">Conditions d'utilisation</a>
+        &middot;
+        <a href="#" class="text-light">Politique de confidentialité</a>
+      </div>
+    </div>
+  </div>
 </footer>
 
+<!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- AOS Animation Library -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<!-- SweetAlert2 for nice alerts -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // Initialize AOS animations
+  AOS.init({
+    duration: 800,
+    once: true
+  });
+  
+  // Activation des saisies (if it's the 18th)
+  document.addEventListener('DOMContentLoaded', function() {
+    const activateBtn = document.getElementById('activateSaisie');
+    if (activateBtn) {
+      activateBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        Swal.fire({
+          title: 'Activer les saisies ?',
+          text: 'Cela permettra aux clients de saisir leurs consommations pour ce mois.',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#2B6041',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Oui, activer',
+          cancelButtonText: 'Annuler'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Send request to activate
+            fetch('../../traitement/fournisseurTraitement.php?action=activate_saisie', {
+              method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                Swal.fire(
+                  'Activé!',
+                  'Les clients peuvent maintenant saisir leurs consommations.',
+                  'success'
+                );
+              } else {
+                Swal.fire(
+                  'Erreur',
+                  data.message || 'Une erreur est survenue.',
+                  'error'
+                );
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              Swal.fire(
+                'Erreur',
+                'Une erreur de connexion est survenue.',
+                'error'
+              );
+            });
+          }
+        });
+      });
+    }
+  });
+</script>
+
 </body>
 </html>

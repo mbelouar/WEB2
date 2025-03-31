@@ -214,5 +214,67 @@ class Consumption {
             return null;
         }
     }
+    
+    // Get all pending consumptions
+    public function getPendingConsumptions() {
+        try {
+            $sql = "SELECT c.*, cl.nom as client_nom, cl.prenom as client_prenom
+                    FROM Consumption c
+                    JOIN Client cl ON c.client_id = cl.id
+                    ORDER BY c.dateReleve DESC";
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Format the results
+            $consumptions = [];
+            foreach ($results as $row) {
+                $consumptions[] = [
+                    'id' => $row['idC'],
+                    'client_id' => $row['client_id'],
+                    'client_nom' => $row['client_nom'],
+                    'client_prenom' => $row['client_prenom'],
+                    'mois' => $row['month'],
+                    'index_precedent' => $this->getPreviousReading($row['client_id'], $row['month']),
+                    'index_actuel' => $row['current_reading'],
+                    'consommation' => $row['current_reading'] - ($this->getPreviousReading($row['client_id'], $row['month']) ?? 0),
+                    'photo_url' => $row['photo'],
+                    'date_saisie' => $row['dateReleve'],
+                    'statut' => 'en attente',
+                    'anomalie' => false,
+                    'commentaire' => ''
+                ];
+            }
+            
+            return $consumptions;
+            
+        } catch (PDOException $e) {
+            error_log("Error in getPendingConsumptions: " . $e->getMessage());
+            return [];
+        }
+    }
+    
+    // Helper method to get previous reading
+    private function getPreviousReading($clientId, $month) {
+        try {
+            $sql = "SELECT current_reading
+                    FROM Consumption
+                    WHERE client_id = ?
+                    AND dateReleve < ?
+                    ORDER BY dateReleve DESC
+                    LIMIT 1";
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$clientId, $month]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $result ? $result['current_reading'] : null;
+            
+        } catch (PDOException $e) {
+            error_log("Error in getPreviousReading: " . $e->getMessage());
+            return null;
+        }
+    }
 }
 ?>
