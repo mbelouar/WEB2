@@ -1,53 +1,51 @@
 <?php
 session_start();
+require_once '../../BD/db.php';
+require_once '../../BD/Reclamation.php';
+
+// Set page variables
+$pageTitle = 'Réclamations';
+$activePage = 'complaint';
+
+// Check if the user is logged in
 if (!isset($_SESSION['client'])) {
     header("Location: connexion.php");
     exit;
 }
 
-require_once '../../BD/db.php';
-require_once '../../BD/Reclamation.php';
-
 $reclamationModel = new Reclamation($pdo);
 $clientId = $_SESSION['client']['id'];
 
 // Récupérer les réclamations du client
-?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Réclamation - Espace Client</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
-<body class="bg-light">
+$reclamations = $reclamationModel->getReclamationsByClient($clientId);
 
-<!-- Barre de navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Mon Espace</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#clientNavbar" 
-            aria-controls="clientNavbar" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="clientNavbar">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="client_dashboard.php">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="client_invoices.php">Mes Factures</a></li>
-        <li class="nav-item"><a class="nav-link" href="client_new_consumption.php">Saisir Conso</a></li>
-        <li class="nav-item"><a class="nav-link active" href="client_complaint.php">Réclamation</a></li>
-        <li class="nav-item"><a class="nav-link" href="../../traitement/clientTraitement.php?action=logout">Déconnexion</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+// Page-specific CSS for any custom styling
+$pageSpecificCSS = '<style>
+  .complaint-card {
+    transition: transform 0.3s;
+  }
+  .complaint-card:hover {
+    transform: translateY(-5px);
+  }
+</style>';
+
+// Start page content
+ob_start();
+?>
 
 <div class="container my-4">
-  <h2 class="mb-4">Nouvelle Réclamation</h2>
-  
-  <div class="card shadow">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0" data-aos="fade-right">
+      <i class="fas fa-comment-alt me-2 text-primary"></i>
+      Mes Réclamations
+    </h1>
+  </div>
+
+  <!-- New Complaint Form -->
+  <div class="card shadow mb-4" data-aos="fade-up">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-edit me-2"></i>Nouvelle Réclamation</h6>
+    </div>
     <div class="card-body">
       <form id="complaintForm" enctype="multipart/form-data">
         <div class="mb-3">
@@ -67,110 +65,142 @@ $clientId = $_SESSION['client']['id'];
           <label for="complaintPhoto" class="form-label">Photo / Pièce jointe (optionnel)</label>
           <input type="file" class="form-control" name="complaintPhoto" id="complaintPhoto" accept="image/*">
         </div>
-        <button type="submit" class="btn btn-danger">Soumettre la réclamation</button>
+        <button type="submit" class="btn btn-accent">
+          <i class="fas fa-paper-plane me-2"></i>Soumettre la réclamation
+        </button>
       </form>
     </div>
   </div>
 
-  <h2 class="mt-5">Mes Réclamations</h2>
-  <div class="table-responsive shadow">
-    <table class="table table-striped table-hover align-middle">
-      <thead class="table-primary">
-        <tr>
-          <th>ID</th>
-          <th>Objet</th>
-          <th>Description</th>
-          <th>Date</th>
-          <th>Statut</th>
-        </tr>
-      </thead>
-      <tbody id="complaintsTable">
-        <?php if (!empty($reclamations)): ?>
-          <?php foreach ($reclamations as $reclamation): ?>
+  <!-- Complaint History -->
+  <div class="card shadow" data-aos="fade-up" data-aos-delay="200">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-history me-2"></i>Historique des Réclamations</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="bg-light">
             <tr>
-              <td><?php echo $reclamation['id']; ?></td>
-              <td><?php echo htmlspecialchars($reclamation['objet']); ?></td>
-              <td><?php echo htmlspecialchars($reclamation['description']); ?></td>
-              <td><?php echo $reclamation['date_reclamation']; ?></td>
-              <td><?php echo htmlspecialchars($reclamation['statut']); ?></td>
+              <th>ID</th>
+              <th>Objet</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th>Statut</th>
             </tr>
-          <?php endforeach; ?>
-        <?php else: ?>
-          <tr><td colspan="5">Aucune réclamation trouvée</td></tr>
-        <?php endif; ?>
-      </tbody>
-    </table>
+          </thead>
+          <tbody id="complaintsTable">
+            <?php if (!empty($reclamations)): ?>
+              <?php foreach ($reclamations as $reclamation): ?>
+                <tr>
+                  <td><?php echo $reclamation['id']; ?></td>
+                  <td><?php echo htmlspecialchars($reclamation['objet']); ?></td>
+                  <td><?php echo htmlspecialchars($reclamation['description']); ?></td>
+                  <td><?php echo $reclamation['date_reclamation']; ?></td>
+                  <td>
+                    <span class="badge rounded-pill
+                    <?php
+                      switch($reclamation['statut']) {
+                        case 'en attente': echo 'bg-warning'; break;
+                        case 'traitée': echo 'bg-success'; break;
+                        case 'rejetée': echo 'bg-danger'; break;
+                        default: echo 'bg-secondary';
+                      }
+                    ?>">
+                      <?php echo htmlspecialchars($reclamation['statut']); ?>
+                    </span>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <tr><td colspan="5" class="text-center py-3">Aucune réclamation trouvée</td></tr>
+            <?php endif; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- Pied de page -->
-<footer class="bg-light text-center py-3">
-  <span>&copy; 2025 - Mon Fournisseur d'Électricité</span>
-</footer>
-
 <!-- Script pour gérer l'AJAX -->
 <script>
-document.getElementById('complaintForm').addEventListener('submit', function (e) {
-  e.preventDefault();
-
-  const formData = new FormData(this);
+document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('complaintForm').addEventListener('submit', function (e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  const formData = new FormData(this);
-
-  // Log des données envoyées
-  console.log('Données envoyées :', [...formData.entries()]);
-
-  axios.post('../../traitement/reclamationTraitement.php?action=add', formData)
+    const formData = new FormData(this);
+    
+    // Show loading state
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Traitement en cours...';
+    
+    axios.post('../../traitement/reclamationTraitement.php?action=add', formData)   
     .then(response => {
-      // Log de la réponse du serveur
-      console.log('Réponse du serveur :', response.data);
-
       if (response.data.success) {
+        // Reset form and button
+        this.reset();
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        
+        // Add the new complaint to the table
         const tableBody = document.getElementById('complaintsTable');
+        
+        // Remove "no complaints" message if it exists
+        const noComplaintsRow = tableBody.querySelector('tr td[colspan="5"]');
+        if (noComplaintsRow) {
+          tableBody.innerHTML = '';
+        }
+        
         const newRow = document.createElement('tr');
         newRow.innerHTML = `
           <td>${response.data.reclamation.id}</td>
           <td>${response.data.reclamation.objet}</td>
           <td>${response.data.reclamation.description}</td>
           <td>${response.data.reclamation.date_reclamation}</td>
-          <td>${response.data.reclamation.statut}</td>
+          <td><span class="badge rounded-pill bg-warning">${response.data.reclamation.statut}</span></td>
         `;
-        tableBody.prepend(newRow);
-        this.reset();
+        tableBody.insertBefore(newRow, tableBody.firstChild);
+        
+        // Show success message
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-success alert-dismissible fade show';
+        alertDiv.innerHTML = `
+          <i class="fas fa-check-circle me-2"></i>
+          Votre réclamation a été soumise avec succès!
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        document.querySelector('.card-body').insertBefore(alertDiv, document.querySelector('form'));
+        
+        // Auto-dismiss alert after 5 seconds
+        setTimeout(() => {
+          alertDiv.classList.remove('show');
+          setTimeout(() => alertDiv.remove(), 500);
+        }, 5000);
+        
       } else {
+        // Reset button
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        
+        // Show error message
         alert('Erreur : ' + response.data.message);
       }
     })
     .catch(error => {
-      // Log des erreurs
-      console.error('Erreur lors de la requête :', error);
+      console.error('Erreur:', error);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
+      alert('Une erreur est survenue lors de la soumission de votre réclamation.');
     });
-});
-
-  axios.post('../../traitement/reclamationTraitement.php?action=add', formData)   
-   .then(response => {
-      if (response.data.success) {
-        const tableBody = document.getElementById('complaintsTable');
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-          <td>${response.data.reclamation.id}</td>
-          <td>${response.data.reclamation.objet}</td>
-          <td>${response.data.reclamation.description}</td>
-          <td>${response.data.reclamation.date_reclamation}</td>
-          <td>${response.data.reclamation.statut}</td>
-        `;
-        tableBody.prepend(newRow);
-        this.reset();
-      } else {
-        alert('Erreur : ' + response.data.message);
-      }
-    })
-    .catch(error => console.error('Erreur:', error));
+  });
 });
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<?php
+$pageContent = ob_get_clean();
+
+// Include the template
+require_once '../templates/client_template.php';
+?>

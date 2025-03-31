@@ -38,5 +38,84 @@ class Facture {
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$id]);
     }
+    
+    // Créer une nouvelle facture basée sur une consommation
+    public function createInvoiceFromConsumption($clientId, $consumption, $previousConsumption = null) {
+        // Calcul de la consommation en kWh
+        $kwhConsumed = $consumption['current_reading'];
+        
+        // Si on a une lecture précédente, calculer la différence
+        if ($previousConsumption && isset($previousConsumption['current_reading'])) {
+            $kwhConsumed = $consumption['current_reading'] - $previousConsumption['current_reading'];
+            // S'assurer que la valeur n'est pas négative (cas où le compteur a été remplacé)
+            if ($kwhConsumed < 0) {
+                $kwhConsumed = $consumption['current_reading'];
+            }
+        }
+        
+        // Calcul du montant selon le barème
+        $montant = $this->calculateAmount($kwhConsumed);
+        
+        // Date d'émission (aujourd'hui)
+        $dateEmission = date('Y-m-d H:i:s');
+        
+        // Création de la facture
+        $sql = "INSERT INTO Facture (client_id, montant, date_emission, statut, consumption_id, kwh_consumed) 
+                VALUES (?, ?, ?, 'impayée', ?, ?)";
+        $stmt = $this->pdo->prepare($sql);
+        
+        try {
+            $result = $stmt->execute([
+                $clientId, 
+                $montant, 
+                $dateEmission, 
+                $consumption['id'], 
+                $kwhConsumed
+            ]);
+            
+            if ($result) {
+                return [
+                    'success' => true,
+                    'invoice_id' => $this->pdo->lastInsertId(),
+                    'amount' => $montant,
+                    'kwh_consumed' => $kwhConsumed
+                ];
+            } else {
+                error_log("Error creating invoice: " . print_r($stmt->errorInfo(), true));
+                return ['success' => false, 'error' => 'Database error'];
+            }
+        } catch (\PDOException $e) {
+            error_log("PDO Exception creating invoice: " . $e->getMessage());
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+    
+    // Calculer le montant de la facture selon les tranches de consommation
+    private function calculateAmount($kwhConsumed) {
+        // TVA: 18%
+        $tva = 0.18;
+        
+        // Prix unitaire par tranche
+        $price1 = 0.82; // 0-100 kWh
+        $price2 = 0.92; // 101-150 kWh
+        $price3 = 1.10; // 151+ kWh
+        
+        // Calcul du montant HT par tranches
+        $montantHT = 0;
+        
+        if ($kwhConsumed <= 100) {
+            $montantHT = $kwhConsumed * $price1;
+        } elseif ($kwhConsumed <= 150) {
+            $montantHT = (100 * $price1) + (($kwhConsumed - 100) * $price2);
+        } else {
+            $montantHT = (100 * $price1) + (50 * $price2) + (($kwhConsumed - 150) * $price3);
+        }
+        
+        // Ajout de la TVA
+        $montantTTC = $montantHT * (1 + $tva);
+        
+        // Arrondir à 2 décimales
+        return round($montantTTC, 2);
+    }
 }
 ?>

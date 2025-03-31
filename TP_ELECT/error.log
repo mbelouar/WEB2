@@ -1,0 +1,1122 @@
+[30-Mar-2025 21:00:14 Europe/Berlin] PHP Version: 8.2.12
+[30-Mar-2025 21:00:14 Europe/Berlin] PDO Available: Yes
+[30-Mar-2025 21:00:14 Europe/Berlin] PDO SQLite Available: Yes
+[30-Mar-2025 21:00:14 Europe/Berlin] File Info Available: Yes
+[30-Mar-2025 21:00:14 Europe/Berlin] Database connection test successful
+[30-Mar-2025 21:00:14 Europe/Berlin] Client ID: 6
+[30-Mar-2025 21:00:14 Europe/Berlin] Consumption table schema: Array
+(
+    [0] => Array
+        (
+            [cid] => 0
+            [name] => idC
+            [type] => INTEGER
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 1
+        )
+
+    [1] => Array
+        (
+            [cid] => 1
+            [name] => client_id
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [2] => Array
+        (
+            [cid] => 2
+            [name] => month
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [3] => Array
+        (
+            [cid] => 3
+            [name] => current_reading
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [4] => Array
+        (
+            [cid] => 4
+            [name] => photo
+            [type] => TEXT
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [5] => Array
+        (
+            [cid] => 5
+            [name] => dateReleve
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => datetime('now')
+            [pk] => 0
+        )
+
+)
+
+[30-Mar-2025 21:00:14 Europe/Berlin] POST data: Array
+(
+    [month] => avril 2025
+    [currentReading] => 1205
+)
+
+[30-Mar-2025 21:00:14 Europe/Berlin] FILES data: Array
+(
+    [meterPhoto] => Array
+        (
+            [name] => premium_photo.jpg
+            [full_path] => premium_photo.jpg
+            [type] => image/jpeg
+            [tmp_name] => C:\xampp\tmp\php79A4.tmp
+            [error] => 0
+            [size] => 382970
+        )
+
+)
+
+[30-Mar-2025 21:00:14 Europe/Berlin] Attempting to move uploaded file to: ../uploads/consumptions/1743361214_premium_photo.jpg
+[30-Mar-2025 21:00:14 Europe/Berlin] File successfully uploaded to: ../uploads/consumptions/1743361214_premium_photo.jpg
+[30-Mar-2025 21:00:14 Europe/Berlin] Attempting to save consumption with data: client=6, month=avril 2025, reading=1205, photo=../uploads/consumptions/1743361214_premium_photo.jpg
+[30-Mar-2025 21:00:14 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[30-Mar-2025 21:00:14 Europe/Berlin] Parameters: client_id=6, month=avril 2025, current_reading=1205, photo=../uploads/consumptions/1743361214_premium_photo.jpg
+[30-Mar-2025 21:00:14 Europe/Berlin] Consumption added successfully: {"id":1,"client_id":6,"month":"avril 2025","current_reading":1205,"photo":"..\/uploads\/consumptions\/1743361214_premium_photo.jpg","dateReleve":"2025-03-30 19:00:14"}
+[30-Mar-2025 21:00:16 Europe/Berlin] PHP Version: 8.2.12
+[30-Mar-2025 21:00:16 Europe/Berlin] PDO Available: Yes
+[30-Mar-2025 21:00:16 Europe/Berlin] PDO SQLite Available: Yes
+[30-Mar-2025 21:00:16 Europe/Berlin] File Info Available: Yes
+[30-Mar-2025 21:00:16 Europe/Berlin] Database connection test successful
+[30-Mar-2025 21:00:16 Europe/Berlin] Consumption table schema: Array
+(
+    [0] => Array
+        (
+            [cid] => 0
+            [name] => idC
+            [type] => INTEGER
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 1
+        )
+
+    [1] => Array
+        (
+            [cid] => 1
+            [name] => client_id
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [2] => Array
+        (
+            [cid] => 2
+            [name] => month
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [3] => Array
+        (
+            [cid] => 3
+            [name] => current_reading
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [4] => Array
+        (
+            [cid] => 4
+            [name] => photo
+            [type] => TEXT
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [5] => Array
+        (
+            [cid] => 5
+            [name] => dateReleve
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => datetime('now')
+            [pk] => 0
+        )
+
+)
+
+[30-Mar-2025 21:56:26 Europe/Berlin] PHP Version: 8.2.12
+[30-Mar-2025 21:56:26 Europe/Berlin] PDO Available: Yes
+[30-Mar-2025 21:56:26 Europe/Berlin] PDO SQLite Available: Yes
+[30-Mar-2025 21:56:26 Europe/Berlin] File Info Available: Yes
+[30-Mar-2025 21:56:26 Europe/Berlin] Database connection test successful
+[30-Mar-2025 21:56:26 Europe/Berlin] Client ID: 6
+[30-Mar-2025 21:56:26 Europe/Berlin] Consumption table schema: Array
+(
+    [0] => Array
+        (
+            [cid] => 0
+            [name] => idC
+            [type] => INTEGER
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 1
+        )
+
+    [1] => Array
+        (
+            [cid] => 1
+            [name] => client_id
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [2] => Array
+        (
+            [cid] => 2
+            [name] => month
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [3] => Array
+        (
+            [cid] => 3
+            [name] => current_reading
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [4] => Array
+        (
+            [cid] => 4
+            [name] => photo
+            [type] => TEXT
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [5] => Array
+        (
+            [cid] => 5
+            [name] => dateReleve
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => datetime('now')
+            [pk] => 0
+        )
+
+)
+
+[30-Mar-2025 21:56:26 Europe/Berlin] POST data: Array
+(
+    [month] => avril 2025
+    [currentReading] => 6545
+)
+
+[30-Mar-2025 21:56:26 Europe/Berlin] FILES data: Array
+(
+    [meterPhoto] => Array
+        (
+            [name] => premium_photo.jpg
+            [full_path] => premium_photo.jpg
+            [type] => image/jpeg
+            [tmp_name] => C:\xampp\tmp\phpEE50.tmp
+            [error] => 0
+            [size] => 382970
+        )
+
+)
+
+[30-Mar-2025 21:56:26 Europe/Berlin] Attempting to move uploaded file to: ../uploads/consumptions/1743364586_premium_photo.jpg
+[30-Mar-2025 21:56:26 Europe/Berlin] File successfully uploaded to: ../uploads/consumptions/1743364586_premium_photo.jpg
+[30-Mar-2025 21:56:26 Europe/Berlin] Photo path for database: ../uploads/consumptions/1743364586_premium_photo.jpg
+[30-Mar-2025 21:56:26 Europe/Berlin] Attempting to save consumption with data: client=6, month=avril 2025, reading=6545, photo=../uploads/consumptions/1743364586_premium_photo.jpg
+[30-Mar-2025 21:56:26 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[30-Mar-2025 21:56:26 Europe/Berlin] Parameters: client_id=6, month=avril 2025, current_reading=6545, photo=../uploads/consumptions/1743364586_premium_photo.jpg
+[30-Mar-2025 21:56:26 Europe/Berlin] Consumption added successfully: {"id":2,"client_id":6,"month":"avril 2025","current_reading":6545,"photo":"..\/uploads\/consumptions\/1743364586_premium_photo.jpg","dateReleve":"2025-03-30 19:56:26"}
+[30-Mar-2025 22:07:39 Europe/Berlin] PHP Version: 8.2.12
+[30-Mar-2025 22:07:39 Europe/Berlin] PDO Available: Yes
+[30-Mar-2025 22:07:39 Europe/Berlin] PDO SQLite Available: Yes
+[30-Mar-2025 22:07:39 Europe/Berlin] File Info Available: Yes
+[30-Mar-2025 22:07:39 Europe/Berlin] Database connection test successful
+[30-Mar-2025 22:07:39 Europe/Berlin] Client ID: 6
+[30-Mar-2025 22:07:39 Europe/Berlin] Consumption table schema: Array
+(
+    [0] => Array
+        (
+            [cid] => 0
+            [name] => idC
+            [type] => INTEGER
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 1
+        )
+
+    [1] => Array
+        (
+            [cid] => 1
+            [name] => client_id
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [2] => Array
+        (
+            [cid] => 2
+            [name] => month
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [3] => Array
+        (
+            [cid] => 3
+            [name] => current_reading
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [4] => Array
+        (
+            [cid] => 4
+            [name] => photo
+            [type] => TEXT
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [5] => Array
+        (
+            [cid] => 5
+            [name] => dateReleve
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => datetime('now')
+            [pk] => 0
+        )
+
+)
+
+[30-Mar-2025 22:07:39 Europe/Berlin] POST data: Array
+(
+    [month] => mai 2025
+    [currentReading] => 1855
+)
+
+[30-Mar-2025 22:07:39 Europe/Berlin] FILES data: Array
+(
+    [meterPhoto] => Array
+        (
+            [name] => premium_photo.jpg
+            [full_path] => premium_photo.jpg
+            [type] => image/jpeg
+            [tmp_name] => C:\xampp\tmp\php3174.tmp
+            [error] => 0
+            [size] => 382970
+        )
+
+)
+
+[30-Mar-2025 22:07:39 Europe/Berlin] Attempting to move uploaded file to: ../uploads/consumptions/1743365259_premium_photo.jpg
+[30-Mar-2025 22:07:39 Europe/Berlin] File successfully uploaded to: ../uploads/consumptions/1743365259_premium_photo.jpg
+[30-Mar-2025 22:07:39 Europe/Berlin] Photo path for database: uploads/consumptions/1743365259_premium_photo.jpg
+[30-Mar-2025 22:07:39 Europe/Berlin] Attempting to save consumption with data: client=6, month=mai 2025, reading=1855, photo=uploads/consumptions/1743365259_premium_photo.jpg
+[30-Mar-2025 22:07:39 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[30-Mar-2025 22:07:39 Europe/Berlin] Parameters: client_id=6, month=mai 2025, current_reading=1855, photo=uploads/consumptions/1743365259_premium_photo.jpg
+[30-Mar-2025 22:07:39 Europe/Berlin] Consumption added successfully: {"id":3,"client_id":6,"month":"mai 2025","current_reading":1855,"photo":"uploads\/consumptions\/1743365259_premium_photo.jpg","dateReleve":"2025-03-30 20:07:39"}
+[30-Mar-2025 22:07:44 Europe/Berlin] PHP Version: 8.2.12
+[30-Mar-2025 22:07:44 Europe/Berlin] PDO Available: Yes
+[30-Mar-2025 22:07:44 Europe/Berlin] PDO SQLite Available: Yes
+[30-Mar-2025 22:07:44 Europe/Berlin] File Info Available: Yes
+[30-Mar-2025 22:07:44 Europe/Berlin] Database connection test successful
+[30-Mar-2025 22:07:44 Europe/Berlin] Consumption table schema: Array
+(
+    [0] => Array
+        (
+            [cid] => 0
+            [name] => idC
+            [type] => INTEGER
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 1
+        )
+
+    [1] => Array
+        (
+            [cid] => 1
+            [name] => client_id
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [2] => Array
+        (
+            [cid] => 2
+            [name] => month
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [3] => Array
+        (
+            [cid] => 3
+            [name] => current_reading
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [4] => Array
+        (
+            [cid] => 4
+            [name] => photo
+            [type] => TEXT
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [5] => Array
+        (
+            [cid] => 5
+            [name] => dateReleve
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => datetime('now')
+            [pk] => 0
+        )
+
+)
+
+[30-Mar-2025 22:09:14 Europe/Berlin] PHP Version: 8.2.12
+[30-Mar-2025 22:09:14 Europe/Berlin] PDO Available: Yes
+[30-Mar-2025 22:09:14 Europe/Berlin] PDO SQLite Available: Yes
+[30-Mar-2025 22:09:14 Europe/Berlin] File Info Available: Yes
+[30-Mar-2025 22:09:14 Europe/Berlin] Database connection test successful
+[30-Mar-2025 22:09:14 Europe/Berlin] Client ID: 6
+[30-Mar-2025 22:09:14 Europe/Berlin] Consumption table schema: Array
+(
+    [0] => Array
+        (
+            [cid] => 0
+            [name] => idC
+            [type] => INTEGER
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 1
+        )
+
+    [1] => Array
+        (
+            [cid] => 1
+            [name] => client_id
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [2] => Array
+        (
+            [cid] => 2
+            [name] => month
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [3] => Array
+        (
+            [cid] => 3
+            [name] => current_reading
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [4] => Array
+        (
+            [cid] => 4
+            [name] => photo
+            [type] => TEXT
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [5] => Array
+        (
+            [cid] => 5
+            [name] => dateReleve
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => datetime('now')
+            [pk] => 0
+        )
+
+)
+
+[30-Mar-2025 22:09:14 Europe/Berlin] POST data: Array
+(
+    [month] => mai 2025
+    [currentReading] => 777
+)
+
+[30-Mar-2025 22:09:14 Europe/Berlin] FILES data: Array
+(
+    [meterPhoto] => Array
+        (
+            [name] => premium_photo.jpg
+            [full_path] => premium_photo.jpg
+            [type] => image/jpeg
+            [tmp_name] => C:\xampp\tmp\phpA46E.tmp
+            [error] => 0
+            [size] => 382970
+        )
+
+)
+
+[30-Mar-2025 22:09:14 Europe/Berlin] Attempting to move uploaded file to: ../uploads/consumptions/1743365354_premium_photo.jpg
+[30-Mar-2025 22:09:14 Europe/Berlin] File successfully uploaded to: ../uploads/consumptions/1743365354_premium_photo.jpg
+[30-Mar-2025 22:09:14 Europe/Berlin] Photo path for database: uploads/consumptions/1743365354_premium_photo.jpg
+[30-Mar-2025 22:09:14 Europe/Berlin] Attempting to save consumption with data: client=6, month=mai 2025, reading=777, photo=uploads/consumptions/1743365354_premium_photo.jpg
+[30-Mar-2025 22:09:14 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[30-Mar-2025 22:09:14 Europe/Berlin] Parameters: client_id=6, month=mai 2025, current_reading=777, photo=uploads/consumptions/1743365354_premium_photo.jpg
+[30-Mar-2025 22:09:14 Europe/Berlin] Consumption added successfully: {"id":4,"client_id":6,"month":"mai 2025","current_reading":777,"photo":"uploads\/consumptions\/1743365354_premium_photo.jpg","dateReleve":"2025-03-30 20:09:14"}
+[30-Mar-2025 22:15:23 Europe/Berlin] PHP Version: 8.2.12
+[30-Mar-2025 22:15:23 Europe/Berlin] PDO Available: Yes
+[30-Mar-2025 22:15:23 Europe/Berlin] PDO SQLite Available: Yes
+[30-Mar-2025 22:15:23 Europe/Berlin] File Info Available: Yes
+[30-Mar-2025 22:15:23 Europe/Berlin] Database connection test successful
+[30-Mar-2025 22:15:23 Europe/Berlin] Client ID: 6
+[30-Mar-2025 22:15:23 Europe/Berlin] Consumption table schema: Array
+(
+    [0] => Array
+        (
+            [cid] => 0
+            [name] => idC
+            [type] => INTEGER
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 1
+        )
+
+    [1] => Array
+        (
+            [cid] => 1
+            [name] => client_id
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [2] => Array
+        (
+            [cid] => 2
+            [name] => month
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [3] => Array
+        (
+            [cid] => 3
+            [name] => current_reading
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [4] => Array
+        (
+            [cid] => 4
+            [name] => photo
+            [type] => TEXT
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [5] => Array
+        (
+            [cid] => 5
+            [name] => dateReleve
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => datetime('now')
+            [pk] => 0
+        )
+
+)
+
+[30-Mar-2025 22:15:23 Europe/Berlin] POST data: Array
+(
+    [month] => avril 2025
+    [currentReading] => 1500
+)
+
+[30-Mar-2025 22:15:23 Europe/Berlin] FILES data: Array
+(
+    [meterPhoto] => Array
+        (
+            [name] => premium_photo.jpg
+            [full_path] => premium_photo.jpg
+            [type] => image/jpeg
+            [tmp_name] => C:\xampp\tmp\php45B7.tmp
+            [error] => 0
+            [size] => 382970
+        )
+
+)
+
+[30-Mar-2025 22:15:23 Europe/Berlin] Attempting to move uploaded file to: ../uploads/consumptions/1743365723_premium_photo.jpg
+[30-Mar-2025 22:15:23 Europe/Berlin] File successfully uploaded to: ../uploads/consumptions/1743365723_premium_photo.jpg
+[30-Mar-2025 22:15:23 Europe/Berlin] Photo path for database: uploads/consumptions/1743365723_premium_photo.jpg
+[30-Mar-2025 22:15:23 Europe/Berlin] Attempting to save consumption with data: client=6, month=avril 2025, reading=1500, photo=uploads/consumptions/1743365723_premium_photo.jpg
+[30-Mar-2025 22:15:23 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[30-Mar-2025 22:15:23 Europe/Berlin] Parameters: client_id=6, month=avril 2025, current_reading=1500, photo=uploads/consumptions/1743365723_premium_photo.jpg
+[30-Mar-2025 22:15:23 Europe/Berlin] Last inserted ID: 5
+[30-Mar-2025 22:15:23 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[30-Mar-2025 22:15:23 Europe/Berlin] Consumption added successfully: {"id":5,"client_id":6,"month":"avril 2025","current_reading":1500,"photo":"uploads\/consumptions\/1743365723_premium_photo.jpg","dateReleve":"2025-03-30 20:15:23"}
+[30-Mar-2025 22:15:58 Europe/Berlin] PHP Version: 8.2.12
+[30-Mar-2025 22:15:58 Europe/Berlin] PDO Available: Yes
+[30-Mar-2025 22:15:58 Europe/Berlin] PDO SQLite Available: Yes
+[30-Mar-2025 22:15:58 Europe/Berlin] File Info Available: Yes
+[30-Mar-2025 22:15:58 Europe/Berlin] Database connection test successful
+[30-Mar-2025 22:15:58 Europe/Berlin] Client ID: 6
+[30-Mar-2025 22:15:58 Europe/Berlin] Consumption table schema: Array
+(
+    [0] => Array
+        (
+            [cid] => 0
+            [name] => idC
+            [type] => INTEGER
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 1
+        )
+
+    [1] => Array
+        (
+            [cid] => 1
+            [name] => client_id
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [2] => Array
+        (
+            [cid] => 2
+            [name] => month
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [3] => Array
+        (
+            [cid] => 3
+            [name] => current_reading
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [4] => Array
+        (
+            [cid] => 4
+            [name] => photo
+            [type] => TEXT
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [5] => Array
+        (
+            [cid] => 5
+            [name] => dateReleve
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => datetime('now')
+            [pk] => 0
+        )
+
+)
+
+[30-Mar-2025 22:15:58 Europe/Berlin] POST data: Array
+(
+    [month] => avril 2025
+    [currentReading] => 2222
+)
+
+[30-Mar-2025 22:15:58 Europe/Berlin] FILES data: Array
+(
+    [meterPhoto] => Array
+        (
+            [name] => premium_photo.jpg
+            [full_path] => premium_photo.jpg
+            [type] => image/jpeg
+            [tmp_name] => C:\xampp\tmp\phpCF1C.tmp
+            [error] => 0
+            [size] => 382970
+        )
+
+)
+
+[30-Mar-2025 22:15:58 Europe/Berlin] Attempting to move uploaded file to: ../uploads/consumptions/1743365758_premium_photo.jpg
+[30-Mar-2025 22:15:58 Europe/Berlin] File successfully uploaded to: ../uploads/consumptions/1743365758_premium_photo.jpg
+[30-Mar-2025 22:15:58 Europe/Berlin] Photo path for database: uploads/consumptions/1743365758_premium_photo.jpg
+[30-Mar-2025 22:15:58 Europe/Berlin] Attempting to save consumption with data: client=6, month=avril 2025, reading=2222, photo=uploads/consumptions/1743365758_premium_photo.jpg
+[30-Mar-2025 22:15:58 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[30-Mar-2025 22:15:58 Europe/Berlin] Parameters: client_id=6, month=avril 2025, current_reading=2222, photo=uploads/consumptions/1743365758_premium_photo.jpg
+[30-Mar-2025 22:15:58 Europe/Berlin] Last inserted ID: 6
+[30-Mar-2025 22:15:58 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[30-Mar-2025 22:15:58 Europe/Berlin] Consumption added successfully: {"id":6,"client_id":6,"month":"avril 2025","current_reading":2222,"photo":"uploads\/consumptions\/1743365758_premium_photo.jpg","dateReleve":"2025-03-30 20:15:58"}
+[30-Mar-2025 22:16:05 Europe/Berlin] PHP Version: 8.2.12
+[30-Mar-2025 22:16:05 Europe/Berlin] PDO Available: Yes
+[30-Mar-2025 22:16:05 Europe/Berlin] PDO SQLite Available: Yes
+[30-Mar-2025 22:16:05 Europe/Berlin] File Info Available: Yes
+[30-Mar-2025 22:16:05 Europe/Berlin] Database connection test successful
+[30-Mar-2025 22:16:05 Europe/Berlin] Consumption table schema: Array
+(
+    [0] => Array
+        (
+            [cid] => 0
+            [name] => idC
+            [type] => INTEGER
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 1
+        )
+
+    [1] => Array
+        (
+            [cid] => 1
+            [name] => client_id
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [2] => Array
+        (
+            [cid] => 2
+            [name] => month
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [3] => Array
+        (
+            [cid] => 3
+            [name] => current_reading
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [4] => Array
+        (
+            [cid] => 4
+            [name] => photo
+            [type] => TEXT
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [5] => Array
+        (
+            [cid] => 5
+            [name] => dateReleve
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => datetime('now')
+            [pk] => 0
+        )
+
+)
+
+[30-Mar-2025 22:21:15 Europe/Berlin] PHP Version: 8.2.12
+[30-Mar-2025 22:21:15 Europe/Berlin] PDO Available: Yes
+[30-Mar-2025 22:21:15 Europe/Berlin] PDO SQLite Available: Yes
+[30-Mar-2025 22:21:15 Europe/Berlin] File Info Available: Yes
+[30-Mar-2025 22:21:15 Europe/Berlin] Database connection test successful
+[30-Mar-2025 22:21:15 Europe/Berlin] Client ID: 6
+[30-Mar-2025 22:21:15 Europe/Berlin] Consumption table schema: Array
+(
+    [0] => Array
+        (
+            [cid] => 0
+            [name] => idC
+            [type] => INTEGER
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 1
+        )
+
+    [1] => Array
+        (
+            [cid] => 1
+            [name] => client_id
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [2] => Array
+        (
+            [cid] => 2
+            [name] => month
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [3] => Array
+        (
+            [cid] => 3
+            [name] => current_reading
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [4] => Array
+        (
+            [cid] => 4
+            [name] => photo
+            [type] => TEXT
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [5] => Array
+        (
+            [cid] => 5
+            [name] => dateReleve
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => datetime('now')
+            [pk] => 0
+        )
+
+)
+
+[30-Mar-2025 22:21:15 Europe/Berlin] POST data: Array
+(
+    [month] => avril 2025
+    [currentReading] => 222222
+)
+
+[30-Mar-2025 22:21:15 Europe/Berlin] FILES data: Array
+(
+    [meterPhoto] => Array
+        (
+            [name] => premium_photo.jpg
+            [full_path] => premium_photo.jpg
+            [type] => image/jpeg
+            [tmp_name] => C:\xampp\tmp\phpA41D.tmp
+            [error] => 0
+            [size] => 382970
+        )
+
+)
+
+[30-Mar-2025 22:21:15 Europe/Berlin] Attempting to move uploaded file to: ../uploads/consumptions/1743366075_premium_photo.jpg
+[30-Mar-2025 22:21:15 Europe/Berlin] File successfully uploaded to: ../uploads/consumptions/1743366075_premium_photo.jpg
+[30-Mar-2025 22:21:15 Europe/Berlin] Photo path for database: uploads/consumptions/1743366075_premium_photo.jpg
+[30-Mar-2025 22:21:15 Europe/Berlin] Attempting to save consumption with data: client=6, month=avril 2025, reading=222222, photo=uploads/consumptions/1743366075_premium_photo.jpg
+[30-Mar-2025 22:21:15 Europe/Berlin] Looking for consumption with client_id=6, month=avril 2025
+[30-Mar-2025 22:21:15 Europe/Berlin] Found consumption with exact match
+[30-Mar-2025 22:21:15 Europe/Berlin] A consumption already exists for this month. Existing: {"id":6,"client_id":6,"month":"avril 2025","current_reading":2222,"photo":"uploads\/consumptions\/1743365758_premium_photo.jpg","dateReleve":"2025-03-30 20:15:58"}
+[30-Mar-2025 22:21:15 Europe/Berlin] PHP Version: 8.2.12
+[30-Mar-2025 22:21:15 Europe/Berlin] PDO Available: Yes
+[30-Mar-2025 22:21:15 Europe/Berlin] PDO SQLite Available: Yes
+[30-Mar-2025 22:21:15 Europe/Berlin] File Info Available: Yes
+[30-Mar-2025 22:21:15 Europe/Berlin] Database connection test successful
+[30-Mar-2025 22:21:15 Europe/Berlin] Looking for consumption with client_id=6, month=avril 2025
+[30-Mar-2025 22:21:15 Europe/Berlin] Found consumption with exact match
+[31-Mar-2025 13:01:15 Europe/Berlin] PHP Version: 8.2.12
+[31-Mar-2025 13:01:15 Europe/Berlin] PDO Available: Yes
+[31-Mar-2025 13:01:15 Europe/Berlin] PDO SQLite Available: Yes
+[31-Mar-2025 13:01:15 Europe/Berlin] File Info Available: Yes
+[31-Mar-2025 13:01:15 Europe/Berlin] Database connection test successful
+[31-Mar-2025 13:01:15 Europe/Berlin] Client ID: 6
+[31-Mar-2025 13:01:15 Europe/Berlin] Consumption table schema: Array
+(
+    [0] => Array
+        (
+            [cid] => 0
+            [name] => idC
+            [type] => INTEGER
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 1
+        )
+
+    [1] => Array
+        (
+            [cid] => 1
+            [name] => client_id
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [2] => Array
+        (
+            [cid] => 2
+            [name] => month
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [3] => Array
+        (
+            [cid] => 3
+            [name] => current_reading
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [4] => Array
+        (
+            [cid] => 4
+            [name] => photo
+            [type] => TEXT
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [5] => Array
+        (
+            [cid] => 5
+            [name] => dateReleve
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => datetime('now')
+            [pk] => 0
+        )
+
+)
+
+[31-Mar-2025 13:01:15 Europe/Berlin] POST data: Array
+(
+    [month] => avril 2025
+    [currentReading] => 1222
+)
+
+[31-Mar-2025 13:01:15 Europe/Berlin] FILES data: Array
+(
+    [meterPhoto] => Array
+        (
+            [name] => premium_photo.jpg
+            [full_path] => premium_photo.jpg
+            [type] => image/jpeg
+            [tmp_name] => C:\xampp\tmp\php4729.tmp
+            [error] => 0
+            [size] => 382970
+        )
+
+)
+
+[31-Mar-2025 13:01:15 Europe/Berlin] Attempting to move uploaded file to: ../uploads/consumptions/1743418875_premium_photo.jpg
+[31-Mar-2025 13:01:15 Europe/Berlin] File successfully uploaded to: ../uploads/consumptions/1743418875_premium_photo.jpg
+[31-Mar-2025 13:01:15 Europe/Berlin] Photo path for database: uploads/consumptions/1743418875_premium_photo.jpg
+[31-Mar-2025 13:01:15 Europe/Berlin] Attempting to save consumption with data: client=6, month=avril 2025, reading=1222, photo=uploads/consumptions/1743418875_premium_photo.jpg
+[31-Mar-2025 13:01:15 Europe/Berlin] Looking for consumption with client_id=6, month=avril 2025
+[31-Mar-2025 13:01:15 Europe/Berlin] Found consumption with exact match
+[31-Mar-2025 13:01:15 Europe/Berlin] A consumption already exists for this month. Existing: {"id":6,"client_id":6,"month":"avril 2025","current_reading":2222,"photo":"uploads\/consumptions\/1743365758_premium_photo.jpg","dateReleve":"2025-03-30 20:15:58"}
+[31-Mar-2025 13:01:15 Europe/Berlin] PHP Version: 8.2.12
+[31-Mar-2025 13:01:15 Europe/Berlin] PDO Available: Yes
+[31-Mar-2025 13:01:15 Europe/Berlin] PDO SQLite Available: Yes
+[31-Mar-2025 13:01:15 Europe/Berlin] File Info Available: Yes
+[31-Mar-2025 13:01:15 Europe/Berlin] Database connection test successful
+[31-Mar-2025 13:01:15 Europe/Berlin] Looking for consumption with client_id=6, month=avril 2025
+[31-Mar-2025 13:01:15 Europe/Berlin] Found consumption with exact match
+[31-Mar-2025 14:13:01 Europe/Berlin] PHP Version: 8.2.12
+[31-Mar-2025 14:13:01 Europe/Berlin] PDO Available: Yes
+[31-Mar-2025 14:13:01 Europe/Berlin] PDO SQLite Available: Yes
+[31-Mar-2025 14:13:01 Europe/Berlin] File Info Available: Yes
+[31-Mar-2025 14:13:01 Europe/Berlin] Database connection test successful
+[31-Mar-2025 14:13:01 Europe/Berlin] Client ID: 6
+[31-Mar-2025 14:13:01 Europe/Berlin] Consumption table schema: Array
+(
+    [0] => Array
+        (
+            [cid] => 0
+            [name] => idC
+            [type] => INTEGER
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 1
+        )
+
+    [1] => Array
+        (
+            [cid] => 1
+            [name] => client_id
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [2] => Array
+        (
+            [cid] => 2
+            [name] => month
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [3] => Array
+        (
+            [cid] => 3
+            [name] => current_reading
+            [type] => INTEGER
+            [notnull] => 1
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [4] => Array
+        (
+            [cid] => 4
+            [name] => photo
+            [type] => TEXT
+            [notnull] => 0
+            [dflt_value] => 
+            [pk] => 0
+        )
+
+    [5] => Array
+        (
+            [cid] => 5
+            [name] => dateReleve
+            [type] => TEXT
+            [notnull] => 1
+            [dflt_value] => datetime('now')
+            [pk] => 0
+        )
+
+)
+
+[31-Mar-2025 14:13:01 Europe/Berlin] POST data: Array
+(
+    [month] => mai 2025
+    [currentReading] => 1111
+)
+
+[31-Mar-2025 14:13:01 Europe/Berlin] FILES data: Array
+(
+    [meterPhoto] => Array
+        (
+            [name] => invoice-template-us-neat-750px.png
+            [full_path] => invoice-template-us-neat-750px.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\phpFA32.tmp
+            [error] => 0
+            [size] => 24463
+        )
+
+)
+
+[31-Mar-2025 14:13:01 Europe/Berlin] Attempting to move uploaded file to: ../uploads/consumptions/1743423181_invoice-template-us-neat-750px.png
+[31-Mar-2025 14:13:01 Europe/Berlin] File successfully uploaded to: ../uploads/consumptions/1743423181_invoice-template-us-neat-750px.png
+[31-Mar-2025 14:13:01 Europe/Berlin] Photo path for database: uploads/consumptions/1743423181_invoice-template-us-neat-750px.png
+[31-Mar-2025 14:13:01 Europe/Berlin] Attempting to save consumption with data: client=6, month=mai 2025, reading=1111, photo=uploads/consumptions/1743423181_invoice-template-us-neat-750px.png
+[31-Mar-2025 14:13:01 Europe/Berlin] Looking for consumption with client_id=6, month=mai 2025
+[31-Mar-2025 14:13:01 Europe/Berlin] Found consumption with exact match
+[31-Mar-2025 14:13:01 Europe/Berlin] A consumption already exists for this month. Existing: {"id":4,"client_id":6,"month":"mai 2025","current_reading":777,"photo":"uploads\/consumptions\/1743365354_premium_photo.jpg","dateReleve":"2025-03-30 20:09:14"}
+[31-Mar-2025 14:13:01 Europe/Berlin] PHP Version: 8.2.12
+[31-Mar-2025 14:13:01 Europe/Berlin] PDO Available: Yes
+[31-Mar-2025 14:13:01 Europe/Berlin] PDO SQLite Available: Yes
+[31-Mar-2025 14:13:01 Europe/Berlin] File Info Available: Yes
+[31-Mar-2025 14:13:01 Europe/Berlin] Database connection test successful
+[31-Mar-2025 14:13:01 Europe/Berlin] Looking for consumption with client_id=6, month=mai 2025
+[31-Mar-2025 14:13:01 Europe/Berlin] Found consumption with exact match

@@ -71,7 +71,7 @@
         <img src="assets/images/hero-illustration.svg" alt="Illustration" class="img-fluid">
       </div>
     </div>
-  </div>
+</div>
 </section>
 
 <!-- Choix d'espace -->

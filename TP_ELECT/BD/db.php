@@ -12,7 +12,82 @@ try {
     // Activer les clés étrangères
     $pdo->exec("PRAGMA foreign_keys = ON;");
 
-    // Création (ou mise à jour) des tables si elles n'existent pas
+    // Vérifier si une reconstruction de la table Consumption est nécessaire
+    $recreateConsumption = false;
+    try {
+        // Récupérer la structure actuelle de la table Consumption
+        $consumptionStructure = $pdo->query("PRAGMA table_info(Consumption)")->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Compter combien de colonnes on a
+        $expectedColumns = [
+            'idC', 'client_id', 'month', 'current_reading', 
+            'photo', 'dateReleve'
+        ];
+        
+        $columnsFound = 0;
+        foreach ($consumptionStructure as $column) {
+            if (in_array($column['name'], $expectedColumns)) {
+                $columnsFound++;
+            }
+        }
+        
+        // Si on n'a pas assez de colonnes, on reconstruit
+        if ($columnsFound != count($expectedColumns)) {
+            $recreateConsumption = true;
+        }
+    } catch (Exception $e) {
+        // Si on ne peut pas récupérer la structure, la table n'existe probablement pas
+        $recreateConsumption = true;
+    }
+
+    // Recréer la table Consumption si nécessaire
+    if ($recreateConsumption) {
+        // Sauvegarde des données existantes
+        $consumptionData = [];
+        try {
+            $consumptionData = $pdo->query("SELECT * FROM Consumption")->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            // Pas de données à sauvegarder
+        }
+        
+        // Supprimer la table existante
+        $pdo->exec("DROP TABLE IF EXISTS Consumption");
+        
+        // Créer la table avec une structure propre
+        $pdo->exec("
+            CREATE TABLE Consumption (
+                idC INTEGER PRIMARY KEY AUTOINCREMENT,
+                client_id INTEGER NOT NULL,
+                month TEXT NOT NULL,
+                current_reading INTEGER NOT NULL,
+                photo TEXT,
+                dateReleve TEXT NOT NULL DEFAULT (datetime('now')),
+                FOREIGN KEY (client_id) REFERENCES Client(id)
+            )
+        ");
+        
+        // Restaurer les données si on en avait
+        if (!empty($consumptionData)) {
+            $stmt = $pdo->prepare("
+                INSERT INTO Consumption (client_id, month, current_reading, photo, dateReleve)
+                VALUES (?, ?, ?, ?, ?)
+            ");
+            
+            foreach ($consumptionData as $row) {
+                $clientId = $row['client_id'] ?? null;
+                $month = $row['month'] ?? $row['dateReleve'] ?? null;
+                $reading = $row['current_reading'] ?? $row['indexReleve'] ?? 0;
+                $photo = $row['photo'] ?? $row['photoCompteur'] ?? null;
+                $date = $row['dateReleve'] ?? $row['date_entry'] ?? date('Y-m-d H:i:s');
+                
+                if ($clientId) {
+                    $stmt->execute([$clientId, $month, $reading, $photo, $date]);
+                }
+            }
+        }
+    }
+
+    // Création (ou mise à jour) des autres tables si elles n'existent pas
     $sql = "
     ----------------------------------------------------------------------------
     -- Table Fournisseur
@@ -62,7 +137,10 @@ try {
         montant REAL NOT NULL,
         date_emission TEXT NOT NULL,
         statut TEXT NOT NULL DEFAULT 'impayée',
-        FOREIGN KEY (client_id) REFERENCES Client(id)
+        consumption_id INTEGER,
+        kwh_consumed INTEGER,
+        FOREIGN KEY (client_id) REFERENCES Client(id),
+        FOREIGN KEY (consumption_id) REFERENCES Consumption(idC)
     );
 
     ----------------------------------------------------------------------------
@@ -92,19 +170,6 @@ try {
     );
 
     ----------------------------------------------------------------------------
-    -- Table Consumption (formerly ConsommationReelle)
-    ----------------------------------------------------------------------------
-    CREATE TABLE IF NOT EXISTS Consumption (
-        idC INTEGER PRIMARY KEY AUTOINCREMENT,
-        dateReleve TEXT NOT NULL,
-        indexReleve INTEGER NOT NULL,
-        photoCompteur TEXT,
-        month TEXT NOT NULL,
-        client_id INTEGER NOT NULL,
-        FOREIGN KEY (client_id) REFERENCES Client(id)
-    );
-
-    ----------------------------------------------------------------------------
     -- Table ConsommationAnnuelle
     ----------------------------------------------------------------------------
     CREATE TABLE IF NOT EXISTS ConsommationAnnuelle (
@@ -117,9 +182,6 @@ try {
     ";
 
     $pdo->exec($sql);
-
-    // (Optionnel) Supprimer l'ancienne table "Consumption" si elle existait et ne correspondait pas
-    // $pdo->exec("DROP TABLE IF EXISTS OldConsumption");
 
     // Insertion d'un client de test s'il n'existe aucun enregistrement dans la table Client
     $stmt = $pdo->query("SELECT COUNT(*) as count FROM Client");
@@ -157,7 +219,10 @@ try {
         ]);
     }
 
-    echo "Opérations effectuées avec succès.";
+    // Only show success message if not in an API context
+    if (!defined('API_REQUEST') || !API_REQUEST) {
+        // echo "Opérations effectuées avec succès.";
+    }
 
 } catch (PDOException $e) {
     die('Erreur de connexion ou de création de tables : ' . $e->getMessage());

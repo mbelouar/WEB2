@@ -1,0 +1,101 @@
+/* 
+ * Custom CSS for the consumption form to ensure visibility
+ */
+
+/* Card styling with strong contrast */
+.consumption-form-card {
+    border: 3px solid #2B6041 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+    background-color: #ffffff !important;
+    margin-bottom: 25px !important;
+}
+
+.consumption-form-card .card-header {
+    background-color: #2B6041 !important;
+    border-bottom: 2px solid #1D4B2F !important;
+    color: #ffffff !important;
+    padding: 15px 20px !important;
+}
+
+.consumption-form-card .card-header h6 {
+    color: #ffffff !important;
+    font-weight: bold !important;
+    font-size: 1.1rem !important;
+    margin: 0 !important;
+}
+
+.consumption-form-card .card-body {
+    background-color: #f0f8f4 !important;
+    padding: 25px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+}
+
+/* Form elements with better contrast */
+.consumption-form-card .form-label {
+    color: #2B6041 !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+}
+
+.consumption-form-card .form-control {
+    border: 2px solid #CED4DA !important;
+    padding: 10px 15px !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+.consumption-form-card .form-control:focus {
+    border-color: #2B6041 !important;
+    box-shadow: 0 0 0 0.2rem rgba(43, 96, 65, 0.25) !important;
+}
+
+.consumption-form-card .form-hint {
+    color: #6C757D !important;
+    font-size: 0.85rem !important;
+    margin-top: 5px !important;
+}
+
+/* Alert styles */
+.consumption-form-card .alert {
+    background-color: #ffffff !important;
+    border-left: 4px solid #17a2b8 !important;
+    padding: 15px !important;
+}
+
+.consumption-form-card .alert-info {
+    border-color: #17a2b8 !important;
+}
+
+.consumption-form-card .alert-warning {
+    border-color: #ffc107 !important;
+}
+
+/* Buttons */
+.consumption-form-card .btn-accent {
+    background-color: #EF9651 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    padding: 10px 25px !important;
+    border: none !important;
+}
+
+.consumption-form-card .btn-accent:hover {
+    background-color: #D97C34 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.consumption-form-card .btn-secondary {
+    background-color: #6C757D !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    padding: 10px 25px !important;
+    border: none !important;
+}
+
+.consumption-form-card .btn-secondary:hover {
+    background-color: #5a6268 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}

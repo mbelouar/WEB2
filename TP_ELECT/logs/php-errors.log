@@ -1,0 +1,20 @@
+[31-Mar-2025 22:23:29 Europe/Berlin] Looking for consumption with client_id=6, month=2025-01
+[31-Mar-2025 22:23:29 Europe/Berlin] No consumption found for client 6 and month 2025-01
+[31-Mar-2025 22:23:29 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[31-Mar-2025 22:23:29 Europe/Berlin] Parameters: client_id=6, month=2025-01, current_reading=1000, photo=uploads/compteurs/client6_2025-01_1743452609.jpg
+[31-Mar-2025 22:23:29 Europe/Berlin] Last inserted ID: 15
+[31-Mar-2025 22:23:29 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[31-Mar-2025 22:24:39 Europe/Berlin] Looking for consumption with client_id=6, month=2025-01
+[31-Mar-2025 22:24:39 Europe/Berlin] Found consumption with exact match
+[31-Mar-2025 22:24:44 Europe/Berlin] Looking for consumption with client_id=6, month=2025-02
+[31-Mar-2025 22:24:44 Europe/Berlin] No consumption found for client 6 and month 2025-02
+[31-Mar-2025 22:24:44 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[31-Mar-2025 22:24:44 Europe/Berlin] Parameters: client_id=6, month=2025-02, current_reading=1001, photo=uploads/compteurs/client6_2025-02_1743452684.jpg
+[31-Mar-2025 22:24:44 Europe/Berlin] Last inserted ID: 16
+[31-Mar-2025 22:24:44 Europe/Berlin] Successfully retrieved last consumption directly after insert

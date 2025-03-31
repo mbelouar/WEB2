@@ -1,108 +1,218 @@
 <?php
 session_start();
+require_once '../../BD/db.php';
+require_once '../../BD/Facture.php';
+require_once '../../BD/Consumption.php';
+
+// Set page variables
+$pageTitle = 'Tableau de Bord';
+$activePage = 'dashboard';
+
+// Check if the user is logged in
 if (!isset($_SESSION['client'])) {
     header("Location: connexion.php");
     exit;
 }
 
-require_once '../../BD/db.php';
-require_once '../../BD/Facture.php';
-require_once '../../BD/Consumption.php';
-
+// Get client info
+$clientId = $_SESSION['client']['id'];
 $client = $_SESSION['client'];
+
+// Initialize models
 $factureModel = new Facture($pdo);
 $consumptionModel = new Consumption($pdo);
 
-// Récupérer la dernière facture
-$lastInvoice = $factureModel->getLastInvoice($client['id']);
-$lastInvoiceAmount = $lastInvoice ? $lastInvoice['montant'] . " DH" : "Aucune facture";
-$lastInvoiceDate = $lastInvoice ? $lastInvoice['date_emission'] : "-";
+// Get latest invoice
+$lastInvoice = $factureModel->getLastInvoice($clientId);
 
-// Récupérer la dernière consommation (optionnel)
-$lastConsumption = $consumptionModel->getLastConsumption($client['id']);
+// Get latest consumption reading
+$lastConsumption = $consumptionModel->getLastConsumption($clientId);
+
+// Count total invoices
+$allInvoices = $factureModel->getFacturesByClient($clientId);
+$invoiceCount = count($allInvoices);
+
+// Count unpaid invoices
+$unpaidCount = 0;
+$totalDue = 0;
+foreach ($allInvoices as $invoice) {
+    if ($invoice['statut'] === 'impayée') {
+        $unpaidCount++;
+        $totalDue += $invoice['montant'];
+    }
+}
+
+// Start page content
+ob_start();
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard Client - Espace Client</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
 
-<!-- Barre de navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Mon Espace</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#clientNavbar" 
-            aria-controls="clientNavbar" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="clientNavbar">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link active" href="client_dashboard.php">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="client_invoices.php">Mes Factures</a></li>
-        <li class="nav-item"><a class="nav-link" href="client_new_consumption.php">Saisir Conso</a></li>
-        <li class="nav-item"><a class="nav-link" href="client_complaint.php">Réclamation</a></li>
-        <li class="nav-item"><a class="nav-link" href="client_notifications.php">Notifications</a></li>
-        <li class="nav-item"><a class="nav-link" href="../../traitement/clientTraitement.php?action=logout">Déconnexion</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<!-- Contenu principal -->
 <div class="container my-4">
-  <h2 class="mb-4">Bienvenue, <?php echo htmlspecialchars($client['nom']); ?></h2>
-  <div class="row g-4">
-    <!-- Carte Dernière Facture -->
-    <div class="col-md-4">
-      <div class="card text-center shadow">
-        <div class="card-body">
-          <h5 class="card-title">Dernière Facture</h5>
-          <p class="display-6"><?php echo $lastInvoiceAmount; ?></p>
-          <p class="mb-0"><small><?php echo $lastInvoice ? "Payée le " . $lastInvoiceDate : ""; ?></small></p>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0" data-aos="fade-right">
+            <i class="fas fa-tachometer-alt me-2 text-primary"></i>
+            Tableau de bord
+        </h1>
+        <div data-aos="fade-left">
+            <a href="client_new_consumption.php" class="btn btn-accent">
+                <i class="fas fa-bolt me-2"></i> Saisir une consommation
+            </a>
         </div>
-      </div>
     </div>
-    <!-- Carte Prochaine Saisie -->
-    <div class="col-md-4">
-      <div class="card text-center shadow">
+
+    <!-- Welcome Banner -->
+    <div class="card mb-4" data-aos="fade-up">
         <div class="card-body">
-          <h5 class="card-title">Prochaine Saisie</h5>
-          <p class="mb-0">Fin du mois en cours</p>
-          <a href="client_new_consumption.php" class="btn btn-primary btn-sm mt-2">Saisir maintenant</a>
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h4>Bienvenue, <?php echo htmlspecialchars($client['prenom'] . ' ' . $client['nom']); ?> !</h4>
+                    <p class="mb-0">
+                        Voici votre espace personnel pour gérer vos consommations, factures et réclamations.
+                        <?php if ($unpaidCount > 0): ?>
+                            <span class="text-danger">Vous avez <?php echo $unpaidCount; ?> facture(s) impayée(s).</span>
+                        <?php else: ?>
+                            <span class="text-success">Toutes vos factures sont à jour. Merci !</span>
+                        <?php endif; ?>
+                    </p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <img src="../../uploads/Lydec.png" alt="Welcome" class="img-fluid" style="max-height: 100px;">
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    <!-- Carte Réclamation -->
-    <div class="col-md-4">
-      <div class="card text-center shadow">
-        <div class="card-body">
-          <h5 class="card-title">Faire une réclamation</h5>
-          <p class="mb-0">Signalez un problème</p>
-          <a href="client_complaint.php" class="btn btn-danger btn-sm mt-2">Nouvelle réclamation</a>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <!-- Consumption Card -->
+        <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="stat-card">
+                <div class="stat-value">
+                    <?php echo $lastConsumption ? $lastConsumption['current_reading'] : '0'; ?>
+                    <small>kWh</small>
+                </div>
+                <div class="stat-label">Dernière Consommation</div>
+                <i class="fas fa-bolt stat-icon"></i>
+            </div>
         </div>
-      </div>
+        
+        <!-- Last Invoice Card -->
+        <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="stat-card">
+                <div class="stat-value">
+                    <?php echo $lastInvoice ? number_format($lastInvoice['montant'], 2) : '0.00'; ?>
+                    <small>DH</small>
+                </div>
+                <div class="stat-label">Dernière Facture</div>
+                <i class="fas fa-file-invoice-dollar stat-icon"></i>
+            </div>
+        </div>
+        
+        <!-- Total Due Card -->
+        <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="stat-card">
+                <div class="stat-value">
+                    <?php echo number_format($totalDue, 2); ?>
+                    <small>DH</small>
+                </div>
+                <div class="stat-label">Montant Total Dû</div>
+                <i class="fas fa-money-bill-wave stat-icon"></i>
+            </div>
+        </div>
+        
+        <!-- Invoice Count Card -->
+        <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="stat-card">
+                <div class="stat-value">
+                    <?php echo $invoiceCount; ?>
+                </div>
+                <div class="stat-label">Factures Totales</div>
+                <i class="fas fa-file-alt stat-icon"></i>
+            </div>
+        </div>
     </div>
-  </div>
-  
-  <!-- Zone pour graphique/statistiques (à développer selon vos besoins) -->
-  <div class="card shadow mt-4">
-    <div class="card-body">
-      <h5 class="card-title">Statistiques de Consommation</h5>
-      <p class="card-text">[Graphique ou résumé mensuel]</p>
+
+    <div class="row">
+        <!-- Latest Invoice -->
+        <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-file-invoice-dollar me-2"></i> Dernière Facture</h5>
+                    <a href="client_invoices.php" class="btn btn-sm btn-primary">Voir Toutes</a>
+                </div>
+                <div class="card-body">
+                    <?php if ($lastInvoice): ?>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>Facture #<?php echo $lastInvoice['id']; ?></div>
+                            <div class="badge <?php echo $lastInvoice['statut'] === 'payée' ? 'bg-success' : 'bg-warning'; ?>">
+                                <?php echo ucfirst($lastInvoice['statut']); ?>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>Date d'émission:</div>
+                            <div><?php echo date('d/m/Y', strtotime($lastInvoice['date_emission'])); ?></div>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>Montant:</div>
+                            <div class="fw-bold"><?php echo number_format($lastInvoice['montant'], 2); ?> DH</div>
+                        </div>
+                        <?php if ($lastInvoice['statut'] === 'impayée'): ?>
+                            <div class="text-center mt-4">
+                                <a href="#" class="btn btn-accent">Payer Maintenant</a>
+                            </div>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <div class="text-center py-4">
+                            <i class="fas fa-file-invoice text-muted mb-3" style="font-size: 3rem;"></i>
+                            <p>Aucune facture disponible pour le moment.</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Latest Consumption -->
+        <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-bolt me-2"></i> Dernière Consommation</h5>
+                    <a href="client_new_consumption.php" class="btn btn-sm btn-primary">Saisir Nouvelle</a>
+                </div>
+                <div class="card-body">
+                    <?php if ($lastConsumption): ?>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>Mois:</div>
+                            <div><?php echo htmlspecialchars($lastConsumption['month']); ?></div>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>Date de relevé:</div>
+                            <div><?php echo date('d/m/Y H:i', strtotime($lastConsumption['dateReleve'])); ?></div>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>Lecture du compteur:</div>
+                            <div class="fw-bold"><?php echo $lastConsumption['current_reading']; ?> kWh</div>
+                        </div>
+                        <?php if (!empty($lastConsumption['photo'])): ?>
+                            <div class="text-center mt-3">
+                                <img src="../../<?php echo htmlspecialchars($lastConsumption['photo']); ?>" 
+                                    alt="Photo du compteur" class="img-fluid img-thumbnail" style="max-height: 200px;">
+                            </div>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <div class="text-center py-4">
+                            <i class="fas fa-bolt text-muted mb-3" style="font-size: 3rem;"></i>
+                            <p>Aucune consommation enregistrée pour le moment.</p>
+                            <a href="client_new_consumption.php" class="btn btn-primary mt-2">Saisir une consommation</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-<!-- Pied de page -->
-<footer class="bg-light text-center py-3">
-  <span>&copy; 2025 - Mon Fournisseur d'Électricité</span>
-</footer>
+<?php
+$pageContent = ob_get_clean();
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+// Include the template
+require_once '../templates/client_template.php';
+?>
