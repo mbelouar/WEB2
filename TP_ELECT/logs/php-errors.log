@@ -18,3 +18,374 @@
 [31-Mar-2025 22:24:44 Europe/Berlin] Parameters: client_id=6, month=2025-02, current_reading=1001, photo=uploads/compteurs/client6_2025-02_1743452684.jpg
 [31-Mar-2025 22:24:44 Europe/Berlin] Last inserted ID: 16
 [31-Mar-2025 22:24:44 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[01-Apr-2025 01:17:16 Europe/Berlin] Error updating consumption: SQLSTATE[HY000]: General error: 1 no such column: releve_compteur
+[01-Apr-2025 01:37:42 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 147
+[01-Apr-2025 01:37:42 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 148
+[01-Apr-2025 01:37:42 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 149
+[01-Apr-2025 01:37:42 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 150
+[01-Apr-2025 01:37:42 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 151
+[01-Apr-2025 01:37:42 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 152
+[01-Apr-2025 01:37:42 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 159
+[01-Apr-2025 01:37:42 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 160
+[01-Apr-2025 01:37:42 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 161
+[01-Apr-2025 01:37:42 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 162
+[01-Apr-2025 01:40:51 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to private method Consumption::getPreviousReading() from global scope in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php:85
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 85
+[01-Apr-2025 01:40:53 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to private method Consumption::getPreviousReading() from global scope in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php:85
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 85
+[01-Apr-2025 01:51:42 Europe/Berlin] Edit consumption request: ID=undefined, Reading=1007, Month=2025-02
+[01-Apr-2025 01:51:42 Europe/Berlin] POST data: Array
+(
+    [id] => undefined
+    [action] => edit
+    [api_request] => true
+    [month] => 2025-02
+    [current_reading] => 1007
+    [comment] => 
+)
+
+[01-Apr-2025 01:51:42 Europe/Berlin] SQL Query: UPDATE Consumption 
+                SET current_reading = ?, month = ? 
+                WHERE idC = ?
+[01-Apr-2025 01:51:42 Europe/Berlin] Parameters: current_reading=1007, month=2025-02, id=undefined
+[01-Apr-2025 01:51:42 Europe/Berlin] Updated consumption: 
+[01-Apr-2025 01:54:45 Europe/Berlin] Getting consumption details for ID: 16
+[01-Apr-2025 01:54:45 Europe/Berlin] Found consumption: Array
+(
+    [idC] => 16
+    [client_id] => 6
+    [month] => 2025-02
+    [current_reading] => 1001
+    [photo] => uploads/compteurs/client6_2025-02_1743452684.jpg
+    [dateReleve] => 2025-03-31 20:24:44
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[01-Apr-2025 01:54:48 Europe/Berlin] Edit consumption request: ID=16, Reading=1007, Month=2025-02
+[01-Apr-2025 01:54:48 Europe/Berlin] POST data: Array
+(
+    [idC] => 16
+    [action] => edit
+    [api_request] => true
+    [month] => 2025-02
+    [current_reading] => 1007
+    [comment] => 
+)
+
+[01-Apr-2025 01:54:48 Europe/Berlin] SQL Query: UPDATE Consumption 
+                SET current_reading = ?, month = ? 
+                WHERE idC = ?
+[01-Apr-2025 01:54:48 Europe/Berlin] Parameters: current_reading=1007, month=2025-02, id=16
+[01-Apr-2025 01:54:48 Europe/Berlin] Updated consumption: Array
+(
+    [idC] => 16
+    [client_id] => 6
+    [month] => 2025-02
+    [current_reading] => 1007
+    [photo] => uploads/compteurs/client6_2025-02_1743452684.jpg
+    [dateReleve] => 2025-03-31 20:24:44
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[01-Apr-2025 01:54:52 Europe/Berlin] Getting consumption details for ID: 16
+[01-Apr-2025 01:54:52 Europe/Berlin] Found consumption: Array
+(
+    [idC] => 16
+    [client_id] => 6
+    [month] => 2025-02
+    [current_reading] => 1007
+    [photo] => uploads/compteurs/client6_2025-02_1743452684.jpg
+    [dateReleve] => 2025-03-31 20:24:44
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[01-Apr-2025 01:54:58 Europe/Berlin] Getting consumption details for ID: 16
+[01-Apr-2025 01:54:58 Europe/Berlin] Found consumption: Array
+(
+    [idC] => 16
+    [client_id] => 6
+    [month] => 2025-02
+    [current_reading] => 1007
+    [photo] => uploads/compteurs/client6_2025-02_1743452684.jpg
+    [dateReleve] => 2025-03-31 20:24:44
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[01-Apr-2025 01:55:06 Europe/Berlin] Edit consumption request: ID=16, Reading=1150, Month=2025-02
+[01-Apr-2025 01:55:06 Europe/Berlin] POST data: Array
+(
+    [idC] => 16
+    [action] => edit
+    [api_request] => true
+    [month] => 2025-02
+    [current_reading] => 1150
+    [comment] => too small
+)
+
+[01-Apr-2025 01:55:06 Europe/Berlin] SQL Query: UPDATE Consumption 
+                SET current_reading = ?, month = ? 
+                WHERE idC = ?
+[01-Apr-2025 01:55:06 Europe/Berlin] Parameters: current_reading=1150, month=2025-02, id=16
+[01-Apr-2025 01:55:06 Europe/Berlin] Updated consumption: Array
+(
+    [idC] => 16
+    [client_id] => 6
+    [month] => 2025-02
+    [current_reading] => 1150
+    [photo] => uploads/compteurs/client6_2025-02_1743452684.jpg
+    [dateReleve] => 2025-03-31 20:24:44
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[01-Apr-2025 02:07:34 Europe/Berlin] Looking for consumption with client_id=6, month=Mars 2025
+[01-Apr-2025 02:07:34 Europe/Berlin] No consumption found for client 6 and month Mars 2025
+[01-Apr-2025 02:07:34 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Consumption::getLastConsumptionByClient() in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php:350
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 350
+[01-Apr-2025 02:09:38 Europe/Berlin] Looking for consumption with client_id=6, month=Mars 2025
+[01-Apr-2025 02:09:38 Europe/Berlin] No consumption found for client 6 and month Mars 2025
+[01-Apr-2025 02:09:38 Europe/Berlin] PHP Warning:  Undefined array key "releve_compteur" in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 351
+[01-Apr-2025 02:09:38 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[01-Apr-2025 02:09:38 Europe/Berlin] Parameters: client_id=6, month=2000, current_reading=, photo=2000
+[01-Apr-2025 02:09:38 Europe/Berlin] PDO Error in addConsumption: SQLSTATE[23000]: Integrity constraint violation: 19 NOT NULL constraint failed: Consumption.current_reading
+[01-Apr-2025 02:09:38 Europe/Berlin] SQL State: 23000
+[01-Apr-2025 02:09:47 Europe/Berlin] Looking for consumption with client_id=6, month=Février 2025
+[01-Apr-2025 02:09:47 Europe/Berlin] No consumption found for client 6 and month Février 2025
+[01-Apr-2025 02:09:47 Europe/Berlin] PHP Warning:  Undefined array key "releve_compteur" in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 351
+[01-Apr-2025 02:09:47 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[01-Apr-2025 02:09:47 Europe/Berlin] Parameters: client_id=6, month=2000, current_reading=, photo=2000
+[01-Apr-2025 02:09:47 Europe/Berlin] PDO Error in addConsumption: SQLSTATE[23000]: Integrity constraint violation: 19 NOT NULL constraint failed: Consumption.current_reading
+[01-Apr-2025 02:09:47 Europe/Berlin] SQL State: 23000
+[01-Apr-2025 02:09:48 Europe/Berlin] Looking for consumption with client_id=6, month=Février 2025
+[01-Apr-2025 02:09:48 Europe/Berlin] No consumption found for client 6 and month Février 2025
+[01-Apr-2025 02:09:48 Europe/Berlin] PHP Warning:  Undefined array key "releve_compteur" in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 351
+[01-Apr-2025 02:09:48 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[01-Apr-2025 02:09:48 Europe/Berlin] Parameters: client_id=6, month=2000, current_reading=, photo=2000
+[01-Apr-2025 02:09:48 Europe/Berlin] PDO Error in addConsumption: SQLSTATE[23000]: Integrity constraint violation: 19 NOT NULL constraint failed: Consumption.current_reading
+[01-Apr-2025 02:09:48 Europe/Berlin] SQL State: 23000
+[01-Apr-2025 02:11:16 Europe/Berlin] Looking for consumption with client_id=6, month=Mars 2025
+[01-Apr-2025 02:11:16 Europe/Berlin] No consumption found for client 6 and month Mars 2025
+[01-Apr-2025 02:11:16 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[01-Apr-2025 02:11:16 Europe/Berlin] Parameters: client_id=6, month=Mars 2025, current_reading=2000, photo=../uploads/meter_photos/1743466276_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+[01-Apr-2025 02:11:16 Europe/Berlin] Last inserted ID: 3
+[01-Apr-2025 02:11:16 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[01-Apr-2025 02:16:34 Europe/Berlin] Looking for consumption with client_id=6, month=Avril 2025
+[01-Apr-2025 02:16:34 Europe/Berlin] No consumption found for client 6 and month Avril 2025
+[01-Apr-2025 02:16:34 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[01-Apr-2025 02:16:34 Europe/Berlin] Parameters: client_id=6, month=Avril 2025, current_reading=2500, photo=../uploads/meter_photos/1743466594_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+[01-Apr-2025 02:16:34 Europe/Berlin] Last inserted ID: 4
+[01-Apr-2025 02:16:34 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[01-Apr-2025 02:16:42 Europe/Berlin] Getting consumption details for ID: 4
+[01-Apr-2025 02:16:42 Europe/Berlin] Found consumption: Array
+(
+    [idC] => 4
+    [client_id] => 6
+    [month] => Avril 2025
+    [current_reading] => 2500
+    [photo] => ../uploads/meter_photos/1743466594_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+    [dateReleve] => 2025-04-01 00:16:34
+    [status] => pending
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[01-Apr-2025 02:16:45 Europe/Berlin] Getting consumption details for ID: 4
+[01-Apr-2025 02:16:45 Europe/Berlin] Found consumption: Array
+(
+    [idC] => 4
+    [client_id] => 6
+    [month] => Avril 2025
+    [current_reading] => 2500
+    [photo] => ../uploads/meter_photos/1743466594_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+    [dateReleve] => 2025-04-01 00:16:34
+    [status] => pending
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[01-Apr-2025 02:16:47 Europe/Berlin] Getting consumption details for ID: 2
+[01-Apr-2025 02:16:47 Europe/Berlin] Found consumption: Array
+(
+    [idC] => 2
+    [client_id] => 6
+    [month] => 2025-02
+    [current_reading] => 1150
+    [photo] => uploads/compteurs/client6_2025-02_1743452684.jpg
+    [dateReleve] => 2025-03-31 20:24:44
+    [status] => pending
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[01-Apr-2025 02:16:50 Europe/Berlin] Error in getPreviousConsumption: Failed to parse time string (Avril 2025-01) at position 0 (A): The timezone could not be found in the database
+[01-Apr-2025 02:16:50 Europe/Berlin] Cannot create invoice: consumption not approved
+[01-Apr-2025 02:18:37 Europe/Berlin] Looking for consumption with client_id=6, month=Janvier 2025
+[01-Apr-2025 02:18:37 Europe/Berlin] No consumption found for client 6 and month Janvier 2025
+[01-Apr-2025 02:18:37 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[01-Apr-2025 02:18:37 Europe/Berlin] Parameters: client_id=6, month=Janvier 2025, current_reading=1200, photo=../uploads/meter_photos/1743466717_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+[01-Apr-2025 02:18:37 Europe/Berlin] Last inserted ID: 5
+[01-Apr-2025 02:18:37 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[01-Apr-2025 02:18:54 Europe/Berlin] Error in getPreviousConsumption: Failed to parse time string (Janvier 2025-01) at position 0 (J): The timezone could not be found in the database
+[01-Apr-2025 02:18:54 Europe/Berlin] Cannot create invoice: consumption not approved
+[01-Apr-2025 02:21:39 Europe/Berlin] Looking for consumption with client_id=6, month=Février 2025
+[01-Apr-2025 02:21:39 Europe/Berlin] No consumption found for client 6 and month Février 2025
+[01-Apr-2025 02:21:39 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[01-Apr-2025 02:21:39 Europe/Berlin] Parameters: client_id=6, month=Février 2025, current_reading=1500, photo=../uploads/meter_photos/1743466899_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+[01-Apr-2025 02:21:39 Europe/Berlin] Last inserted ID: 6
+[01-Apr-2025 02:21:39 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[01-Apr-2025 02:22:01 Europe/Berlin] Error in getPreviousConsumption: Failed to parse time string (Février 2025-01) at position 1 (�): Unexpected character
+[01-Apr-2025 02:22:01 Europe/Berlin] Cannot create invoice: consumption not approved
+[01-Apr-2025 02:24:37 Europe/Berlin] Looking for consumption with client_id=6, month=Mars 2025
+[01-Apr-2025 02:24:37 Europe/Berlin] No consumption found for client 6 and month Mars 2025
+[01-Apr-2025 02:24:37 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[01-Apr-2025 02:24:37 Europe/Berlin] Parameters: client_id=6, month=Mars 2025, current_reading=1750, photo=../uploads/meter_photos/1743467077_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+[01-Apr-2025 02:24:37 Europe/Berlin] Last inserted ID: 7
+[01-Apr-2025 02:24:37 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[01-Apr-2025 02:24:44 Europe/Berlin] Error in getPreviousConsumption: Failed to parse time string (Mars 2025-01) at position 0 (M): The timezone could not be found in the database
+[01-Apr-2025 02:24:44 Europe/Berlin] Consumption data for invoice: Array
+(
+    [id] => 7
+    [client_id] => 6
+    [month] => Mars 2025
+    [current_reading] => 1750
+    [photo] => ../uploads/meter_photos/1743467077_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+    [dateReleve] => 2025-04-01 00:24:37
+    [status] => pending
+)
+
+[01-Apr-2025 02:24:44 Europe/Berlin] Previous consumption data: 
+[01-Apr-2025 02:24:44 Europe/Berlin] Cannot create invoice: consumption not approved
+[01-Apr-2025 02:24:44 Europe/Berlin] Invoice result: 
+[02-Apr-2025 17:27:46 Europe/Berlin] Looking for consumption with client_id=6, month=Avril 2025
+[02-Apr-2025 17:27:46 Europe/Berlin] No consumption found for client 6 and month Avril 2025
+[02-Apr-2025 17:27:46 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[02-Apr-2025 17:27:46 Europe/Berlin] Parameters: client_id=6, month=Avril 2025, current_reading=2000, photo=../uploads/meter_photos/1743607666_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+[02-Apr-2025 17:27:46 Europe/Berlin] Last inserted ID: 8
+[02-Apr-2025 17:27:46 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[02-Apr-2025 17:28:08 Europe/Berlin] Getting consumption details for ID: 8
+[02-Apr-2025 17:28:08 Europe/Berlin] Found consumption: Array
+(
+    [idC] => 8
+    [client_id] => 6
+    [month] => Avril 2025
+    [current_reading] => 2000
+    [photo] => ../uploads/meter_photos/1743607666_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+    [dateReleve] => 2025-04-02 15:27:46
+    [status] => pending
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[02-Apr-2025 17:28:10 Europe/Berlin] Getting consumption details for ID: 8
+[02-Apr-2025 17:28:10 Europe/Berlin] Found consumption: Array
+(
+    [idC] => 8
+    [client_id] => 6
+    [month] => Avril 2025
+    [current_reading] => 2000
+    [photo] => ../uploads/meter_photos/1743607666_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+    [dateReleve] => 2025-04-02 15:27:46
+    [status] => pending
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[02-Apr-2025 17:28:12 Europe/Berlin] Getting consumption details for ID: 8
+[02-Apr-2025 17:28:12 Europe/Berlin] Found consumption: Array
+(
+    [idC] => 8
+    [client_id] => 6
+    [month] => Avril 2025
+    [current_reading] => 2000
+    [photo] => ../uploads/meter_photos/1743607666_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+    [dateReleve] => 2025-04-02 15:27:46
+    [status] => pending
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[02-Apr-2025 17:44:13 Europe/Berlin] Looking for consumption with client_id=6, month=Mai 2025
+[02-Apr-2025 17:44:13 Europe/Berlin] No consumption found for client 6 and month Mai 2025
+[02-Apr-2025 17:44:13 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[02-Apr-2025 17:44:13 Europe/Berlin] Parameters: client_id=6, month=Mai 2025, current_reading=2150, photo=../uploads/meter_photos/1743608653_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+[02-Apr-2025 17:44:13 Europe/Berlin] Last inserted ID: 9
+[02-Apr-2025 17:44:13 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[02-Apr-2025 17:44:20 Europe/Berlin] PHP Warning:  Undefined array key "idC" in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 227
+[02-Apr-2025 17:51:35 Europe/Berlin] Looking for consumption with client_id=6, month=Juin 2025
+[02-Apr-2025 17:51:35 Europe/Berlin] No consumption found for client 6 and month Juin 2025
+[02-Apr-2025 17:51:35 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[02-Apr-2025 17:51:35 Europe/Berlin] Parameters: client_id=6, month=Juin 2025, current_reading=2400, photo=../uploads/meter_photos/1743609095_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+[02-Apr-2025 17:51:35 Europe/Berlin] Last inserted ID: 10
+[02-Apr-2025 17:51:35 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[02-Apr-2025 17:51:44 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Consumption::getPreviousConsumption() in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php:232
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 232
+[02-Apr-2025 17:52:03 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Consumption::getPreviousConsumption() in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php:232
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\WEB2\TP_ELECT\traitement\consommationTraitement.php on line 232
+[02-Apr-2025 17:57:49 Europe/Berlin] Looking for consumption with client_id=6, month=Juillet 2025
+[02-Apr-2025 17:57:49 Europe/Berlin] No consumption found for client 6 and month Juillet 2025
+[02-Apr-2025 17:57:49 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[02-Apr-2025 17:57:49 Europe/Berlin] Parameters: client_id=6, month=Juillet 2025, current_reading=2600, photo=../uploads/meter_photos/1743609469_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+[02-Apr-2025 17:57:49 Europe/Berlin] Last inserted ID: 11
+[02-Apr-2025 17:57:49 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[02-Apr-2025 17:57:57 Europe/Berlin] Getting previous consumption for client 6 before consumption 11
+[02-Apr-2025 17:57:57 Europe/Berlin] Found previous consumption: Array
+(
+    [idC] => 10
+    [client_id] => 6
+    [month] => Juin 2025
+    [current_reading] => 2400
+    [photo] => ../uploads/meter_photos/1743609095_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+    [dateReleve] => 2025-04-02 15:51:35
+    [status] => approved
+)
+

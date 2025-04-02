@@ -41,6 +41,30 @@ class Facture {
     
     // Créer une nouvelle facture basée sur une consommation
     public function createInvoiceFromConsumption($clientId, $consumption, $previousConsumption = null) {
+        // Vérifier si la consommation est approuvée
+        if (!isset($consumption['status']) || $consumption['status'] !== 'approved') {
+            // Check if the consumption has an id field, if so use that to check the status in the database
+            if (isset($consumption['id'])) {
+                try {
+                    $sql = "SELECT status FROM Consumption WHERE idC = ?";
+                    $stmt = $this->pdo->prepare($sql);
+                    $stmt->execute([$consumption['id']]);
+                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    if (!$result || $result['status'] !== 'approved') {
+                        error_log("Cannot create invoice: consumption not approved. Status: " . ($result['status'] ?? 'unknown'));
+                        return ['success' => false, 'error' => 'Consumption not approved'];
+                    }
+                } catch (\Exception $e) {
+                    error_log("Error checking consumption status: " . $e->getMessage());
+                    return ['success' => false, 'error' => 'Error checking consumption status'];
+                }
+            } else {
+                error_log("Cannot create invoice: consumption not approved or missing status");
+                return ['success' => false, 'error' => 'Consumption not approved or missing status'];
+            }
+        }
+        
         // Calcul de la consommation en kWh
         $kwhConsumed = $consumption['current_reading'];
         

@@ -4,6 +4,7 @@ session_start();
 // Define API_REQUEST constant to prevent any text output from db.php in AJAX calls
 define('API_REQUEST', true);
 
+// Vérifier si le fournisseur est connecté
 if (!isset($_SESSION['fournisseur'])) {
     header("Location: login.php");
     exit;
@@ -15,7 +16,7 @@ require_once '../../BD/Client.php';
 
 // Récupérer les consommations en attente
 $consumptionModel = new Consumption($pdo);
-$pendingConsumptions = $consumptionModel->getPendingConsumptions();
+$pendingConsumptions = $consumptionModel->getConsumptionsByStatus('pending');
 
 // Récupérer la liste des clients
 $clientModel = new Client($pdo);
@@ -111,9 +112,8 @@ $pageTitle = "Gestion des Consommations";
               <th>ID</th>
               <th>Client</th>
               <th>Mois</th>
-              <th>Relevé</th>
-              <th>Consommation</th>
-              <th>Date</th>
+              <th>Index actuel</th>
+              <th>Date de saisie</th>
               <th>Statut</th>
               <th>Actions</th>
             </tr>
@@ -121,43 +121,54 @@ $pageTitle = "Gestion des Consommations";
           <tbody id="consumptionsTable">
             <?php if (!empty($pendingConsumptions)): ?>
               <?php foreach ($pendingConsumptions as $consumption): ?>
-                <tr class="consumption-row" data-id="<?php echo $consumption['id']; ?>">
-                  <td><?php echo $consumption['id']; ?></td>
-                  <td><?php echo htmlspecialchars($consumption['client_nom'] ?? 'N/A'); ?></td>
-                  <td><?php echo htmlspecialchars($consumption['mois']); ?></td>
-                  <td><?php echo number_format($consumption['index_actuel'], 0, ',', ' '); ?> kWh</td>
-                  <td><?php echo number_format($consumption['consommation'], 0, ',', ' '); ?> kWh</td>
-                  <td><?php echo $consumption['date_saisie']; ?></td>
+                <tr class="consumption-row" data-id="<?php echo $consumption['idC']; ?>">
+                  <td><?php echo $consumption['idC']; ?></td>
+                  <td><?php echo htmlspecialchars($consumption['client_nom'] . ' ' . $consumption['client_prenom'] ?? 'N/A'); ?></td>
+                  <td><?php echo htmlspecialchars($consumption['month']); ?></td>
+                  <td><?php echo number_format($consumption['current_reading'], 0, ',', ' '); ?> kWh</td>
+                  <td><?php echo $consumption['dateReleve']; ?></td>
                   <td>
                     <span class="badge rounded-pill
                     <?php
-                      switch($consumption['statut']) {
-                        case 'validé': echo 'bg-success'; break;
-                        case 'refusé': echo 'bg-danger'; break;
+                      switch($consumption['status']) {
+                        case 'approved': echo 'bg-success'; break;
+                        case 'rejected': echo 'bg-danger'; break;
                         default: echo 'bg-warning';
                       }
                     ?>">
-                      <?php echo htmlspecialchars($consumption['statut']); ?>
+                      <?php 
+                        switch($consumption['status']) {
+                          case 'approved': echo 'Approuvu00e9'; break;
+                          case 'rejected': echo 'Refusu00e9'; break;
+                          default: echo 'En attente';
+                        }
+                      ?>
                     </span>
                   </td>
                   <td>
-                    <button class="btn btn-sm btn-primary view-consumption" data-id="<?php echo $consumption['id']; ?>">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn btn-sm btn-warning edit-consumption" data-id="<?php echo $consumption['id']; ?>">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-sm btn-success validate-consumption" data-id="<?php echo $consumption['id']; ?>">
-                      <i class="fas fa-check"></i>
-                    </button>
-                    <button class="btn btn-sm btn-danger reject-consumption" data-id="<?php echo $consumption['id']; ?>">
-                      <i class="fas fa-times"></i>
-                    </button>
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-sm btn-info view-consumption" data-id="<?php echo $consumption['idC']; ?>">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-primary edit-consumption" data-id="<?php echo $consumption['idC']; ?>">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <?php if ($consumption['status'] === 'pending'): ?>
+                      <button type="button" class="btn btn-sm btn-success approve-consumption" data-id="<?php echo $consumption['idC']; ?>">
+                        <i class="fas fa-check"></i>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-danger reject-consumption" data-id="<?php echo $consumption['idC']; ?>">
+                        <i class="fas fa-times"></i>
+                      </button>
+                      <?php endif; ?>
+                    </div>
                   </td>
                 </tr>
               <?php endforeach; ?>
             <?php else: ?>
-              <tr><td colspan="8" class="text-center py-3">Aucune consommation en attente</td></tr>
+              <tr>
+                <td colspan="6" class="text-center">Aucune consommation en attente</td>
+              </tr>
             <?php endif; ?>
           </tbody>
         </table>
@@ -248,12 +259,6 @@ $pageTitle = "Gestion des Consommations";
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           <i class="fas fa-times me-1"></i> Fermer
         </button>
-        <button type="button" class="btn btn-success" id="validateBtn">
-          <i class="fas fa-check me-1"></i> Valider
-        </button>
-        <button type="button" class="btn btn-danger" id="rejectBtn">
-          <i class="fas fa-ban me-1"></i> Rejeter
-        </button>
       </div>
     </div>
   </div>
@@ -269,9 +274,9 @@ $pageTitle = "Gestion des Consommations";
       </div>
       <div class="modal-body">
         <form id="editConsumptionForm">
-          <input type="hidden" id="edit_id" name="id">
+          <input type="hidden" id="edit_id" name="idC">
           <input type="hidden" name="action" value="edit">
-          <input type="hidden" name="API_REQUEST" value="true">
+          <input type="hidden" name="api_request" value="true">
           
           <div class="mb-3">
             <label for="edit_client" class="form-label">Client</label>
@@ -284,14 +289,8 @@ $pageTitle = "Gestion des Consommations";
           </div>
           
           <div class="mb-3">
-            <label for="edit_previous" class="form-label">Index précédent (kWh)</label>
-            <input type="number" id="edit_previous" class="form-control" readonly>
-          </div>
-          
-          <div class="mb-3">
             <label for="edit_current" class="form-label">Index actuel (kWh)</label>
             <input type="number" id="edit_current" name="current_reading" class="form-control" required min="0">
-            <div class="form-text">L'index actuel doit être supérieur à l'index précédent.</div>
           </div>
           
           <div class="mb-3">
@@ -338,14 +337,14 @@ $pageTitle = "Gestion des Consommations";
     once: true
   });
   
-  // View consumption details
+  // Event listeners for view and edit buttons
   document.querySelectorAll('.view-consumption').forEach(button => {
     button.addEventListener('click', function() {
       const consumptionId = this.dataset.id;
       const modal = new bootstrap.Modal(document.getElementById('consumptionModal'));
       
       // Get consumption details
-      fetch(`../../traitement/consommationTraitement.php?action=get_details&id=${consumptionId}&API_REQUEST=true`)
+      fetch(`../../traitement/consommationTraitement.php?action=get_details&id=${consumptionId}&api_request=true`)
         .then(response => response.json())
         .then(data => {
           if (data.success) {
@@ -354,10 +353,10 @@ $pageTitle = "Gestion des Consommations";
             
             // Update modal content
             let photoHtml = '';
-            if (consumption.photo_url) {
+            if (consumption.photo) {
               photoHtml = `
                 <div class="text-center mb-3 mt-4">
-                  <img src="${consumption.photo_url}" alt="Photo du compteur" class="img-fluid rounded" style="max-height: 300px;">
+                  <img src="../../${consumption.photo}" alt="Photo du compteur" class="img-fluid rounded" style="max-height: 300px;">
                   <p class="mt-2 text-muted">Photo du compteur</p>
                 </div>
               `;
@@ -366,40 +365,23 @@ $pageTitle = "Gestion des Consommations";
             modalBody.innerHTML = `
               <div class="row">
                 <div class="col-md-6">
-                  <p><strong>Client:</strong> ${consumption.client_nom}</p>
-                  <p><strong>Mois:</strong> ${consumption.mois}</p>
-                  <p><strong>Date de saisie:</strong> ${consumption.date_saisie}</p>
+                  <p><strong>Client:</strong> ${consumption.client_nom || ''} ${consumption.client_prenom || ''}</p>
+                  <p><strong>Mois:</strong> ${consumption.month || consumption.mois || ''}</p>
+                  <p><strong>Date de saisie:</strong> ${consumption.dateReleve || consumption.date_saisie || ''}</p>
                 </div>
                 <div class="col-md-6">
-                  <p><strong>Index précédent:</strong> ${consumption.index_precedent} kWh</p>
-                  <p><strong>Index actuel:</strong> ${consumption.index_actuel} kWh</p>
-                  <p><strong>Consommation:</strong> ${consumption.consommation} kWh</p>
+                  <p><strong>Index actuel:</strong> ${consumption.current_reading || consumption.releve_compteur || consumption.index_actuel || '0'} kWh</p>
+                  <p><strong>Consommation:</strong> ${consumption.kwh_consumed || consumption.consommation || '0'} kWh</p>
                 </div>
               </div>
               
-              <div class="alert alert-${consumption.anomalie ? 'warning' : 'success'} mt-3">
-                <i class="fas fa-${consumption.anomalie ? 'exclamation-triangle' : 'check-circle'} me-2"></i>
-                <strong>${consumption.anomalie ? 'Anomalie détectée' : 'Consommation normale'}</strong>
-                ${consumption.anomalie ? ' - ' + consumption.commentaire : ''}
+              <div class="alert alert-${getStatusAlertClass(consumption.status)} mt-3">
+                <i class="fas fa-${getStatusIcon(consumption.status)} me-2"></i>
+                <strong>Statut:</strong> ${getStatusLabel(consumption.status)}
               </div>
               
               ${photoHtml}
             `;
-            
-            // Update action buttons
-            const validateBtn = document.getElementById('validateBtn');
-            const rejectBtn = document.getElementById('rejectBtn');
-            
-            validateBtn.dataset.id = consumptionId;
-            rejectBtn.dataset.id = consumptionId;
-            
-            if (consumption.statut !== 'en attente') {
-              validateBtn.disabled = true;
-              rejectBtn.disabled = true;
-            } else {
-              validateBtn.disabled = false;
-              rejectBtn.disabled = false;
-            }
             
             modal.show();
           } else {
@@ -413,27 +395,25 @@ $pageTitle = "Gestion des Consommations";
     });
   });
   
-  // Edit consumption
   document.querySelectorAll('.edit-consumption').forEach(button => {
     button.addEventListener('click', function() {
       const consumptionId = this.dataset.id;
+      const editModal = new bootstrap.Modal(document.getElementById('editConsumptionModal'));
       
-      // Get consumption details to populate the form
-      fetch(`../../traitement/consommationTraitement.php?action=get_details&id=${consumptionId}&API_REQUEST=true`)
+      // Get consumption details for editing
+      fetch(`../../traitement/consommationTraitement.php?action=get_details&id=${consumptionId}&api_request=true`)
         .then(response => response.json())
         .then(data => {
           if (data.success) {
             const consumption = data.consumption;
             
             // Populate form
-            document.getElementById('edit_id').value = consumption.id;
-            document.getElementById('edit_client').value = consumption.client_nom;
-            document.getElementById('edit_month').value = consumption.mois;
-            document.getElementById('edit_previous').value = consumption.index_precedent;
-            document.getElementById('edit_current').value = consumption.index_actuel;
+            document.getElementById('edit_id').value = consumption.idC || consumption.id;
+            document.getElementById('edit_client').value = consumption.client_nom + ' ' + consumption.client_prenom;
+            document.getElementById('edit_month').value = consumption.month || consumption.mois;
+            document.getElementById('edit_current').value = consumption.current_reading || consumption.releve_compteur || consumption.index_actuel;
             
             // Show modal
-            const editModal = new bootstrap.Modal(document.getElementById('editConsumptionModal'));
             editModal.show();
           } else {
             Swal.fire('Erreur', data.message || 'Impossible de charger les détails', 'error');
@@ -446,153 +426,51 @@ $pageTitle = "Gestion des Consommations";
     });
   });
   
-  // Validate consumption
-  document.querySelectorAll('.validate-consumption').forEach(button => {
-    button.addEventListener('click', validateConsumption);
-  });
-  
-  document.getElementById('validateBtn').addEventListener('click', function() {
-    validateConsumption.call(this);
-  });
-  
-  function validateConsumption() {
-    const consumptionId = this.dataset.id;
-    
-    Swal.fire({
-      title: 'Valider cette consommation?',
-      text: 'Cette action permettra la génération de la facture.',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#28a745',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Oui, valider',
-      cancelButtonText: 'Annuler'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Send validation request
-        const formData = new FormData();
-        formData.append('id', consumptionId);
-        formData.append('action', 'validate');
-        formData.append('API_REQUEST', 'true');
-        
-        fetch('../../traitement/consommationTraitement.php', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            Swal.fire({
-              title: 'Validée!',
-              text: data.message || 'La consommation a été validée avec succès.',
-              icon: 'success'
-            }).then(() => {
-              // Reload page to show updated data
-              window.location.reload();
-            });
-          } else {
-            Swal.fire('Erreur', data.message || 'Une erreur est survenue', 'error');
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          Swal.fire('Erreur', 'Une erreur de connexion est survenue', 'error');
-        });
-      }
-    });
+  // Function to reload consumption data after update
+  function reloadConsumptionData() {
+    // Reload the page to show updated data
+    window.location.reload();
   }
-  
-  // Reject consumption
-  document.querySelectorAll('.reject-consumption').forEach(button => {
-    button.addEventListener('click', rejectConsumption);
-  });
-  
-  document.getElementById('rejectBtn').addEventListener('click', function() {
-    rejectConsumption.call(this);
-  });
-  
-  function rejectConsumption() {
-    const consumptionId = this.dataset.id;
-    
-    Swal.fire({
-      title: 'Rejeter cette consommation?',
-      text: 'Le client devra soumettre une nouvelle saisie.',
-      icon: 'warning',
-      input: 'text',
-      inputLabel: 'Raison du rejet',
-      inputPlaceholder: 'Entrez la raison du rejet...',
-      inputAttributes: {
-        required: 'true'
-      },
-      showCancelButton: true,
-      confirmButtonColor: '#dc3545',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Oui, rejeter',
-      cancelButtonText: 'Annuler',
-      preConfirm: (reason) => {
-        if (!reason.trim()) {
-          Swal.showValidationMessage('Veuillez entrer une raison');
-        }
-        return reason;
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Send reject request with reason
-        const formData = new FormData();
-        formData.append('id', consumptionId);
-        formData.append('reason', result.value);
-        formData.append('action', 'reject');
-        formData.append('API_REQUEST', 'true');
-        
-        fetch('../../traitement/consommationTraitement.php', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            Swal.fire({
-              title: 'Rejetée!',
-              text: data.message || 'La consommation a été rejetée.',
-              icon: 'success'
-            }).then(() => {
-              // Reload page to show updated data
-              window.location.reload();
-            });
-          } else {
-            Swal.fire('Erreur', data.message || 'Une erreur est survenue', 'error');
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          Swal.fire('Erreur', 'Une erreur de connexion est survenue', 'error');
-        });
-      }
-    });
-  }
-  
+
   // Save edited consumption
   document.getElementById('saveEditBtn').addEventListener('click', function() {
     const form = document.getElementById('editConsumptionForm');
     const formData = new FormData(form);
     
+    // Add api_request parameter if not already in the form
+    if (!formData.has('api_request')) {
+      formData.append('api_request', 'true');
+    }
+    
     // Validate form
-    if (!form.checkValidity()) {
-      form.reportValidity();
+    const currentReading = document.getElementById('edit_current').value;
+    if (!currentReading || isNaN(parseInt(currentReading)) || parseInt(currentReading) < 0) {
+      Swal.fire('Erreur', 'Veuillez entrer un index actuel valide', 'error');
       return;
     }
     
     // Show loading state
     this.disabled = true;
-    this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Traitement...';
+    this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enregistrement...';
+    
+    // Log form data for debugging
+    console.log('Form data being sent:');
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
     
     // Send request
     fetch('../../traitement/consommationTraitement.php', {
       method: 'POST',
       body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+      console.log('Response status:', response.status);
+      return response.json();
+    })
     .then(data => {
+      console.log('Response data:', data);
+      
       // Reset button state
       this.disabled = false;
       this.innerHTML = 'Enregistrer';
@@ -600,18 +478,25 @@ $pageTitle = "Gestion des Consommations";
       if (data.success) {
         // Close modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('editConsumptionModal'));
-        modal.hide();
+        if (modal) {
+          modal.hide();
+        }
         
         Swal.fire({
           title: 'Succès!',
           text: data.message || 'Consommation modifiée avec succès',
           icon: 'success'
         }).then(() => {
-          // Reload page
-          window.location.reload();
+          // Reload page to show updated data
+          reloadConsumptionData();
         });
       } else {
-        Swal.fire('Erreur', data.message || 'Une erreur est survenue', 'error');
+        Swal.fire({
+          title: 'Erreur', 
+          text: data.message || 'Une erreur est survenue', 
+          icon: 'error',
+          footer: data.debug ? JSON.stringify(data.debug) : ''
+        });
       }
     })
     .catch(error => {
@@ -718,6 +603,150 @@ $pageTitle = "Gestion des Consommations";
         console.error('Error:', error);
       });
   });
+  
+  // Handle approve consumption button
+  document.querySelectorAll('.approve-consumption').forEach(button => {
+    button.addEventListener('click', function() {
+      const consumptionId = this.dataset.id;
+      
+      Swal.fire({
+        title: 'Approuver la consommation?',
+        text: "Cette action permettra la génération d'une facture pour cette consommation.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Oui, approuver',
+        cancelButtonText: 'Annuler'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Show loading state
+          this.disabled = true;
+          this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+          
+          // Send approval request
+          const formData = new FormData();
+          formData.append('action', 'approve');
+          formData.append('idC', consumptionId);
+          formData.append('api_request', 'true');
+          
+          fetch('../../traitement/consommationTraitement.php', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire({
+                title: 'Approuvée!',
+                text: data.message || 'La consommation a été approuvée avec succès.',
+                icon: 'success'
+              }).then(() => {
+                // Reload page to show updated data
+                window.location.reload();
+              });
+            } else {
+              Swal.fire('Erreur', data.message || 'Une erreur est survenue', 'error');
+              // Reset button state
+              this.disabled = false;
+              this.innerHTML = '<i class="fas fa-check"></i>';
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            Swal.fire('Erreur', 'Une erreur de connexion est survenue', 'error');
+            // Reset button state
+            this.disabled = false;
+            this.innerHTML = '<i class="fas fa-check"></i>';
+          });
+        }
+      });
+    });
+  });
+  
+  // Handle reject consumption button
+  document.querySelectorAll('.reject-consumption').forEach(button => {
+    button.addEventListener('click', function() {
+      const consumptionId = this.dataset.id;
+      
+      Swal.fire({
+        title: 'Refuser la consommation?',
+        text: "Cette action empêchera la génération d'une facture pour cette consommation.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Oui, refuser',
+        cancelButtonText: 'Annuler'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Show loading state
+          this.disabled = true;
+          this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+          
+          // Send rejection request
+          const formData = new FormData();
+          formData.append('action', 'reject');
+          formData.append('idC', consumptionId);
+          formData.append('api_request', 'true');
+          
+          fetch('../../traitement/consommationTraitement.php', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire({
+                title: 'Refusée!',
+                text: data.message || 'La consommation a été refusée avec succès.',
+                icon: 'success'
+              }).then(() => {
+                // Reload page to show updated data
+                window.location.reload();
+              });
+            } else {
+              Swal.fire('Erreur', data.message || 'Une erreur est survenue', 'error');
+              // Reset button state
+              this.disabled = false;
+              this.innerHTML = '<i class="fas fa-times"></i>';
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            Swal.fire('Erreur', 'Une erreur de connexion est survenue', 'error');
+            // Reset button state
+            this.disabled = false;
+            this.innerHTML = '<i class="fas fa-times"></i>';
+          });
+        }
+      });
+    });
+  });
+  
+  function getStatusAlertClass(status) {
+    switch(status) {
+      case 'approved': return 'success';
+      case 'rejected': return 'danger';
+      default: return 'warning';
+    }
+  }
+  
+  function getStatusIcon(status) {
+    switch(status) {
+      case 'approved': return 'check-circle';
+      case 'rejected': return 'exclamation-circle';
+      default: return 'info-circle';
+    }
+  }
+  
+  function getStatusLabel(status) {
+    switch(status) {
+      case 'approved': return 'Approuvée';
+      case 'rejected': return 'Refusée';
+      default: return 'En attente';
+    }
+  }
 </script>
 
 </body>

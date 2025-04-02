@@ -21,7 +21,7 @@ try {
         // Compter combien de colonnes on a
         $expectedColumns = [
             'idC', 'client_id', 'month', 'current_reading', 
-            'photo', 'dateReleve'
+            'photo', 'dateReleve', 'status'
         ];
         
         $columnsFound = 0;
@@ -62,6 +62,7 @@ try {
                 current_reading INTEGER NOT NULL,
                 photo TEXT,
                 dateReleve TEXT NOT NULL DEFAULT (datetime('now')),
+                status TEXT NOT NULL DEFAULT 'pending',
                 FOREIGN KEY (client_id) REFERENCES Client(id)
             )
         ");
@@ -69,8 +70,8 @@ try {
         // Restaurer les données si on en avait
         if (!empty($consumptionData)) {
             $stmt = $pdo->prepare("
-                INSERT INTO Consumption (client_id, month, current_reading, photo, dateReleve)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO Consumption (client_id, month, current_reading, photo, dateReleve, status)
+                VALUES (?, ?, ?, ?, ?, ?)
             ");
             
             foreach ($consumptionData as $row) {
@@ -79,9 +80,10 @@ try {
                 $reading = $row['current_reading'] ?? $row['indexReleve'] ?? 0;
                 $photo = $row['photo'] ?? $row['photoCompteur'] ?? null;
                 $date = $row['dateReleve'] ?? $row['date_entry'] ?? date('Y-m-d H:i:s');
+                $status = $row['status'] ?? 'pending';
                 
                 if ($clientId) {
-                    $stmt->execute([$clientId, $month, $reading, $photo, $date]);
+                    $stmt->execute([$clientId, $month, $reading, $photo, $date, $status]);
                 }
             }
         }

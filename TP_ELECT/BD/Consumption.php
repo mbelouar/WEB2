@@ -133,12 +133,18 @@ class Consumption {
                 'month' => $row['month'] ?? null,
                 'current_reading' => $row['current_reading'] ?? null,
                 'photo' => $row['photo'] ?? null,
-                'dateReleve' => $row['dateReleve'] ?? null
+                'dateReleve' => $row['dateReleve'] ?? null,
+                'status' => $row['status'] ?? 'pending'
             ];
         } catch (\PDOException $e) {
             error_log("Error in getLastConsumption: " . $e->getMessage());
             return null;
         }
+    }
+    
+    // Récupérer la dernière consommation d'un client
+    public function getLastConsumptionByClient($clientId) {
+        return $this->getLastConsumption($clientId);
     }
     
     // Get consumption by client ID and month
@@ -178,7 +184,8 @@ class Consumption {
             'month' => $row['month'] ?? null,
             'current_reading' => $row['current_reading'] ?? null,
             'photo' => $row['photo'] ?? null,
-            'dateReleve' => $row['dateReleve'] ?? null
+            'dateReleve' => $row['dateReleve'] ?? null,
+            'status' => $row['status'] ?? 'pending'
         ];
     }
     
@@ -203,76 +210,147 @@ class Consumption {
         }
     }
     
-    // Debugging function to check table schema
-    public function checkTableSchema() {
+    // Update the status of a consumption entry
+    public function updateStatus($id, $status) {
         try {
-            $result = $this->pdo->query("PRAGMA table_info(Consumption)")->fetchAll(\PDO::FETCH_ASSOC);
-            error_log("Consumption table schema: " . print_r($result, true));
-            return $result;
+            if (!$id) {
+                error_log("Cannot update status: missing consumption ID");
+                return false;
+            }
+            
+            // Validate status
+            if (!in_array($status, ['pending', 'approved', 'rejected'])) {
+                error_log("Invalid status: $status");
+                return false;
+            }
+            
+            $sql = "UPDATE Consumption SET status = ? WHERE idC = ?";
+            $stmt = $this->pdo->prepare($sql);
+            
+            if (!$stmt) {
+                error_log("SQL Prepare Error: " . print_r($this->pdo->errorInfo(), true));
+                return false;
+            }
+            
+            $result = $stmt->execute([$status, $id]);
+            
+            if (!$result) {
+                error_log("SQL Execute Error: " . print_r($stmt->errorInfo(), true));
+                return false;
+            }
+            
+            return true;
+        } catch (\PDOException $e) {
+            error_log("PDO Error in updateStatus: " . $e->getMessage());
+            return false;
         } catch (\Exception $e) {
-            error_log("Error checking table schema: " . $e->getMessage());
-            return null;
+            error_log("General Error in updateStatus: " . $e->getMessage());
+            return false;
         }
     }
     
-    // Get all pending consumptions
-    public function getPendingConsumptions() {
+    // Get consumptions by status
+    public function getConsumptionsByStatus($status) {
         try {
-            $sql = "SELECT c.*, cl.nom as client_nom, cl.prenom as client_prenom
+            // Join with Client table to get client information
+            $sql = "SELECT c.*, cl.nom as client_nom, cl.prenom as client_prenom 
+                    FROM Consumption c
+                    JOIN Client cl ON c.client_id = cl.id
+                    WHERE c.status = ?
+                    ORDER BY c.dateReleve DESC";
+            
+            $stmt = $this->pdo->prepare($sql);
+            if (!$stmt) {
+                error_log("SQL Prepare Error: " . print_r($this->pdo->errorInfo(), true));
+                return [];
+            }
+            
+            $stmt->execute([$status]);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log("Error in getConsumptionsByStatus: " . $e->getMessage());
+            return [];
+        }
+    }
+    
+    // Get all consumptions
+    public function getAllConsumptions() {
+        try {
+            // Join with Client table to get client information
+            $sql = "SELECT c.*, cl.nom as client_nom, cl.prenom as client_prenom 
                     FROM Consumption c
                     JOIN Client cl ON c.client_id = cl.id
                     ORDER BY c.dateReleve DESC";
             
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            // Format the results
-            $consumptions = [];
-            foreach ($results as $row) {
-                $consumptions[] = [
-                    'id' => $row['idC'],
-                    'client_id' => $row['client_id'],
-                    'client_nom' => $row['client_nom'],
-                    'client_prenom' => $row['client_prenom'],
-                    'mois' => $row['month'],
-                    'index_precedent' => $this->getPreviousReading($row['client_id'], $row['month']),
-                    'index_actuel' => $row['current_reading'],
-                    'consommation' => $row['current_reading'] - ($this->getPreviousReading($row['client_id'], $row['month']) ?? 0),
-                    'photo_url' => $row['photo'],
-                    'date_saisie' => $row['dateReleve'],
-                    'statut' => 'en attente',
-                    'anomalie' => false,
-                    'commentaire' => ''
-                ];
+            if (!$stmt) {
+                error_log("SQL Prepare Error: " . print_r($this->pdo->errorInfo(), true));
+                return [];
             }
             
-            return $consumptions;
-            
-        } catch (PDOException $e) {
-            error_log("Error in getPendingConsumptions: " . $e->getMessage());
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log("Error in getAllConsumptions: " . $e->getMessage());
             return [];
         }
     }
     
-    // Helper method to get previous reading
-    private function getPreviousReading($clientId, $month) {
+    // Get the previous consumption for a client
+    public function getPreviousConsumption($clientId, $currentConsumptionId) {
         try {
-            $sql = "SELECT current_reading
-                    FROM Consumption
-                    WHERE client_id = ?
-                    AND dateReleve < ?
-                    ORDER BY dateReleve DESC
+            error_log("Getting previous consumption for client $clientId before consumption $currentConsumptionId");
+            
+            // Get the current consumption to find its date
+            $currentConsumption = $this->getConsumptionById($currentConsumptionId);
+            
+            if (!$currentConsumption) {
+                error_log("Cannot find current consumption with ID: $currentConsumptionId");
+                return null;
+            }
+            
+            // Get the previous consumption based on date
+            $sql = "SELECT * FROM Consumption 
+                    WHERE client_id = ? 
+                    AND idC != ? 
+                    AND dateReleve < (SELECT dateReleve FROM Consumption WHERE idC = ?)
+                    ORDER BY dateReleve DESC, idC DESC
                     LIMIT 1";
             
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$clientId, $month]);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$stmt) {
+                error_log("SQL Prepare Error: " . print_r($this->pdo->errorInfo(), true));
+                return null;
+            }
             
-            return $result ? $result['current_reading'] : null;
+            $stmt->execute([$clientId, $currentConsumptionId, $currentConsumptionId]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             
-        } catch (PDOException $e) {
-            error_log("Error in getPreviousReading: " . $e->getMessage());
+            if (!$row) {
+                error_log("No previous consumption found for client $clientId before consumption $currentConsumptionId");
+                return null;
+            }
+            
+            error_log("Found previous consumption: " . print_r($row, true));
+            return $this->formatConsumptionData($row);
+        } catch (\PDOException $e) {
+            error_log("Error in getPreviousConsumption: " . $e->getMessage());
+            return null;
+        } catch (\Exception $e) {
+            error_log("General Error in getPreviousConsumption: " . $e->getMessage());
+            return null;
+        }
+    }
+    
+    // Debugging function to check table schema
+    public function checkTableSchema() {
+        try {
+            $sql = "PRAGMA table_info(Consumption)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log("Error checking table schema: " . $e->getMessage());
             return null;
         }
     }
