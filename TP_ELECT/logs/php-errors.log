@@ -389,3 +389,52 @@ Stack trace:
     [status] => approved
 )
 
+[03-Apr-2025 16:37:02 Europe/Berlin] Looking for consumption with client_id=6, month=Août 2025
+[03-Apr-2025 16:37:02 Europe/Berlin] No consumption found for client 6 and month Août 2025
+[03-Apr-2025 16:37:02 Europe/Berlin] Prepared SQL: INSERT INTO Consumption 
+                    (client_id, month, current_reading, photo) 
+                    VALUES 
+                    (?, ?, ?, ?)
+[03-Apr-2025 16:37:02 Europe/Berlin] Parameters: client_id=6, month=Août 2025, current_reading=2845, photo=../uploads/meter_photos/1743691022_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+[03-Apr-2025 16:37:02 Europe/Berlin] Last inserted ID: 12
+[03-Apr-2025 16:37:02 Europe/Berlin] Successfully retrieved last consumption directly after insert
+[03-Apr-2025 16:37:10 Europe/Berlin] Getting consumption details for ID: 12
+[03-Apr-2025 16:37:10 Europe/Berlin] Found consumption: Array
+(
+    [idC] => 12
+    [client_id] => 6
+    [month] => Août 2025
+    [current_reading] => 2845
+    [photo] => ../uploads/meter_photos/1743691022_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+    [dateReleve] => 2025-04-03 14:37:02
+    [status] => pending
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[03-Apr-2025 16:37:13 Europe/Berlin] Getting consumption details for ID: 12
+[03-Apr-2025 16:37:13 Europe/Berlin] Found consumption: Array
+(
+    [idC] => 12
+    [client_id] => 6
+    [month] => Août 2025
+    [current_reading] => 2845
+    [photo] => ../uploads/meter_photos/1743691022_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+    [dateReleve] => 2025-04-03 14:37:02
+    [status] => pending
+    [client_nom] => BEL OUARRAQ
+    [client_prenom] => MOHAMMED
+)
+
+[03-Apr-2025 16:37:16 Europe/Berlin] Getting previous consumption for client 6 before consumption 12
+[03-Apr-2025 16:37:16 Europe/Berlin] Found previous consumption: Array
+(
+    [idC] => 11
+    [client_id] => 6
+    [month] => Juillet 2025
+    [current_reading] => 2600
+    [photo] => ../uploads/meter_photos/1743609469_a1170bd625fbc6821b78ac3487ed331f64a3b3f4.jpg
+    [dateReleve] => 2025-04-02 15:57:49
+    [status] => approved
+)
+

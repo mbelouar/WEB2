@@ -7,6 +7,33 @@ define('API_REQUEST', true);
 require_once '../../BD/db.php';
 require_once '../../BD/Facture.php';
 
+// Handle AJAX request for invoice details
+if (isset($_GET['action']) && $_GET['action'] === 'get_invoice' && isset($_GET['id'])) {
+    header('Content-Type: application/json');
+    
+    if (!isset($_SESSION['client'])) {
+        echo json_encode(['success' => false, 'message' => 'Not logged in']);
+        exit;
+    }
+    
+    $clientId = $_SESSION['client']['id'];
+    $invoiceId = intval($_GET['id']);
+    
+    $factureModel = new Facture($pdo);
+    $facture = $factureModel->getFactureById($invoiceId);
+    
+    if (!$facture || $facture['client_id'] != $clientId) {
+        echo json_encode(['success' => false, 'message' => 'Invoice not found or not authorized']);
+        exit;
+    }
+    
+    // Format date
+    $facture['date_formatted'] = date('d/m/Y', strtotime($facture['date_emission']));
+    
+    echo json_encode(['success' => true, 'data' => $facture]);
+    exit;
+}
+
 // Set page variables
 $pageTitle = 'Mes Factures';
 $activePage = 'invoices';
@@ -278,6 +305,9 @@ require_once '../templates/client_template.php';
 ?>
 
 <script>
+// Pass PHP data to JavaScript
+const clientId = <?php echo $clientId; ?>;
+
 document.addEventListener('DOMContentLoaded', function() {
     // Status filter functionality
     const statusFilter = document.getElementById('statusFilter');
@@ -307,6 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function(e) {
             e.preventDefault();
             const invoiceId = this.getAttribute('data-id');
+            console.log("View invoice clicked for ID:", invoiceId);
             
             // Show loading spinner
             invoiceModalBody.innerHTML = `
@@ -324,94 +355,93 @@ document.addEventListener('DOMContentLoaded', function() {
             // Set the invoice ID for printing
             printInvoiceBtn.setAttribute('data-id', invoiceId);
             
-            // Here you would fetch the invoice details from server
-            // For now, we'll simulate loading with a timeout
-            setTimeout(() => {
-                // Find the invoice in our list
-                const invoiceRow = document.querySelector(`.invoice-row[data-id="\${invoiceId}"]`);
-                
-                // Create invoice template (this would be fetched from server in a real app)
-                invoiceModalBody.innerHTML = `
-                    <div class="invoice-detail">
-                        <div class="row mb-4">
-                            <div class="col-6">
-                                <img src="../../uploads/Lydec.png" alt="Lydec" style="height: 60px;">
-                                <p class="mt-2 mb-1">Lydec</p>
-                                <p class="mb-1">48, Rue Mohamed Diouri</p>
-                                <p class="mb-1">Casablanca, Maroc</p>
-                                <p class="mb-1">05 22 54 90 00</p>
-                            </div>
-                            <div class="col-6 text-end">
-                                <h5>FACTURE #\${invoiceId}</h5>
-                                <p class="mb-1">Date d'émission: 01/06/2023</p>
-                                <p class="mb-1">Client: #\${clientId}</p>
-                                <p class="mb-1">Statut: <span class="badge bg-warning">Impayée</span></p>
-                            </div>
-                        </div>
+            // Fetch invoice details from server
+            fetch(`client_invoices.php?action=get_invoice&id=${invoiceId}`)
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        const facture = result.data;
+                        console.log("Fetched invoice data:", facture);
                         
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Description</th>
-                                                <th>Consommation</th>
-                                                <th>Prix unitaire</th>
-                                                <th>Montant</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Consommation Électricité (0-100 kWh)</td>
-                                                <td>100 kWh</td>
-                                                <td>0.82 DH</td>
-                                                <td>82.00 DH</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Consommation Électricité (101-150 kWh)</td>
-                                                <td>50 kWh</td>
-                                                <td>0.92 DH</td>
-                                                <td>46.00 DH</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Consommation Électricité (151+ kWh)</td>
-                                                <td>75 kWh</td>
-                                                <td>1.10 DH</td>
-                                                <td>82.50 DH</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="3" class="text-end"><strong>Sous-total</strong></td>
-                                                <td>210.50 DH</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3" class="text-end"><strong>TVA (18%)</strong></td>
-                                                <td>37.89 DH</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3" class="text-end"><strong>Total</strong></td>
-                                                <td><strong>248.39 DH</strong></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                        // Create invoice template
+                        invoiceModalBody.innerHTML = `
+                            <div class="invoice-detail">
+                                <div class="row mb-4">
+                                    <div class="col-6">
+                                        <img src="../../uploads/Lydec.png" alt="Lydec" style="height: 60px;">
+                                        <p class="mt-2 mb-1">Lydec</p>
+                                        <p class="mb-1">48, Rue Mohamed Diouri</p>
+                                        <p class="mb-1">Casablanca, Maroc</p>
+                                        <p class="mb-1">05 22 54 90 00</p>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <h5>FACTURE #${facture.id}</h5>
+                                        <p class="mb-1">Date d'émission: ${facture.date_formatted}</p>
+                                        <p class="mb-1">Client: #${facture.client_id}</p>
+                                        <p class="mb-1">Statut: <span class="badge bg-${facture.statut === 'payée' ? 'success' : 'warning'}">${facture.statut}</span></p>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Description</th>
+                                                        <th>Consommation</th>
+                                                        <th>Prix unitaire</th>
+                                                        <th>Montant</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Consommation Électricité</td>
+                                                        <td>${facture.kwh_consumed} kWh</td>
+                                                        <td>Variable</td>
+                                                        <td>${Number(facture.montant).toFixed(2)} DH</td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="3" class="text-end"><strong>Total</strong></td>
+                                                        <td><strong>${Number(facture.montant).toFixed(2)} DH</strong></td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="alert alert-info">
+                                            <p class="mb-1"><strong>Informations de paiement:</strong></p>
+                                            <p class="mb-1">Date limite de paiement: 15 jours après émission</p>
+                                            <p class="mb-0">Veuillez effectuer le paiement dans les 15 jours suivant la réception de cette facture.</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="alert alert-info">
-                                    <p class="mb-1"><strong>Informations de paiement:</strong></p>
-                                    <p class="mb-1">Date limite de paiement: 15/06/2023</p>
-                                    <p class="mb-0">Veuillez effectuer le paiement dans les 15 jours suivant la réception de cette facture.</p>
-                                </div>
+                        `;
+                    } else {
+                        invoiceModalBody.innerHTML = `
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                ${result.message || 'Impossible de récupérer les détails de la facture.'}
                             </div>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching invoice details:", error);
+                    invoiceModalBody.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Une erreur s'est produite lors de la récupération des détails de la facture.
                         </div>
-                    </div>
-                `;
-            }, 1000);
+                    `;
+                });
         });
     });
     
@@ -477,16 +507,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Print invoice function
 function printInvoice(invoiceId) {
-    // Here you would fetch the invoice details and open a print window
-    
-    // For now, we'll open the current modal content in a new window for printing
+    // Get current modal content for printing
     const modalContent = document.getElementById('invoiceModalBody').innerHTML;
     
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
         <html>
             <head>
-                <title>Facture #\${invoiceId} - Lydec</title>
+                <title>Facture #${invoiceId} - Lydec</title>
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
                 <style>
                     body { padding: 20px; }
@@ -503,7 +531,7 @@ function printInvoice(invoiceId) {
                             <button class="btn btn-secondary ms-2" onclick="window.close()">Fermer</button>
                         </div>
                     </div>
-                    \${modalContent}
+                    ${modalContent}
                 </div>
             </body>
         </html>
