@@ -25,30 +25,65 @@ if ($action === 'get_details' || $action === 'update_status') {
 $clientId = $_SESSION['client']['id'] ?? null;
 
 if ($action === 'add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    $objet = $_POST['complaintType'] ?? null;
-    $description = $_POST['complaintDetails'] ?? null;
-    $photoPath = null;
+    try {
+        // Set appropriate headers for JSON response
+        header('Content-Type: application/json');
+        
+        $objet = $_POST['complaintType'] ?? null;
+        $description = $_POST['complaintDetails'] ?? null;
+        $photoPath = null;
 
-    // Vérifiez si les données sont reçues
-    error_log("Objet: $objet, Description: $description");
-
-    if (isset($_FILES['complaintPhoto']) && $_FILES['complaintPhoto']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = "../uploads/complaints/";
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
+        // Validation
+        if (!$objet || !$description) {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Le type de réclamation et la description sont requis.'
+            ]);
+            exit;
         }
-        $filename = basename($_FILES['complaintPhoto']['name']);
-        $targetPath = $uploadDir . time() . "_" . $filename;
-        if (move_uploaded_file($_FILES['complaintPhoto']['tmp_name'], $targetPath)) {
-            $photoPath = $targetPath;
-        }
-    }
 
-    if ($reclamationModel->addReclamation($clientId, $objet, $description, $photoPath)) {
-        $lastReclamation = $reclamationModel->getLastReclamationByClient($clientId);
-        echo json_encode(['success' => true, 'reclamation' => $lastReclamation]);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Erreur lors de l\'ajout de la réclamation.']);
+        if (!$clientId) {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Session client non trouvée. Veuillez vous reconnecter.'
+            ]);
+            exit;
+        }
+
+        // Vérifiez si les données sont reçues
+        error_log("Reclamation - Objet: $objet, Description: $description, Client ID: $clientId");
+
+        // Process uploaded photo if available
+        if (isset($_FILES['complaintPhoto']) && $_FILES['complaintPhoto']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = "../uploads/complaints/";
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+            $filename = basename($_FILES['complaintPhoto']['name']);
+            $targetPath = $uploadDir . time() . "_" . $filename;
+            if (move_uploaded_file($_FILES['complaintPhoto']['tmp_name'], $targetPath)) {
+                $photoPath = $targetPath;
+                error_log("Photo uploaded successfully to: $photoPath");
+            } else {
+                error_log("Failed to upload photo: " . $_FILES['complaintPhoto']['error']);
+            }
+        }
+
+        // Add the reclamation
+        if ($reclamationModel->addReclamation($clientId, $objet, $description, $photoPath)) {
+            $lastReclamation = $reclamationModel->getLastReclamationByClient($clientId);
+            
+            if ($lastReclamation) {
+                echo json_encode(['success' => true, 'reclamation' => $lastReclamation]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Réclamation ajoutée mais impossible de la récupérer.']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Erreur lors de l\'ajout de la réclamation.']);
+        }
+    } catch (Exception $e) {
+        error_log("Exception in reclamation add: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => 'Erreur serveur: ' . $e->getMessage()]);
     }
     exit;
 }

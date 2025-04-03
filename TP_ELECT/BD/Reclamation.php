@@ -10,10 +10,17 @@ class Reclamation {
 
     // Ajouter une réclamation avec option de photo
     public function addReclamation($clientId, $objet, $description, $photo = null) {
-        $sql = "INSERT INTO Reclamation (client_id, objet, description, photo, date_reclamation, statut)
-                VALUES (?, ?, ?, ?, NOW(), 'en attente')";
-        $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([$clientId, $objet, $description, $photo]);
+        try {
+            $currentDateTime = date('Y-m-d H:i:s'); // Standard date format
+            
+            $sql = "INSERT INTO Reclamation (client_id, objet, description, photo, date_reclamation, statut)
+                    VALUES (?, ?, ?, ?, ?, 'en attente')";
+            $stmt = $this->pdo->prepare($sql);
+            return $stmt->execute([$clientId, $objet, $description, $photo, $currentDateTime]);
+        } catch (PDOException $e) {
+            error_log("Error in addReclamation: " . $e->getMessage());
+            return false;
+        }
     }
 
     // Récupérer la dernière réclamation d'un client

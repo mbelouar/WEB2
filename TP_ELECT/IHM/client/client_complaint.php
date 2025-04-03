@@ -136,9 +136,19 @@ document.addEventListener('DOMContentLoaded', function() {
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Traitement en cours...';
     
-    axios.post('../../traitement/reclamationTraitement.php?action=add', formData)   
+    // Use native fetch instead of axios for better compatibility
+    fetch('../../traitement/reclamationTraitement.php?action=add', {
+      method: 'POST',
+      body: formData
+    })
     .then(response => {
-      if (response.data.success) {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.success) {
         // Reset form and button
         this.reset();
         submitBtn.disabled = false;
@@ -155,11 +165,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const newRow = document.createElement('tr');
         newRow.innerHTML = `
-          <td>${response.data.reclamation.id}</td>
-          <td>${response.data.reclamation.objet}</td>
-          <td>${response.data.reclamation.description}</td>
-          <td>${response.data.reclamation.date_reclamation}</td>
-          <td><span class="badge rounded-pill bg-warning">${response.data.reclamation.statut}</span></td>
+          <td>${data.reclamation.id}</td>
+          <td>${data.reclamation.objet}</td>
+          <td>${data.reclamation.description}</td>
+          <td>${data.reclamation.date_reclamation}</td>
+          <td><span class="badge rounded-pill bg-warning">${data.reclamation.statut}</span></td>
         `;
         tableBody.insertBefore(newRow, tableBody.firstChild);
         
@@ -185,14 +195,32 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.innerHTML = originalBtnText;
         
         // Show error message
-        alert('Erreur : ' + response.data.message);
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+        alertDiv.innerHTML = `
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          Erreur: ${data.message || 'Une erreur est survenue'}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        document.querySelector('.card-body').insertBefore(alertDiv, document.querySelector('form'));
       }
     })
     .catch(error => {
       console.error('Erreur:', error);
+      
+      // Reset button
       submitBtn.disabled = false;
       submitBtn.innerHTML = originalBtnText;
-      alert('Une erreur est survenue lors de la soumission de votre réclamation.');
+      
+      // Show error message
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+      alertDiv.innerHTML = `
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Une erreur est survenue lors de la soumission de votre réclamation.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      `;
+      document.querySelector('.card-body').insertBefore(alertDiv, document.querySelector('form'));
     });
   });
 });
