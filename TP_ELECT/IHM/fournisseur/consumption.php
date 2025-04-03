@@ -46,12 +46,20 @@ $pageTitle = "Gestion des Consommations";
 </head>
 <body>
 
+<!-- Page Loader -->
+<div class="page-loader">
+  <img src="../../uploads/Lydec.png" alt="Lydec" class="loader-logo">
+</div>
+
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark">
   <div class="container">
     <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
-      <i class="fas fa-bolt me-2"></i>
-      <span>Gestion d'Électricité</span>
+      <img src="../../uploads/Lydec.png" alt="Lydec" class="logo">
+      <div class="brand-text">
+        <span class="brand-name">Lydec</span>
+        <small class="brand-tagline d-none d-sm-inline">Électricité & Eau</small>
+      </div>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
       <span class="navbar-toggler-icon"></span>
@@ -335,6 +343,17 @@ $pageTitle = "Gestion des Consommations";
   AOS.init({
     duration: 800,
     once: true
+  });
+  
+  // Hide page loader after page loads
+  window.addEventListener('load', function() {
+    const loader = document.querySelector('.page-loader');
+    if (loader) {
+      loader.classList.add('hidden');
+      setTimeout(() => {
+        loader.style.display = 'none';
+      }, 500);
+    }
   });
   
   // Event listeners for view and edit buttons
@@ -748,6 +767,45 @@ $pageTitle = "Gestion des Consommations";
     }
   }
 </script>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4 mb-md-0">
+        <h5>Lydec</h5>
+        <p class="mb-3">Votre fournisseur d'électricité et d'eau, engagé pour un service de qualité et un développement durable.</p>
+        <div class="d-flex mt-4">
+          <a href="#" class="me-3"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="me-3"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="me-3"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="me-3"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div class="col-md-3 mb-4 mb-md-0">
+        <h5>Navigation</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="dashboard.php">Tableau de bord</a></li>
+          <li class="mb-2"><a href="clients.php">Clients</a></li>
+          <li class="mb-2"><a href="consumption.php">Consommations</a></li>
+          <li class="mb-2"><a href="reclamations.php">Réclamations</a></li>
+        </ul>
+      </div>
+      <div class="col-md-5">
+        <h5>Contact</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 48, Rue Mohamed Diouri, Casablanca</li>
+          <li class="mb-2"><i class="fas fa-phone me-2"></i> 05 22 54 90 00</li>
+          <li class="mb-2"><i class="fas fa-envelope me-2"></i> <a href="mailto:service-client@lydec.ma">service-client@lydec.ma</a></li>
+          <li class="mb-2"><i class="fas fa-clock me-2"></i> Lun-Ven: 8h00-16h30</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-top border-secondary pt-4 mt-4 text-center">
+      <p class="mb-0">&copy; <?php echo date('Y'); ?> - Lydec. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>
 
 </body>
 </html>

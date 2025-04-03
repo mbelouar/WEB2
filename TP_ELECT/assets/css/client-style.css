@@ -119,14 +119,14 @@ a:hover {
 /* Navbar */
 .navbar {
   padding: 15px 0;
-  background-color: rgba(43, 96, 65, 0.95);
+  background: var(--gradient-footer);
   transition: all 0.3s ease;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .navbar.scrolled {
   padding: 10px 0;
-  background-color: rgba(29, 75, 47, 0.98);
+  background: linear-gradient(135deg, #1a3c2a 0%, var(--primary-dark) 100%);
 }
 
 .navbar-brand {
@@ -168,11 +168,13 @@ a:hover {
   padding: 8px 16px !important;
   transition: all 0.3s ease;
   position: relative;
+  border-radius: 0.25rem;
 }
 
 .nav-link:hover, 
 .nav-link.active {
   color: white !important;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .nav-link:after {

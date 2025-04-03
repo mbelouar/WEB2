@@ -16,17 +16,26 @@ if (isset($_SESSION['client'])) {
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../assets/css/client-style.css">
   <!-- AOS Animation Library -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
 
+<!-- Page Loader -->
+<div class="page-loader">
+  <img src="../../uploads/Lydec.png" alt="Lydec" class="loader-logo">
+</div>
+
 <!-- Barre de navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark">
   <div class="container">
     <a class="navbar-brand" href="../../index.php">
-      <i class="fas fa-bolt me-2"></i>Gestion Électricité
+      <img src="../../uploads/Lydec.png" alt="Lydec" class="logo">
+      <div class="brand-text">
+        <span class="brand-name">Lydec</span>
+        <small class="brand-tagline d-none d-sm-inline">Électricité & Eau</small>
+      </div>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarConnexion" 
             aria-controls="navbarConnexion" aria-expanded="false" aria-label="Toggle navigation">
@@ -119,6 +128,17 @@ if (isset($_SESSION['client'])) {
       duration: 800,
       easing: 'ease-in-out',
       once: true
+    });
+
+    // Hide page loader after page loads
+    window.addEventListener('load', function() {
+      const loader = document.querySelector('.page-loader');
+      if (loader) {
+        loader.classList.add('hidden');
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 500);
+      }
     });
 
     // Dark mode toggle
